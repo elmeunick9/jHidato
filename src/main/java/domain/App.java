@@ -1,7 +1,7 @@
 package domain;
 
 public class App {
-    static public String getMessage() {
+    static String getMessage() {
         return "Projecte dels hidatos fet";
     }
 
