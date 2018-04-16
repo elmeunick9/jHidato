@@ -20,22 +20,20 @@ public class TriHidato extends Hidato {
 
     protected ArrayList<Node> adjacentNodes(int i, int j) {
         ArrayList<Node> nodes = new ArrayList<>();
-        int x, y;
         if (adjacency == AdjacencyType.EDGE || adjacency == AdjacencyType.BOTH) {
-            x = i; y = j-1; addNodeIfValid(x, y, nodes);
-            x = i; y = j+1; addNodeIfValid(x, y, nodes);
-            x = (i%2 == j%2) ? i+1 : i-1; y = j; addNodeIfValid(x, y, nodes);
+            addNodeIfValid(i, j-1, nodes);
+            addNodeIfValid(i, j+1, nodes);
+            addNodeIfValid((i%2 == j%2) ? i+1 : i-1, j, nodes);
         }
         if (adjacency == AdjacencyType.VERTEX || adjacency == AdjacencyType.BOTH) {
             if (i%2 == j%2) {
-                x = i-1; y = j;     addNodeIfValid(x, y, nodes);
-                x = i+1; y = j-2;   addNodeIfValid(x, y, nodes);
-                x = i+1; y = j+2;   addNodeIfValid(x, y, nodes);
-            }
-            else {
-                x = i+1; y = j;     addNodeIfValid(x, y, nodes);
-                x = i-1; y = j+2;   addNodeIfValid(x, y, nodes);
-                x = i-1; y = j-2;   addNodeIfValid(x, y, nodes);
+                addNodeIfValid(i-1, j, nodes);
+                addNodeIfValid(i+1, j-2, nodes);
+                addNodeIfValid(i+1, j+2, nodes);
+            } else {
+                addNodeIfValid(i+1, j, nodes);
+                addNodeIfValid(i-1, j+2, nodes);
+                addNodeIfValid(1-1, j-2, nodes);
             }
         }
 

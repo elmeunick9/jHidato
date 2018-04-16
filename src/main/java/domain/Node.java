@@ -2,10 +2,13 @@ package domain;
 
 public class Node {
     public enum Type { variable, fixed, block, invisible, unset }
+    private int value = 0;
+    private Type type;
+
     Node(String data) {
-        if      (data.equals("#")) type = Type.invisible;
-        else if (data.equals("*")) type = Type.block;
-        else if (data.equals("?")) type = Type.unset;
+        if      ("#".equals(data)) type = Type.invisible;
+        else if ("*".equals(data)) type = Type.block;
+        else if ("?".equals(data)) type = Type.unset;
         else {
             type = Type.fixed;
             value = Integer.parseInt(data);
@@ -37,9 +40,6 @@ public class Node {
     public Type getType(){ return type; }
     public boolean editable() { return type == Type.unset || type == Type.variable; }
     public boolean valid() { return type != Type.invisible && type != Type.block; }
-
-    private int value = 0;
-    private Type type;
 
     class InvalidTypeException extends Exception {};
 

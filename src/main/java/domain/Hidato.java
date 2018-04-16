@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Hidato {
-    ArrayList<ArrayList<Node>> nodes;
-    private Map<Node, ArrayList<Node>> map = new HashMap<>();
-
     public enum AdjacencyType { VERTEX, EDGE, BOTH };
     protected AdjacencyType adjacency;
+    private ArrayList<ArrayList<Node>> nodes;
+    private Map<Node, ArrayList<Node>> map = new HashMap<>();
 
-    Hidato (ArrayList<ArrayList<Node>> data, AdjacencyType t) {
+    Hidato(ArrayList<ArrayList<Node>> data, AdjacencyType t) {
         nodes = data;
         adjacency = t;
 
