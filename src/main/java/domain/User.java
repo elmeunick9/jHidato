@@ -16,4 +16,8 @@ public class User {
     public int getTotalGames(){
         return this.totalGames;
     }
+
+    public void gameFinished(){
+        this.totalGames += 1;
+    }
 }
