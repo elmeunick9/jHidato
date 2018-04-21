@@ -32,10 +32,11 @@
         <module name="AvoidNestedBlocks"/>
         <module name="EmptyBlock"/>
         <module name="EmptyCatchBlock"/>
-        <module name="LeftCurly"/>
-        <module name="NeedBraces">
+        <!--<module name="LeftCurly"/>--> <!-- I want one-line methods -->
+        <!-- <module name="NeedBraces">
             <property name="allowEmptyLoopBody" value="true"/>
-        </module>
+            <property name="allowSingleLineStatement" value="true"/>
+        </module> -->
         <module name="RightCurly"/>
 
         <!-- Checks class design -->
@@ -67,7 +68,7 @@
         <module name="IllegalCatch"/>
         <module name="IllegalThrows"/>
         <module name="InnerAssignment"/>
-        <module name="MagicNumber"/>
+        <!-- <module name="MagicNumber"/> we need magic numbers on tests, not actual magic though-->
         <!-- <module name="MissingCtor"/> not sure it's a good one -->
         <module name="MissingSwitchDefault"/>
         <module name="MultipleVariableDeclarations"/>
@@ -143,10 +144,10 @@
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->
         <module name="EmptyForInitializerPad"/>
         <module name="EmptyForIteratorPad"/>
-        <module name="EmptyLineSeparator">
+        <!-- <module name="EmptyLineSeparator">
             <property name="allowMultipleEmptyLines" value="false"/>
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
-        </module>
+        </module> -->
         <module name="GenericWhitespace"/>
         <module name="MethodParamPad"/>
         <module name="NoLineWrap"/>
@@ -158,7 +159,7 @@
             <property name="tokens" value="COMMA"/>
         </module>
         <module name="TypecastParenPad"/>
-        <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/>
+        <!-- <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>-->
     </module>
 </module>
