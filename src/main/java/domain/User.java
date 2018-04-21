@@ -9,15 +9,15 @@ public class User {
         this.totalGames = 0;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public int getTotalGames(){
+    public int getTotalGames() {
         return this.totalGames;
     }
 
-    public void gameFinished(){
+    public void gameFinished() {
         this.totalGames += 1;
     }
 }

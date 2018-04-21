@@ -18,7 +18,7 @@ public class UserTest {
     }
 
     @Test
-    public void testTotalGames(){
+    public void testTotalGames() {
         assertEquals(0, user.getTotalGames());
     }
 
