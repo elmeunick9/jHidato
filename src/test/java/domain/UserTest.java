@@ -1,8 +1,8 @@
 package domain;
 
-import org.junit.Test;
+import org.junit.Assert;
 import org.junit.Before;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class UserTest {
     private User user;
@@ -14,19 +14,19 @@ public class UserTest {
 
     @Test
     public void testGetName() {
-        assertEquals("Dummy", user.getName());
+        Assert.assertEquals("Dummy", user.getName());
     }
 
     @Test
     public void testTotalGames() {
-        assertEquals(0, user.getTotalGames());
+        Assert.assertEquals(0, user.getTotalGames());
     }
 
     @Test
-    public void testIncreaseTotalGames(){
+    public void testIncreaseTotalGames() {
         user.gameFinished();
-        assertEquals(1, user.getTotalGames());
+        Assert.assertEquals(1, user.getTotalGames());
         user.gameFinished();
-        assertEquals(2, user.getTotalGames());
+        Assert.assertEquals(2, user.getTotalGames());
     }
 }
