@@ -60,6 +60,7 @@ public class TriHidatoTest {
 
     @Test
     public void adjacencyTest() throws Node.InvalidTypeException {
+
         //Test by EDGE
         Node a = hidato.getNode(5, 4);
         assertEquals(a.getValue(), 7);
@@ -71,6 +72,10 @@ public class TriHidatoTest {
         assertTrue(list.contains(a));
         assertTrue(list.contains(b));
         assertEquals(list.get(list.indexOf(b)).getValue(), 3);
+
+        a = hidato.getNode(3, 7);
+        b = hidato.getNode(2, 7);
+        list = hidato.adjacentNodes(hidato.getNode(3, 6));
 
         //Test by VERTEX
         Hidato c = hidato.copy(Hidato.AdjacencyType.VERTEX);

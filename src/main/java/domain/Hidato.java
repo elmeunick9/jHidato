@@ -3,23 +3,52 @@ package domain;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
 
-public abstract class Hidato {
+public abstract class Hidato implements Iterable<Node> {
     public enum AdjacencyType { VERTEX, EDGE, BOTH };
     protected AdjacencyType adjacency;
     private ArrayList<ArrayList<Node>> nodes;
     private Map<Node, ArrayList<Node>> map = new HashMap<>();
 
+
     Hidato(ArrayList<ArrayList<Node>> data, AdjacencyType t) {
         nodes = data;
         adjacency = t;
 
-        for (int i = 1; i <= data.size(); i++)
-            for (int j = 1; j <= data.size(); j++) {
+        for (int i = 1; i <= data.size(); i++) {
+            for (int j = 1; j <= data.get(i-1).size(); j++) {
                 Node n = getNode(i, j);
-                if (!n.valid()) continue;
-                map.put(n, adjacentNodes(i, j));
+                if (n.valid()) map.put(n, adjacentNodes(i, j));
             }
+        }
+
+    }
+
+    @Override
+    public Iterator<Node> iterator() {
+        Iterator<Node> it = new Iterator<Node>() {
+            private int i = 0;
+            private int j = 0;
+
+            @Override
+            public boolean hasNext() {
+                return i < nodes.size() && j < nodes.get(i).size();
+            }
+
+            @Override
+            public Node next() {
+                if (i < nodes.size()-1)     { i++; }
+                else                        { i = 0; j++; }
+                return nodes.get(i).get(j);
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        return it;
     }
 
     protected abstract ArrayList<Node> adjacentNodes(int i, int j);

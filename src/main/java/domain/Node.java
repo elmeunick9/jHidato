@@ -38,19 +38,20 @@ public class Node {
     }
 
     public Type getType(){ return type; }
-    public boolean editable() { return type == Type.unset || type == Type.variable; }
-    public boolean valid() { return type != Type.invisible && type != Type.block; }
+    public boolean editable()   { return type == Type.unset || type == Type.variable; }
+    public boolean valid()      { return type != Type.invisible && type != Type.block; }
+    public boolean hasValue()   { return type == Type.variable || type == Type.fixed; }
 
     class InvalidTypeException extends Exception {};
 
     public int getValue() throws InvalidTypeException {
-        if (type == Type.variable || type == Type.fixed) return value;
+        if (hasValue()) return value;
         else throw new InvalidTypeException();
     }
     public void setValue(int v) throws InvalidTypeException {
-        if (type == Type.unset) type = Type.variable;
-        if (type == Type.variable) value = v;
-        else throw new InvalidTypeException();
+        if (type == Type.unset)     type = Type.variable;
+        if (type == Type.variable)  value = v;
+        else if (!(type == Type.fixed && value == v)) throw new InvalidTypeException();
     }
 
     public void clear() {
