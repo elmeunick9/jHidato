@@ -1,12 +1,14 @@
 package domain;
 
-import org.junit.Test;
-import org.junit.Before;
-import org.junit.Assert;
 import java.util.ArrayList;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import static jdk.nashorn.internal.parser.TokenType.NOT;
 
 public class QuadHidatoTest {
-	/*private QuadHidato hidato;
+	private QuadHidato hidato;
 
     @Before
     public void before() {
@@ -30,7 +32,7 @@ public class QuadHidatoTest {
     }
 
     @Test
-    public void generalTest() throws Node.InvalidTypeException {
+    public void integrationNodeTest() throws Node.InvalidTypeException {
         Hidato c = hidato.copy(Hidato.AdjacencyType.VERTEX);
         c.getNode(4, 2).setValue(8);
         hidato.getNode(4, 2).setValue(9);
@@ -55,7 +57,7 @@ public class QuadHidatoTest {
     }
 
     @Test
-    public void adjacencyTest() throws Node.InvalidTypeException {
+    public void adjacencyEdgeTest() throws Node.InvalidTypeException {
         //Test by EDGE
         Node a = hidato.getNode(5, 4);
         Assert.assertEquals(a.getValue(), 7);
@@ -68,12 +70,16 @@ public class QuadHidatoTest {
         Assert.assertTrue(list.contains(b));
         Assert.assertEquals(list.get(list.indexOf(b)).getValue(), 3);
 
+
+    }
+
+    @Test
+    public void adjacencyVertexTest() throws Node.InvalidTypeException {
         //Test by VERTEX
         Hidato c = hidato.copy(Hidato.AdjacencyType.VERTEX);
-        a = hidato.getNode(5, 4);
-        b = hidato.getNode(3, 4);
-        list = hidato.adjacentNodes(hidato.getNode(4, 4));
-        Assert.assertTrue(list.contains(a));
-        Assert.assertTrue(list.toString().contains("?"));
-    }*/
+        Node a = hidato.getNode(5, 4);
+        Node b = hidato.getNode(4, 4);
+        ArrayList<Node> list = hidato.adjacentNodes(hidato.getNode(4, 4));
+        Assert.assertTrue(list.contains(b));
+    }
 }

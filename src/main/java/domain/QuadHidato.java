@@ -1,9 +1,9 @@
 package domain;
 
-//import java.util.ArrayList;
+import java.util.ArrayList;
 
-public class QuadHidato /*extends Hidato*/ {
-    /*public QuadHidato(ArrayList<ArrayList<Node>> data, AdjacencyType t) { super(data, t); }
+public class QuadHidato extends Hidato {
+    public QuadHidato(ArrayList<ArrayList<Node>> data, AdjacencyType t) { super(data, t); }
 
     public QuadHidato copy() { return copy(adjacency); }
     public QuadHidato copy(AdjacencyType t) {
@@ -40,5 +40,5 @@ public class QuadHidato /*extends Hidato*/ {
     public void draw() {}
 
     //TODO: This is a mock implementation.
-    public Node getNodeByCoord(float i, float j) { return new Node("#");}*/
+    public Node getNodeByCoord(float i, float j) { return new Node("#");}
 }
