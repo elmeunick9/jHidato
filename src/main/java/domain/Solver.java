@@ -1,12 +1,14 @@
 package domain;
 
-import javafx.util.Pair;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Solver {
     private Hidato hidato;
     private Random rand = new Random();
+    private HashMap<Node, ArrayList<Node>> visited = new HashMap<>();
 
     Solver(Hidato h) { hidato = h; }
 
@@ -31,18 +33,21 @@ public class Solver {
     */
 
     /* Generates a list of valid next movements, an empty list indicates that no movements can be done from this node */
-    ArrayList<Pair<Node, Integer>> nextMove(Node a) {
+    ArrayList<Pair<Node, Integer>> nextMove(Node a) throws Node.InvalidTypeException {
         ArrayList<Node>                 nodes = hidato.adjacentNodes(a);
         ArrayList<Pair<Node, Integer>>  moves = new ArrayList<>();
+        Integer nv = a.getValue();
 
-        // Check if there is already an adjacent node of increasing or decreasing value.
-        boolean upper = true;
-        boolean lower = true;
+        nodes.removeAll(visited.getOrDefault(a, new ArrayList<>()));
+
+        // If there is any node that has value +1, that's the only possible movement, unless already taken.
         for (Node b : nodes) {
             if (b.hasValue()) {
                 try {
-                    if (b.getValue() == a.getValue()-1) lower = false;
-                    if (b.getValue() == a.getValue()+1) upper = false;
+                    if (b.getValue() == nv) {
+                        moves.add(new Pair<>(b, nv));
+                        return moves;
+                    }
                 } catch (Node.InvalidTypeException e) {
                     System.err.println("We somehow reached an invalid node!");
                     System.err.println(e);
@@ -53,28 +58,7 @@ public class Solver {
 
         // If not, all adjacent unset nodes may have an increasing or decreasing value.
         for (Node b : nodes) {
-            if (b.getType() == Node.Type.unset) {
-                try {
-                    if (lower) moves.add(new Pair<>(b, a.getValue() - 1));
-                    if (upper) moves.add(new Pair<>(b, a.getValue() + 1));
-                } catch (Node.InvalidTypeException e) {
-                    System.err.println("We somehow reached an invalid node!");
-                    System.err.println(e);
-                    throw new Error();
-                }
-            }
-        }
-
-        // We also want to count fixed adjacent nodes as a valid next movement as long as they have the correct value.
-        // i.e. ignoring lower and upper.
-        /* TODO: This aproax will fail. It could cause an unending loop of fixed nodes.
-        We will need to mantain a lookup table of visited nodes, even if only for fixed ones.
-        We can make the table a private member and clean it when generateSolution() finishes.
-        */
-        for (Node b : nodes) {
-            if (b.getType() == Node.Type.fixed) {
-
-            }
+            if (b.getType() == Node.Type.unset) moves.add(new Pair<>(b, nv+1));
         }
 
         return moves;
@@ -84,24 +68,22 @@ public class Solver {
 
     /* Generates a random solution  */
     // TODO: To guarentee one solution or unsolvable we must try every start node. Therefore maintain a list of already tried nodes.
-    public Hidato generateSolution() throws HidatoIsFilledWrongException {
-        ArrayList<Node> fixed_nodes = new ArrayList<>();
-        for (Node n : hidato) if (n.getType() == Node.Type.fixed) fixed_nodes.add(n);
+    public Hidato generateSolution() throws HidatoIsFilledWrongException, Node.InvalidTypeException {
+        Node start_node = null;
+        for (Node n : hidato) if (n.getType() == Node.Type.fixed && n.getValue() == 1) start_node = n;
         ArrayList<Node> unset_nodes = new ArrayList<>();
         for (Node n : hidato) if (n.getType() == Node.Type.unset) unset_nodes.add(n);
 
         // Select a start node. If there is any of fixed type, one of them, otherwise any unset node.
-        Node start_node;
-        if (!fixed_nodes.isEmpty()) {
-            int i = rand.nextInt(fixed_nodes.size()) + 1;
-            start_node = fixed_nodes.get(i);
-        } else {
+
+        if (start_node == null) {
             if (unset_nodes.isEmpty()) {
                 if (isSolution()) return hidato.copy();
                 else throw new HidatoIsFilledWrongException();
             }
             int i = rand.nextInt(unset_nodes.size()) + 1;
             start_node = unset_nodes.get(i);
+            start_node.setValue(1);
         }
 
         Hidato original = hidato;
@@ -109,6 +91,7 @@ public class Solver {
 
         // Backtracking
         generateSolution(start_node, unset_nodes.size());
+        visited.clear();
 
         Hidato copy = hidato;
         hidato = original;
@@ -121,8 +104,14 @@ public class Solver {
             else return;
         }
 
-        ArrayList<Pair<Node, Integer>> moves = nextMove(n);
-
+        ArrayList<Pair<Node, Integer>> moves;
+        try {
+             moves = nextMove(n);
+        } catch (Node.InvalidTypeException e) {
+            System.err.println("We somehow reached an invalid node!");
+            System.err.println(e);
+            throw new Error();
+        }
 
         //Select random movement and try until no movements left.
         boolean notFound = true;
@@ -133,6 +122,8 @@ public class Solver {
 
             try {
                 mov.getKey().setValue(mov.getValue());
+                visited.putIfAbsent(n, new ArrayList<>());
+                visited.get(n).add(mov.getKey());
                 generateSolution(mov.getKey(), remaining_nodes--);
                 notFound = false;
             } catch (Node.InvalidTypeException e) {
