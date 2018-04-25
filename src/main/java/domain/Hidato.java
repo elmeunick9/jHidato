@@ -1,9 +1,6 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
+import java.util.*;
 
 public abstract class Hidato implements Iterable<Node> {
     public enum AdjacencyType { VERTEX, EDGE, BOTH };
@@ -22,25 +19,29 @@ public abstract class Hidato implements Iterable<Node> {
                 if (n.valid()) map.put(n, adjacentNodes(i, j));
             }
         }
-
     }
 
     @Override
     public Iterator<Node> iterator() {
-        Iterator<Node> it = new Iterator<Node>() {
-            private int i = 0;
+        return new Iterator<>() {
+            private int i = -1;
             private int j = 0;
 
             @Override
             public boolean hasNext() {
-                return i < nodes.size() && j < nodes.get(i).size();
+                int k = i;
+                int s = j;
+                if (k < nodes.get(s).size()-1)     { k++; }
+                else                               { k = 0; s++; }
+                return s < nodes.size() && k < nodes.get(s).size();
             }
 
             @Override
             public Node next() {
-                if (i < nodes.size()-1)     { i++; }
-                else                        { i = 0; j++; }
-                return nodes.get(i).get(j);
+                if (!hasNext()) throw new NoSuchElementException();
+                if (i < nodes.get(j).size()-1)      { i++; }
+                else                                { i = 0; j++; }
+                return nodes.get(j).get(i);
             }
 
             @Override
@@ -48,7 +49,6 @@ public abstract class Hidato implements Iterable<Node> {
                 throw new UnsupportedOperationException();
             }
         };
-        return it;
     }
 
     protected abstract ArrayList<Node> adjacentNodes(int i, int j);
@@ -79,8 +79,8 @@ public abstract class Hidato implements Iterable<Node> {
     public abstract Hidato copy();
     public abstract Hidato copy(AdjacencyType t);
 
-    protected ArrayList<ArrayList<Node>> copyData() {
-        ArrayList<ArrayList<Node>> copy = new ArrayList(nodes.size());
+    ArrayList<ArrayList<Node>> copyData() {
+        ArrayList<ArrayList<Node>> copy = new ArrayList<>(nodes.size());
         for (ArrayList<Node> list : nodes) {
             copy.add(new ArrayList<>());
             for (Node x : list) {

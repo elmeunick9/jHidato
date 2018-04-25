@@ -8,12 +8,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class SolverTest {
-    private TriHidato hidato;
-    private Solver solver;
+    private ArrayList<ArrayList<Node>> data = new ArrayList<>();
 
     @Before
     public void before() {
-        ArrayList<ArrayList<Node>> data = new ArrayList<>();
         String[][] matrix = {
                 {"#", "#", "#", "#", "#", "#", "#"},
                 {"#", "#", "#", "*", "#", "#", "#"},
@@ -28,17 +26,15 @@ public class SolverTest {
                 data.get(data.size() - 1).add(new Node(x));
             }
         }
-
-        hidato = new TriHidato(data, Hidato.AdjacencyType.EDGE);
-        solver = new Solver(hidato);
     }
 
     @Test
     public void nextMoveTest() throws Node.InvalidTypeException {
+        Hidato hidato = new TriHidato(data, Hidato.AdjacencyType.EDGE);
+        Solver solver = new Solver(hidato);
+
         Node n = hidato.getNode(3, 4);
         ArrayList<Pair<Node, Integer>> moves = solver.nextMove(n);
-
-        System.out.println(moves);
 
         assertTrue( moves.contains(new Pair<>(hidato.getNode(3,3), 2)));
         assertTrue(!moves.contains(new Pair<>(hidato.getNode(3,3), 3)));
@@ -48,6 +44,38 @@ public class SolverTest {
         moves = solver.nextMove(n);
 
         assertTrue( moves.contains(new Pair<>(hidato.getNode(3,7), 3)));
+    }
+
+    @Test
+    public void findSolution1Test1() {
+        data.get(2).set(5, new Node("?")); //Overriding Fixed Node!
+        Hidato hidato = new TriHidato(data, Hidato.AdjacencyType.EDGE);
+        Solver solver = new Solver(hidato);
+
+        try {
+            Hidato solution = solver.generateSolution();
+        } catch (Solver.SolutionNotFound e) {
+            throw new AssertionError();
+        }
+
+    }
+
+    @Test
+    public void findSolution1Test2() {
+        data.get(2).set(2, new Node("2")); //Overriding Fixed Node!
+        data.get(2).set(3, new Node("?"));
+        data.get(2).set(4, new Node("14"));
+        data.get(2).set(5, new Node("?"));
+
+        Hidato hidato = new TriHidato(data, Hidato.AdjacencyType.EDGE);
+        Solver solver = new Solver(hidato);
+
+        try {
+            Hidato solution = solver.generateSolution();
+        } catch (Solver.SolutionNotFound e) {
+            throw new AssertionError();
+        }
+
     }
 
 }

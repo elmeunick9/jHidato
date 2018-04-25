@@ -8,11 +8,17 @@ import java.util.Map;
 public class Solver {
     private Hidato hidato;
     private Random rand = new Random();
-    private HashMap<Node, ArrayList<Node>> visited = new HashMap<>();
+    private ArrayList<Node> visited = new ArrayList<>();
+    private int fill_size = 0;
 
-    Solver(Hidato h) { hidato = h; }
+    Solver(Hidato h) {
+        hidato = h;
+        for (Node n : hidato) {
+            if (n.getType() == Node.Type.fixed || n.getType() == Node.Type.unset) fill_size++;
+        }
+    }
 
-    /* There is a hamiltonian strictly increasing by a order of 1 path from min to max node values. */
+   /* There is a hamiltonian strictly increasing by a order of 1 path from min to max node values. */
     /* To implement using nextMove */
     private boolean isSolution() {
         return false;
@@ -36,9 +42,9 @@ public class Solver {
     ArrayList<Pair<Node, Integer>> nextMove(Node a) throws Node.InvalidTypeException {
         ArrayList<Node>                 nodes = hidato.adjacentNodes(a);
         ArrayList<Pair<Node, Integer>>  moves = new ArrayList<>();
-        Integer nv = a.getValue();
+        Integer nv = a.getValue()+1;
 
-        nodes.removeAll(visited.getOrDefault(a, new ArrayList<>()));
+        nodes.removeAll(visited);
 
         // If there is any node that has value +1, that's the only possible movement, unless already taken.
         for (Node b : nodes) {
@@ -56,54 +62,78 @@ public class Solver {
             }
         }
 
-        // If not, all adjacent unset nodes may have an increasing or decreasing value.
+        // If not, all adjacent unset nodes may have an increasing value.
         for (Node b : nodes) {
-            if (b.getType() == Node.Type.unset) moves.add(new Pair<>(b, nv+1));
+            if (b.getType() == Node.Type.unset) moves.add(new Pair<>(b, nv));
         }
 
         return moves;
     }
 
-    class HidatoIsFilledWrongException extends Exception {}
+    private class HidatoIsFilledWrongException extends Exception {}
+    public class SolutionNotFound extends Exception {}
 
     /* Generates a random solution  */
     // TODO: To guarentee one solution or unsolvable we must try every start node. Therefore maintain a list of already tried nodes.
-    public Hidato generateSolution() throws HidatoIsFilledWrongException, Node.InvalidTypeException {
+    public Hidato generateSolution() throws SolutionNotFound {
         Node start_node = null;
-        for (Node n : hidato) if (n.getType() == Node.Type.fixed && n.getValue() == 1) start_node = n;
-        ArrayList<Node> unset_nodes = new ArrayList<>();
-        for (Node n : hidato) if (n.getType() == Node.Type.unset) unset_nodes.add(n);
+        ArrayList<Node> candidate_nodes = new ArrayList<>();
 
-        // Select a start node. If there is any of fixed type, one of them, otherwise any unset node.
-
-        if (start_node == null) {
-            if (unset_nodes.isEmpty()) {
-                if (isSolution()) return hidato.copy();
-                else throw new HidatoIsFilledWrongException();
-            }
-            int i = rand.nextInt(unset_nodes.size()) + 1;
-            start_node = unset_nodes.get(i);
-            start_node.setValue(1);
-        }
-
+        //The swap must be here or else we will get NullPointerExceptions. Why?
+        //We would be selecting a start_node from the original hidato, which doesn't exist on the copy (it's a different object).
         Hidato original = hidato;
         hidato = hidato.copy();
 
-        // Backtracking
-        generateSolution(start_node, unset_nodes.size());
-        visited.clear();
+        try {
+            for (Node n : hidato) if (n.getType() == Node.Type.fixed && n.getValue() == 1) start_node = n;
+            for (Node n : hidato) if (n.getType() == Node.Type.unset) candidate_nodes.add(n);
+        } catch (Node.InvalidTypeException e) {
+            throw new Error("Logic Error!");
+        }
+
+        boolean not_found = true;
+        boolean fixed = start_node != null;
+        do {
+            try {
+                // Select a start node. If there is any of fixed type, one of them, otherwise any unset node.
+                if (!fixed) {
+                    if (candidate_nodes.isEmpty() && not_found) {
+                        if (isSolution()) return hidato.copy();
+                        else throw new SolutionNotFound();
+                    }
+                    int i = rand.nextInt(candidate_nodes.size());
+                    start_node = candidate_nodes.get(i);
+                    start_node.setValue(1);
+                }
+            } catch (Node.InvalidTypeException e) {
+                throw new Error("Logic Error!");
+            }
+
+            // Backtracking
+            visited.add(start_node);
+            try {
+                generateSolution(start_node);
+                not_found = false;
+            } catch (HidatoIsFilledWrongException e) {
+                candidate_nodes.remove(start_node);
+            }
+            visited.clear();
+            start_node.clear();
+            System.out.println("START NODE: " + start_node);
+        } while (!candidate_nodes.isEmpty() && not_found && !fixed);
+
+        if (not_found) throw new SolutionNotFound();
 
         Hidato copy = hidato;
         hidato = original;
         return copy;
     }
 
-    private void generateSolution(Node n, int remaining_nodes) throws HidatoIsFilledWrongException {
-        if (remaining_nodes == 0) {
-            if (!isSolution()) throw new HidatoIsFilledWrongException();
-            else return;
-        }
+    private void generateSolution(Node n) throws HidatoIsFilledWrongException {
+        System.out.println(visited);
+         if (visited.size() == fill_size) return; //SOLUTION FOUND!
 
+        //Get a list of possible movements.
         ArrayList<Pair<Node, Integer>> moves;
         try {
              moves = nextMove(n);
@@ -111,9 +141,13 @@ public class Solver {
             System.err.println("We somehow reached an invalid node!");
             System.err.println(e);
             throw new Error();
+        } catch (NullPointerException e) {
+            System.err.println("NULL POINTER EXCEPTION ON ADJACENCY FOR NODE: " + n);
+            System.err.println("Check that the solver is using the correct hidato!");
+            throw e;
         }
 
-        //Select random movement and try until no movements left.
+        //Keep trying until no movements left.
         boolean notFound = true;
         while (!moves.isEmpty() && notFound) {
             int i = rand.nextInt(moves.size());
@@ -122,9 +156,8 @@ public class Solver {
 
             try {
                 mov.getKey().setValue(mov.getValue());
-                visited.putIfAbsent(n, new ArrayList<>());
-                visited.get(n).add(mov.getKey());
-                generateSolution(mov.getKey(), remaining_nodes--);
+                visited.add(mov.getKey());
+                generateSolution(mov.getKey());
                 notFound = false;
             } catch (Node.InvalidTypeException e) {
                 System.err.println("We somehow reached an invalid node!");
@@ -132,7 +165,9 @@ public class Solver {
                 throw new Error();
             } catch (HidatoIsFilledWrongException e) {
                 mov.getKey().clear();
+                visited.remove(mov.getKey());
             }
+
         }
 
         if (notFound) throw new HidatoIsFilledWrongException();
