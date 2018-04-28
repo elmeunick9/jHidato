@@ -27,7 +27,6 @@ public class QuadHidato extends Hidato {
             addNodeIfValid(i+1, j, nodes);
         }
         if (adjacency == AdjacencyType.VERTEX || adjacency == AdjacencyType.BOTH) {
-               
             addNodeIfValid(i+1, j+1, nodes);
             addNodeIfValid(i+1, j-1, nodes);
             addNodeIfValid(i-1, j+1, nodes);
