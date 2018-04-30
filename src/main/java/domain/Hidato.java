@@ -27,7 +27,7 @@ public abstract class Hidato implements Iterable<Node> {
 
     @Override
     public Iterator<Node> iterator() {
-        return new Iterator<>() {
+        return new Iterator<Node>() {
             private int i = -1;
             private int j = 0;
 
