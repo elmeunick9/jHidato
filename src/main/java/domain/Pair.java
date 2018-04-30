@@ -4,7 +4,10 @@ public class Pair<T, G> {
     private T first;
     private G second;
 
-    Pair(T a, G b)      { first = a; second = b; }
+    Pair(T a, G b) {
+        first = a;
+        second = b;
+    }
 
     public T getKey()   { return first; }
     public G getValue() { return second; }
@@ -24,5 +27,10 @@ public class Pair<T, G> {
             return inst.getKey() == this.getKey() && inst.getValue() == this.getValue();
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return first.hashCode() * second.hashCode() + first.hashCode();
     }
 }

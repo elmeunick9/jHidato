@@ -33,6 +33,7 @@ public class Node {
             s = s.substring(0, s.length()-1);
             Node k = new Node("?");
             k.value = Integer.parseInt(s);
+            k.type = Type.variable;
             return k;
         } else return new Node(s);
     }
@@ -42,7 +43,7 @@ public class Node {
     public boolean valid()      { return type != Type.invisible && type != Type.block; }
     public boolean hasValue()   { return type == Type.variable || type == Type.fixed; }
 
-    class InvalidTypeException extends Exception {};
+    class InvalidTypeException extends RuntimeException {}
 
     public int getValue() throws InvalidTypeException {
         if (hasValue()) return value;

@@ -1,6 +1,10 @@
 package domain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public abstract class Hidato implements Iterable<Node> {
     public enum AdjacencyType { VERTEX, EDGE, BOTH };
@@ -27,27 +31,30 @@ public abstract class Hidato implements Iterable<Node> {
             private int i = -1;
             private int j = 0;
 
+            //CHECKSTYLE:OFF
             @Override
             public boolean hasNext() {
                 int k = i;
                 int s = j;
-                if (k < nodes.get(s).size()-1)     { k++; }
-                else                               { k = 0; s++; }
+                if (k < nodes.get(s).size()-1) { k++; }
+                else                           { k = 0; s++; }
                 return s < nodes.size() && k < nodes.get(s).size();
             }
 
             @Override
             public Node next() {
                 if (!hasNext()) throw new NoSuchElementException();
-                if (i < nodes.get(j).size()-1)      { i++; }
-                else                                { i = 0; j++; }
+                if (i < nodes.get(j).size()-1)  { i++; }
+                else                            { i = 0; j++; }
                 return nodes.get(j).get(i);
             }
+            //CHECKSTYLE:ON
 
             @Override
             public void remove() {
                 throw new UnsupportedOperationException();
             }
+
         };
     }
 
@@ -88,6 +95,21 @@ public abstract class Hidato implements Iterable<Node> {
             }
         }
         return copy;
+    }
+
+    public void print() {
+        for (ArrayList<Node> a : nodes) {
+            System.out.print("{");
+            for (Node n : a) {
+                String node = n.toString();
+                String space = "    ".substring(node.length());
+
+                System.out.print('"' + node + '"' + (a.get(a.size()-1) != n ? "," + space : ""));
+            }
+            System.out.print("}");
+            if (nodes.get(nodes.size()-1) != a) System.out.print(",");
+            System.out.println();
+        }
     }
 
 }
