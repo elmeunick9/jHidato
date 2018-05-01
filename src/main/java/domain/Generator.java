@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Generator {
-    private String filename;
-    private Hidato h;
-    Generator(Game.Difficulty d, Game.HidatoType ht) throws Solver.SolutionNotFound{
+
+    //A filename is the FILE NAME, not the FILE NAME + EXTENSION.
+    protected String filename;
+    protected Hidato h;
+
+    protected Generator() {}
+
+    Generator(Game.Difficulty d, Game.HidatoType ht) {
         Hidato.AdjacencyType adj = Hidato.AdjacencyType.VERTEX;
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
         int max;
@@ -56,10 +61,11 @@ public class Generator {
 
         Solver s = new Solver (h);
         //h = s.generateSolution();
-        filename = getSaltString() + ".txt";
+        filename = getHashedFilename();
     }
 
     /* Create random string*/
+    /*
     protected String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
@@ -70,6 +76,14 @@ public class Generator {
         }
         String saltStr = salt.toString();
         return saltStr;
+    }*/
+
+    public Hidato getHidato() {
+        return h;
+    }
+
+    public String getHashedFilename() {
+        return Integer.toHexString(getHidato().hashCode());
     }
 
     public static void main(String[] args) throws Solver.SolutionNotFound {

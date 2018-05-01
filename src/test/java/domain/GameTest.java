@@ -8,11 +8,13 @@ import org.junit.Test;
 public class GameTest {
     private Game game;
     private User user;
+    private Generator generator;
 
     @Before
     public void before() {
         user = new User("test");
-        game = new Game(Game.Difficulty.EASY, user, Game.HidatoType.TRIANGLE);
+        generator = new GeneratorStub(Game.Difficulty.EASY, Game.HidatoType.TRIANGLE);
+        game = new Game(Game.Difficulty.EASY, user, Game.HidatoType.TRIANGLE, generator);
     }
 
     @Test

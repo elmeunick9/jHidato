@@ -11,9 +11,13 @@ public class Game {
     private String filename;
     private User user;
     //time played;
+
     Game(Difficulty d, User u, HidatoType htype) {
+        this(d, u, htype, new Generator(d, htype));
+    }
+
+    Game(Difficulty d, User u, HidatoType htype, Generator g) {
         score = 0;
-        GeneratorStub g = new GeneratorStub(d);
         h = g.getHidato();
         dif = d;
         filename = g.getHashedFilename();

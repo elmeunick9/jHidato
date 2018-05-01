@@ -2,11 +2,9 @@ package domain;
 
 import java.util.ArrayList;
 
-public class GeneratorStub {
-    private Hidato h;
-    private String filename;
+public class GeneratorStub extends Generator {
 
-    GeneratorStub(Game.Difficulty d) {
+    GeneratorStub(Game.Difficulty d, Game.HidatoType t) {
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
         String[][] matrix = {
                 {"#", "#", "#", "#", "#", "#", "#"},
@@ -24,14 +22,6 @@ public class GeneratorStub {
         }
 
         h = new TriHidato(data, Hidato.AdjacencyType.EDGE);
-        filename = "example.txt";
-    }
-
-    public Hidato getHidato() {
-        return h;
-    }
-
-    public String getHashedFilename() {
-        return filename;
+        filename = "example-hash";
     }
 }
