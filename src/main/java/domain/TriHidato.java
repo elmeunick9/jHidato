@@ -33,7 +33,7 @@ public class TriHidato extends Hidato {
             } else {
                 addNodeIfValid(i+1, j, nodes);
                 addNodeIfValid(i-1, j+2, nodes);
-                addNodeIfValid(1-1, j-2, nodes);
+                addNodeIfValid(i-1, j-2, nodes);
             }
         }
 
