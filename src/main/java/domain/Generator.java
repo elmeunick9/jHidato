@@ -11,19 +11,6 @@ public class Generator {
 
     protected Generator() {}
 
-    private Hidato createHidato(ArrayList<ArrayList<Node>> data, Hidato.AdjacencyType adj, Game.HidatoType ht) {
-        switch (ht) {
-            case TRIANGLE:
-                return new TriHidato(data, adj);
-            case SQUARE:
-                return new QuadHidato(data, adj);
-            case HEXAGON:
-                return new TriHidato(data, adj);
-            default:
-                return new TriHidato(data, adj);
-        }
-    }
-
     Generator(Game.Difficulty d, Game.HidatoType ht) {
         Hidato.AdjacencyType adj = Hidato.AdjacencyType.EDGE;
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
@@ -47,13 +34,13 @@ public class Generator {
         int y = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
         int z = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
 
-        int unset_num = 0;
+        int unsetNum = 0;
         for(int i = 0; i < x; i++) {
             data.add(new ArrayList<>());
             for(int j = 0; j < y; j++){
                 String elem = "?";
                 data.get(data.size() - 1).add(new Node(elem));
-                unset_num++;
+                unsetNum++;
             }
         }
 
@@ -61,7 +48,7 @@ public class Generator {
 
         int minLen = 4;
         boolean notFound = false;
-        while(!notFound && minLen <= unset_num) {
+        while(!notFound && minLen <= unsetNum) {
             Solver solver = new Solver(s);
             try {
                 h = solver.generateSolution(minLen);
@@ -71,7 +58,7 @@ public class Generator {
 
                 // Small random chance to consider the hidato OK if at least half unset nodes
                 // are filled.
-                if (minLen > unset_num/2 && rn.nextInt(5) == 1) notFound = true;
+                if (minLen > unsetNum/2 && rn.nextInt(5) == 1) notFound = true;
 
             } catch (Solver.SolutionNotFound e) {
                 notFound = true;
@@ -87,8 +74,7 @@ public class Generator {
                     if (rn.nextInt(z/2+2) != 1) n = new Node("?");
                     else n = new Node(t.toString().replace("v", ""));
                     data.get(i).set(j, n);
-                }
-                else if (t.getType() == Node.Type.unset) {
+                } else if (t.getType() == Node.Type.unset) {
                     data.get(i).set(j, new Node("*"));
                 }
             }
@@ -96,6 +82,21 @@ public class Generator {
 
         h = createHidato(data, adj, ht);
         filename = getHashedFilename();
+    }
+
+    private Hidato createHidato(ArrayList<ArrayList<Node>> data,
+                                Hidato.AdjacencyType adj,
+                                Game.HidatoType ht) {
+        switch (ht) {
+            case TRIANGLE:
+                return new TriHidato(data, adj);
+            case SQUARE:
+                return new QuadHidato(data, adj);
+            case HEXAGON:
+                return new TriHidato(data, adj);
+            default:
+                return new TriHidato(data, adj);
+        }
     }
 
     public Hidato getHidato() {

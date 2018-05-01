@@ -2,8 +2,6 @@ package domain;
 
 import org.junit.Test;
 
-import java.util.Random;
-
 public class GeneratorTest {
     private Generator gen;
 
