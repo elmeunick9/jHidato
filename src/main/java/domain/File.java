@@ -68,6 +68,4 @@ public class File {
 
         return hidato;
     }
-
-    
 }
