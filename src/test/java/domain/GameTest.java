@@ -12,7 +12,7 @@ public class GameTest {
     @Before
     public void before() {
         user = new User("test");
-        game = new Game(Game.Difficulty.EASY, user);
+        game = new Game(Game.Difficulty.EASY, user, Game.HidatoType.TRIANGLE);
     }
 
     @Test
@@ -20,6 +20,7 @@ public class GameTest {
         assertEquals(0, game.getScore());
         assertEquals(user, game.getPlayer());
         assertEquals(Game.Difficulty.EASY, game.getDif());
+        assertEquals(Game.HidatoType.TRIANGLE, game.getHt());
     }
 
     @Test

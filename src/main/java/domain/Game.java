@@ -2,20 +2,23 @@ package domain;
 
 
 public class Game {
-    public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM }
+    public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
+    public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
     private int score;
+    private HidatoType ht;
     private Difficulty dif;
     private Hidato h;
     private String filename;
     private User user;
     //time played;
-    Game(Difficulty d, User u) {
+    Game(Difficulty d, User u, HidatoType htype) {
         score = 0;
         GeneratorStub g = new GeneratorStub(d);
         h = g.getHidato();
         dif = d;
         filename = g.getHashedFilename();
         user = u;
+        ht = htype;
     }
 
     public int getScore() {
@@ -36,6 +39,10 @@ public class Game {
 
     public int getValue(int x, int y) throws Node.InvalidTypeException{
         return h.getNode(x,y).getValue();
+    }
+
+    public HidatoType getHt() {
+        return ht;
     }
 
     /*Add or substract the score with minimum of 0*/
