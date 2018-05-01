@@ -9,9 +9,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 
-public class TriHidatoTest {
-    private TriHidato hidato;
-
+public class QuadHidatoTest {
+    private QuadHidato hidato;
     @Before
     public void before() {
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
@@ -30,46 +29,20 @@ public class TriHidatoTest {
             }
         }
 
-        hidato = new TriHidato(data, Hidato.AdjacencyType.EDGE);
+        hidato = new QuadHidato(data, Hidato.AdjacencyType.EDGE);
     }
 
     @Test
-    public void copyTest() throws Node.InvalidTypeException {
+    public void setValuesTest() throws Node.InvalidTypeException {
         Hidato c = hidato.copy(Hidato.AdjacencyType.VERTEX);
         c.getNode(4, 2).setValue(8);
         hidato.getNode(4, 2).setValue(9);
-        assertEquals(c.getNode(1,1).getType(), Node.Type.invisible);
-        assertEquals(c.getNode(5,1).getType(), Node.Type.block);
-        assertEquals(c.getNode(5,7).getType(), Node.Type.block);
-        assertEquals(c.getNode(3,4).getType(), Node.Type.fixed);
-        assertEquals(c.getNode(3,4).getValue(), 1);
         assertEquals(c.getNode(4,2).getValue(), 8);
         assertEquals(hidato.getNode(4,2).getValue(), 9);
     }
 
     @Test
-    public void copyDataTest() throws Node.InvalidTypeException {
-        ArrayList<ArrayList<Node>> data = hidato.copyData();
-        Hidato c = new TriHidato(data, Hidato.AdjacencyType.VERTEX);
-
-        c.getNode(4, 2).setValue(8);
-        hidato.getNode(4, 2).setValue(9);
-        assertEquals(c.getNode(1,1).getType(), Node.Type.invisible);
-        assertEquals(c.getNode(5,1).getType(), Node.Type.block);
-        assertEquals(c.getNode(5,7).getType(), Node.Type.block);
-        assertEquals(c.getNode(3,4).getType(), Node.Type.fixed);
-        assertEquals(c.getNode(3,4).getValue(), 1);
-        assertEquals(c.getNode(4,2).getValue(), 8);
-        assertEquals(hidato.getNode(4,2).getValue(), 9);
-
-        int s = 0;
-        for (Node n : c) s++;
-        assertEquals(data.size()*data.get(0).size(), s);
-    }
-
-
-    @Test
-    public void codificationIsGood() throws Node.InvalidTypeException {
+    public void typeNodeTest() throws Node.InvalidTypeException {
         hidato.getNode(4, 2).setValue(8);
         assertEquals(hidato.getNode(1,1).getType(), Node.Type.invisible);
         assertEquals(hidato.getNode(5,1).getType(), Node.Type.block);
@@ -80,30 +53,35 @@ public class TriHidatoTest {
     }
 
     @Test
-    public void adjacencyTest() throws Node.InvalidTypeException {
-
-        //Test by EDGE
+    public void adjacencyEdgeTest() throws Node.InvalidTypeException {
         Node a = hidato.getNode(5, 4);
         assertEquals(a.getValue(), 7);
 
         Node b = hidato.getNode(4, 3);
         b.setValue(3);
+        Node c = hidato.getNode(3, 4);
+        Node d = hidato.getNode(4, 6);
 
         ArrayList<Node> list = hidato.adjacentNodes(hidato.getNode(4, 4));
         assertTrue(list.contains(a));
         assertTrue(list.contains(b));
+        assertTrue(list.contains(c));
+        assertTrue(!list.contains(d));
         assertEquals(list.get(list.indexOf(b)).getValue(), 3);
+    }
 
-        a = hidato.getNode(3, 7);
-        b = hidato.getNode(2, 7);
-        list = hidato.adjacentNodes(hidato.getNode(3, 6));
-
-        //Test by VERTEX
+    @Test
+    public void adjacencyVertexTest() throws Node.InvalidTypeException {
         Hidato c = hidato.copy(Hidato.AdjacencyType.VERTEX);
-        a = hidato.getNode(5, 4);
-        b = hidato.getNode(3, 4);
-        list = hidato.adjacentNodes(hidato.getNode(4, 4));
-        assertTrue(list.contains(a));
-        assertTrue(list.toString().contains("?"));
+        Node a1 = c.getNode(3, 3);
+        Node a2 = c.getNode(3, 5);
+        Node a3 = c.getNode(5, 3);
+        Node a4 = c.getNode(5, 5);
+        ArrayList<Node> list = c.adjacentNodes(c.getNode(4, 4));
+        assertTrue(list.contains(a1));
+        assertTrue(list.contains(a2));
+        assertTrue(list.contains(a3));
+        assertTrue(list.contains(a4));
+
     }
 }

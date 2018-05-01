@@ -1,6 +1,7 @@
 package domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
@@ -19,6 +20,8 @@ public class NodeTest {
         assertEquals(b.toString(),"?");
         Node c = new Node("98");
         assertEquals(c.toString(),"98");
+        Node d = new Node("?");
+        assertFalse(b == d);
     }
 
     @Test

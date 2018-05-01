@@ -5,6 +5,7 @@
 
 <module name="Checker">
     <module name="SuppressWarningsFilter"/>
+	<module name="SuppressionCommentFilter"/>
     <module name="NewlineAtEndOfFile"/>
     <module name="FileTabCharacter"/>
 
@@ -19,6 +20,7 @@
 
     <module name="TreeWalker">
         <module name="SuppressWarningsHolder"/>
+		<module name="FileContentsHolder"/>
 
         <!-- Checks for annotations -->
         <!-- http://checkstyle.sourceforge.net/config_annotation.html -->
@@ -85,12 +87,6 @@
         <module name="AvoidStarImport"/>
         <module name="AvoidStaticImport">
             <property name="excludes" value="java.lang.System.out,java.lang.Math.*,org.junit.Assert.*,org.mockito.Mockito.*, org.mockito.Matchers.*, org.mockito.AdditionalMatchers.*, ratpack.handling.Handlers.*, ratpack.test.handling.RequestFixture.*"/>
-        </module>
-        <module name="CustomImportOrder">
-            <property name="specialImportsRegExp" value="com.newrelic"/>
-            <property name="customImportOrderRules" value="STATIC###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE###STANDARD_JAVA_PACKAGE"/>
-            <property name="sortImportsInGroupAlphabetically" value="true"/>
-            <property name="separateLineBetweenGroups" value="true"/>
         </module>
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
