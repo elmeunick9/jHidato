@@ -48,6 +48,27 @@ public class TriHidatoTest {
     }
 
     @Test
+    public void copyDataTest() throws Node.InvalidTypeException {
+        ArrayList<ArrayList<Node>> data = hidato.copyData();
+        Hidato c = new TriHidato(data, Hidato.AdjacencyType.VERTEX);
+
+        c.getNode(4, 2).setValue(8);
+        hidato.getNode(4, 2).setValue(9);
+        assertEquals(c.getNode(1,1).getType(), Node.Type.invisible);
+        assertEquals(c.getNode(5,1).getType(), Node.Type.block);
+        assertEquals(c.getNode(5,7).getType(), Node.Type.block);
+        assertEquals(c.getNode(3,4).getType(), Node.Type.fixed);
+        assertEquals(c.getNode(3,4).getValue(), 1);
+        assertEquals(c.getNode(4,2).getValue(), 8);
+        assertEquals(hidato.getNode(4,2).getValue(), 9);
+
+        int s = 0;
+        for (Node n : c) s++;
+        assertEquals(data.size()*data.get(0).size(), s);
+    }
+
+
+    @Test
     public void codificationIsGood() throws Node.InvalidTypeException {
         hidato.getNode(4, 2).setValue(8);
         assertEquals(hidato.getNode(1,1).getType(), Node.Type.invisible);
@@ -60,6 +81,7 @@ public class TriHidatoTest {
 
     @Test
     public void adjacencyTest() throws Node.InvalidTypeException {
+
         //Test by EDGE
         Node a = hidato.getNode(5, 4);
         assertEquals(a.getValue(), 7);
@@ -71,6 +93,10 @@ public class TriHidatoTest {
         assertTrue(list.contains(a));
         assertTrue(list.contains(b));
         assertEquals(list.get(list.indexOf(b)).getValue(), 3);
+
+        a = hidato.getNode(3, 7);
+        b = hidato.getNode(2, 7);
+        list = hidato.adjacentNodes(hidato.getNode(3, 6));
 
         //Test by VERTEX
         Hidato c = hidato.copy(Hidato.AdjacencyType.VERTEX);

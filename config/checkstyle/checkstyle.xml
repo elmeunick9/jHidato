@@ -5,6 +5,7 @@
 
 <module name="Checker">
     <module name="SuppressWarningsFilter"/>
+	<module name="SuppressionCommentFilter"/>
     <module name="NewlineAtEndOfFile"/>
     <module name="FileTabCharacter"/>
 
@@ -19,6 +20,7 @@
 
     <module name="TreeWalker">
         <module name="SuppressWarningsHolder"/>
+		<module name="FileContentsHolder"/>
 
         <!-- Checks for annotations -->
         <!-- http://checkstyle.sourceforge.net/config_annotation.html -->
