@@ -7,10 +7,9 @@ import java.util.ArrayList;
 
 public class File {
 
-    File() {
-    }
+    File() {}
 
-    /*Import from a file the Hidatos */
+    /*Import from a file given and returns the Hidato */
     public static Hidato importHidato(String file)  throws IOException {
         String ruta = "src/files/";
         FileReader fr = new FileReader(ruta+file);
@@ -69,4 +68,6 @@ public class File {
 
         return hidato;
     }
+
+    
 }
