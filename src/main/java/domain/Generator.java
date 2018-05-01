@@ -11,72 +11,92 @@ public class Generator {
 
     protected Generator() {}
 
+    private Hidato createHidato(ArrayList<ArrayList<Node>> data, Hidato.AdjacencyType adj, Game.HidatoType ht) {
+        switch (ht) {
+            case TRIANGLE:
+                return new TriHidato(data, adj);
+            case SQUARE:
+                return new QuadHidato(data, adj);
+            case HEXAGON:
+                return new TriHidato(data, adj);
+            default:
+                return new TriHidato(data, adj);
+        }
+    }
+
     Generator(Game.Difficulty d, Game.HidatoType ht) {
-        Hidato.AdjacencyType adj = Hidato.AdjacencyType.VERTEX;
+        Hidato.AdjacencyType adj = Hidato.AdjacencyType.EDGE;
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
-        int max;
+        Pair<Integer, Integer> interval;
         switch (d) {
             case EASY:
-                max = 5;
+                interval = new Pair<>(3, 6);
                 break;
             case MEDIUM:
-                max = 10;
+                interval = new Pair<>(7, 9);
                 break;
             case HARD:
-                max = 20;
-                break;
-            case CUSTOM:
-                max = 20;
+                interval = new Pair<>(10, 20);
                 break;
             default:
-                max = 10;
+                interval = new Pair<>(3, 6);
                 break;
         }
         Random rn = new Random();
-        int x = 5;//rn.nextInt() % max;
-        int y = 5;//rn.nextInt() % max;
+        int x = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
+        int y = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
+        int z = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
 
+        int unset_num = 0;
         for(int i = 0; i < x; i++) {
             data.add(new ArrayList<>());
             for(int j = 0; j < y; j++){
                 String elem = "?";
                 data.get(data.size() - 1).add(new Node(elem));
+                unset_num++;
             }
         }
 
-        switch (ht) {
-            case TRIANGLE:
-                h = new TriHidato(data, adj);
-                break;
-            case SQUARE:
-                h = new QuadHidato(data, adj);
-                break;
-            case HEXAGON:
-                h = new TriHidato(data, adj);
-                break;
-            default:
-                h = new TriHidato(data, adj);
-                break;
+        Hidato s = createHidato(data, adj, ht);
+
+        int minLen = 4;
+        boolean notFound = false;
+        while(!notFound && minLen <= unset_num) {
+            Solver solver = new Solver(s);
+            try {
+                h = solver.generateSolution(minLen);
+
+                //Advance, try find a more filled solution, but not linearly.
+                minLen = (int) ((double)minLen * 1.3 + 1);
+
+                // Small random chance to consider the hidato OK if at least half unset nodes
+                // are filled.
+                if (minLen > unset_num/2 && rn.nextInt(5) == 1) notFound = true;
+
+            } catch (Solver.SolutionNotFound e) {
+                notFound = true;
+            }
         }
 
-        Solver s = new Solver (h);
-        //h = s.generateSolution();
+        data = h.copyData();
+        for(int i = 0; i < data.size(); i++) {
+            for(int j = 0; j < data.get(i).size(); j++) {
+                Node t = data.get(i).get(j);
+                if (t.getType() == Node.Type.variable) {
+                    Node n;
+                    if (rn.nextInt(z/2+2) != 1) n = new Node("?");
+                    else n = new Node(t.toString().replace("v", ""));
+                    data.get(i).set(j, n);
+                }
+                else if (t.getType() == Node.Type.unset) {
+                    data.get(i).set(j, new Node("*"));
+                }
+            }
+        }
+
+        h = createHidato(data, adj, ht);
         filename = getHashedFilename();
     }
-
-    /* Create random string*/
-    /*
-    protected String getSaltString() {
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
-        while (salt.length() < 18) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
-        }
-        String saltStr = salt.toString();
-        return saltStr;
-    }*/
 
     public Hidato getHidato() {
         return h;
