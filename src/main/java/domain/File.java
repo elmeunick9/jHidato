@@ -68,4 +68,23 @@ public class File {
 
         return hidato;
     }
+
+    /* return the data of ranking from the file*/
+    public static ArrayList<ArrayList<String>> getRanking() throws IOException {
+        String ruta = "src/files/ranking.txt";
+        FileReader fr = new FileReader(ruta);
+        BufferedReader b = new BufferedReader(fr);
+        String cadena = b.readLine();
+        ArrayList<ArrayList<String>> ret = new ArrayList<>();
+        while(cadena != null) {
+            ret.add(new ArrayList<>());
+            String[] line = cadena.split("/");
+            for (String x : line) {
+                ret.get(ret.size() - 1).add(x);
+            }
+            cadena = b.readLine();
+        }
+
+        return ret;
+    }
 }
