@@ -5,9 +5,7 @@ import java.util.Scanner;
 
 public class App {
     private static void getWelcome() {
-        String msg = "Welcome to the project of the group 21.1: \n"
-                + "If you want to see all the options available please press enter.";
-
+        String msg = "Welcome to the project of the group 21.1: \n";
         System.out.print(msg);
     }
 
@@ -23,21 +21,47 @@ public class App {
                 + " corresponding to the class you want to test: \n"
                 + "1: Class Generator \n"
                 + "2: Class Game \n"
-                + "3: Class Ranking \n";
+                + "3: Class Ranking \n"
+                + "To try the solver enter into the class game and let it to him!";
 
         System.out.print(msg);
     }
 
     private static void testingGenerator() {
+        Scanner s = new Scanner(System.in);
         String msg = "This is the generator class. What would you like to do?\n"
-                + "1: ";
+                + "1: Generate a Easy Hidato \n"
+                + "2: Generate a Medium Hidato \n"
+                + "3: Generate a Hard Hidato \n";
         System.out.print(msg);
+        String val = s.nextLine();
+        Generator g;
+
+        msg = "This is the generated Hidato. Note that we only implemented "
+                + "the SQUARE cell type due to the implementation in the terminal"
+                + "is the same. The diferences between the cell types you could see"
+                + "it in the tests. \n";
+        System.out.print(msg);
+        switch (val) {
+            case "1":
+                g = new Generator(Game.Difficulty.EASY, Game.HidatoType.SQUARE);
+                g.getHidato().print();
+                break;
+            case "2":
+                g = new Generator(Game.Difficulty.MEDIUM, Game.HidatoType.SQUARE);
+                g.getHidato().print();
+                break;
+            case "3":
+                g = new Generator(Game.Difficulty.HARD, Game.HidatoType.SQUARE);
+                g.getHidato().print();
+                break;
+        }
+
     }
 
     private static void testingGame() throws Solver.SolutionNotFound {
         Scanner s = new Scanner(System.in);
-        String msg = "\n\n\n"
-                + "Please enter a username to create a user for the game: \n";
+        String msg = "Please enter a username to create a user for the game: \n";
         System.out.print(msg);
         String username = s.nextLine();
         User u = new User(username);
@@ -176,7 +200,6 @@ public class App {
         boolean keepPlaying = true;
         Scanner s = new Scanner(System.in);
         getWelcome();
-        System.in.read();
         getOptions();
         while (keepPlaying) {
             String val = s.nextLine();
