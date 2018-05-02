@@ -13,7 +13,7 @@ public class Ranking {
        return r;
     }
 
-    public void mostraRanking() {
+    public void showRanking() {
         System.out.print("RANKING:  \n");
         for(int i = 0; i < r.size(); i++){
             System.out.print(r.get(i));
