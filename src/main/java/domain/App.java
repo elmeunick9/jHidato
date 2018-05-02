@@ -55,6 +55,8 @@ public class App {
                 g = new Generator(Game.Difficulty.HARD, Game.HidatoType.SQUARE);
                 g.getHidato().print();
                 break;
+            default:
+                break;
         }
 
     }
@@ -172,21 +174,6 @@ public class App {
         }
     }
 
-    private static void testingTriHidato() {
-        String msg = "WIP";
-        System.out.print(msg);
-    }
-
-    private static void testingQuadHidato() {
-        String msg = "WIP";
-        System.out.print(msg);
-    }
-
-    private static void testingHexHidato() {
-        String msg = "WIP";
-        System.out.print(msg);
-    }
-
     private static void testingRanking() throws IOException {
         String msg = "We import the file ranking.txt in /files. "
                 + "This is the basic implementation, you will see it now"
@@ -212,15 +199,6 @@ public class App {
                     break;
                 case "3":
                     testingRanking();
-                    break;
-                case "4":
-                    testingTriHidato();
-                    break;
-                case "5":
-                    testingQuadHidato();
-                    break;
-                case "6":
-                    testingHexHidato();
                     break;
                 default:
                     keepPlaying = false;
