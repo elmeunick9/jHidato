@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Comparator;
+
 public class Node {
     public enum Type { variable, fixed, block, invisible, unset }
     private int value = 0;
@@ -58,4 +60,16 @@ public class Node {
     public void clear() {
         if (type == Type.variable) type = Type.unset;
     }
+
+    public static Comparator<Node> COMPARE_BY_VALUE = new Comparator<Node>() {
+        public int compare(Node a, Node b) {
+            return a.getValue() - b.getValue();
+        }
+    };
+
+    public static Comparator<Node> COMPARE_BY_VALUE_DESCENDING = new Comparator<Node>() {
+        public int compare(Node a, Node b) {
+            return b.getValue() - a.getValue();
+        }
+    };
 }
