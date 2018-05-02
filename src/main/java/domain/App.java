@@ -23,7 +23,8 @@ public class App {
                 + "2: Class Game \n"
                 + "3: Class Ranking \n"
                 + "4: Enter Hidato \n"
-                + "To try the solver enter into the class game and let it to him or enter your own Hidato!\n";
+                + "To try the solver enter into the class game and let it to him"
+                + " or enter your own Hidato!\n";
 
         System.out.print(msg);
     }
@@ -186,7 +187,8 @@ public class App {
 
     private static void enterHidato() throws IOException, Solver.SolutionNotFound {
         String msg = "Copy and paste the hidato into the terminal "
-                + "with the structure given in the pdf. You could find a example inside the 'files' folder called 'example.txt'\n";
+                + "with the structure given in the pdf. "
+                + "You could find a example inside the 'files' folder called 'example.txt'\n";
         System.out.print(msg);
         Hidato h = File.enterHidato();
 

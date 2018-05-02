@@ -101,7 +101,7 @@ public class File {
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
         Hidato hidato;
 
-        if(cadena != "") {
+        if(cadena.isEmpty()) {
             params = cadena.split(",");
             int x = Integer.parseInt(params[2]);
             int y = Integer.parseInt(params[3]);
