@@ -22,7 +22,8 @@ public class App {
                 + "1: Class Generator \n"
                 + "2: Class Game \n"
                 + "3: Class Ranking \n"
-                + "To try the solver enter into the class game and let it to him!";
+                + "4: Enter Hidato \n"
+                + "To try the solver enter into the class game and let it to him or enter your own Hidato!\n";
 
         System.out.print(msg);
     }
@@ -183,6 +184,23 @@ public class App {
         r.showRanking();
     }
 
+    private static void enterHidato() throws IOException, Solver.SolutionNotFound {
+        String msg = "Copy and paste the hidato into the terminal "
+                + "with the structure given in the pdf. You could find a example inside the 'files' folder called 'example.txt'\n";
+        System.out.print(msg);
+        Hidato h = File.enterHidato();
+
+        msg = "This is the representation of your Hidato.\n";
+        System.out.print(msg);
+        h.print();
+
+        msg = "A possible solution for the Hidato given is: \n";
+        System.out.print(msg);
+
+        Solver s = new Solver(h);
+        s.generateSolution().print();
+    }
+
     public static void main(String[] args) throws IOException, Solver.SolutionNotFound {
         boolean keepPlaying = true;
         Scanner s = new Scanner(System.in);
@@ -200,13 +218,16 @@ public class App {
                 case "3":
                     testingRanking();
                     break;
+                case "4":
+                    enterHidato();
+                    break;
                 default:
                     keepPlaying = false;
                     break;
             }
 
             if(keepPlaying){
-                System.out.print("\nPress enter to continue");
+                System.out.print("\nPress enter to continue\n");
                 s.nextLine();
                 getOptions();
             } else {
