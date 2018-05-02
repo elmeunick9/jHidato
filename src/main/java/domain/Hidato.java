@@ -11,6 +11,8 @@ public abstract class Hidato implements Iterable<Node> {
     protected AdjacencyType adjacency;
     private ArrayList<ArrayList<Node>> nodes;
     private Map<Node, ArrayList<Node>> map = new HashMap<>();
+    private int sizeY = 0;
+    private int sizeX = 0;
 
 
     Hidato(ArrayList<ArrayList<Node>> data, AdjacencyType t) {
@@ -18,12 +20,21 @@ public abstract class Hidato implements Iterable<Node> {
         adjacency = t;
 
         for (int i = 1; i <= data.size(); i++) {
-            for (int j = 1; j <= data.get(i-1).size(); j++) {
+            int j;
+            for (j = 1; j <= data.get(i-1).size(); j++) {
                 Node n = getNode(i, j);
                 if (n.valid()) map.put(n, adjacentNodes(i, j));
             }
+
+            // The size_y of the matrix is the max. Why? You shouldn't, but what if data is not
+            // a uniform matrix but rather a bunch of lists of different sizes?
+            if (j+1 > sizeY) sizeY = j+1;
         }
+        sizeX = data.size();
     }
+
+    public int getSizeX() { return sizeX; }
+    public int getSizeY() { return sizeY; }
 
     @Override
     public Iterator<Node> iterator() {
