@@ -18,27 +18,19 @@ public class App {
     }
 
     private static void getOptions() {
-        String msg = "If you want to simulate a real game enter 0.\n"
-                + "If you want to exit just press enter.\n"
+        String msg = "If you want to exit just press enter.\n"
                 + "If you want to test a specific class please enter the number"
                 + " corresponding to the class you want to test: \n"
-                + "1: Class Solver \n"
+                + "1: Class Generator \n"
                 + "2: Class Game \n"
-                + "3: Class Ranking \n"
-                + "4: Class TriHidato \n"
-                + "5: Class QuadHidato \n"
-                + "6: Class HexHidato \n";
+                + "3: Class Ranking \n";
 
         System.out.print(msg);
     }
 
-    private static void simulateGame() {
-        String msg = "WIP";
-        System.out.print(msg);
-    }
-
-    private static void testingSolver() {
-        String msg = "WIP";
+    private static void testingGenerator() {
+        String msg = "This is the generator class. What would you like to do?\n"
+                + "1: ";
         System.out.print(msg);
     }
 
@@ -67,8 +59,10 @@ public class App {
                 break;
             case "h":
                 d = Game.Difficulty.HARD;
+                break;
             default:
                 d = Game.Difficulty.EASY;
+                break;
         }
 
         msg = "Finally choose a type of cell: \n"
@@ -187,11 +181,8 @@ public class App {
         while (keepPlaying) {
             String val = s.nextLine();
             switch(val) {
-                case "0":
-                    simulateGame();
-                    break;
                 case "1":
-                    testingSolver();
+                    testingGenerator();
                     break;
                 case "2":
                     testingGame();
@@ -217,9 +208,7 @@ public class App {
                 System.out.print("\nPress enter to continue");
                 s.nextLine();
                 getOptions();
-            }
-
-            else {
+            } else {
                 leaveMsg();
             }
         }
