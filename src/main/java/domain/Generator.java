@@ -93,7 +93,7 @@ public class Generator {
             case SQUARE:
                 return new QuadHidato(data, adj);
             case HEXAGON:
-                return new TriHidato(data, adj);
+                return new HexHidato(data, adj);
             default:
                 return new TriHidato(data, adj);
         }
