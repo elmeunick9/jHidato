@@ -1,6 +1,8 @@
 package domain;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -8,35 +10,73 @@ public class Solver {
     private Hidato hidato;
     private Random rand = new Random();
     private ArrayList<Node> visited = new ArrayList<>();
+    private ArrayList<Node> fixedNodes = new ArrayList<>();
+    private ArrayDeque<Node> fixedNodesDeque = new ArrayDeque<>();
+    private HashMap<Node, HashMap<Node, Integer>> distance = new HashMap<>();
     private int fillSize = 0;
     private boolean printTraceOption = false;
 
     Solver(Hidato h) {
         hidato = h;
         for (Node n : hidato) {
-            if (n.getType() == Node.Type.fixed || n.getType() == Node.Type.unset) fillSize++;
+            if (n.getType() == Node.Type.unset || n.getType() == Node.Type.fixed) fillSize++;
         }
     }
 
+    private void precompute() {
+        fixedNodes.clear();
+        fixedNodesDeque.clear();
+        distance.clear();
+
+        ArrayList<Pair<Node, Pair<Integer, Integer>>> fixedNodesPos = new ArrayList<>();
+        for (Node n : hidato) {
+            if (n.getType() == Node.Type.fixed) fixedNodes.add(n);
+        }
+
+        fixedNodes.sort(Node.compareByValue);
+
+        for (int i = 1; i <= hidato.getSizeX(); i++) {
+            for(int j = 1; j <= hidato.getSizeY(); j++) {
+                if (!hidato.isIndexBounded(i, j)) continue;
+                Node n = hidato.getNode(i, j);
+                if(n.getType() != Node.Type.fixed) continue;
+                fixedNodesPos.add(new Pair<>(n, new Pair<>(i, j)));
+            }
+        }
+
+        for (int i = 1; i <= hidato.getSizeX(); i++) {
+            for(int j = 1; j <= hidato.getSizeY(); j++) {
+                if (!hidato.isIndexBounded(i, j)) continue;
+                Node n = hidato.getNode(i, j);
+                distance.put(n, new HashMap<>());
+                for (Pair<Node, Pair<Integer, Integer>> f : fixedNodesPos) {
+                    double x = i-f.getValue().getKey();
+                    double y = j-f.getValue().getValue();
+                    Double d = Math.sqrt(x*x + y*y);
+                    distance.get(n).put(f.getKey(), d.intValue());
+                }
+            }
+        }
+
+        //Collections.reverse(fixedNodes);
+        fixedNodesDeque.addAll(fixedNodes);
+    }
+
    /* There is a hamiltonian strictly increasing by a order of 1 path from min to max node values.*/
-    /* To implement using nextMove */
+    /* TODO: To implement using nextMove */
     private boolean isSolution() {
         return false;
     }
 
-    /* No nodes have the same value */
-    /* Maybe not requiered
-    boolean isValid() {
-        return false;
+    //Based on euclidian distance. Only checks if two nodes are reacheble.
+    //Rather than a heuristic, it actually is a restriction.
+    private int heuristicFunction(Node n, Node target, int fromValue) {
+        int diff = target.getValue() - fromValue;
+        if (diff == 0) return 1;
+        if (fromValue > target.getValue()) return 1;
+        int mind = distance.get(n).get(target);
+        return mind > diff ? 0 : 1;
     }
-    */
-
-    /* All nodes have some value */
-    /* Maybe not requiered
-    boolean isFilled() {
-        return false;
-    }
-    */
 
     /* Generates a list of valid next movements, an empty list indicates no movements */
     ArrayList<Pair<Node, Integer>> nextMove(Node a) throws Node.InvalidTypeException {
@@ -65,7 +105,12 @@ public class Solver {
 
         // If not, all adjacent unset nodes may have an increasing value.
         for (Node b : nodes) {
-            if (b.getType() == Node.Type.unset) moves.add(new Pair<>(b, nv));
+            if (b.getType() == Node.Type.unset) {
+
+                //The heuristic determines on h = 0 nodes out of reach.
+                //int h = heuristicFunction(b)
+                moves.add(new Pair<>(b, nv));
+            }
         }
 
         return moves;
@@ -87,6 +132,7 @@ public class Solver {
         //We would be selecting a startNode from the original hidato, not the copy.
         Hidato original = hidato;
         hidato = hidato.copy();
+        precompute();
 
         for (Node n : hidato) if (n.hasValue() && n.getValue() == 1) startNode = n;
         for (Node n : hidato) if (n.getType() == Node.Type.unset) candidateNodes.add(n);
@@ -105,15 +151,25 @@ public class Solver {
                 startNode.setValue(1);
             }
 
-            // Backtracking
-            visited.add(startNode);
-            try {
-                generateSolution(startNode, minLen);
-                notFound = false;
-            } catch (HidatoIsFilledWrongException e) {
+            int h = 1;
+            if (!fixedNodesDeque.isEmpty()) {
+                h = heuristicFunction(startNode, fixedNodesDeque.getFirst(), 1);
+            }
+            if (h == 0) {
                 candidateNodes.remove(startNode);
-                visited.clear();
                 startNode.clear();
+
+            } else {
+                // Backtracking
+                visited.add(startNode);
+                try {
+                    generateSolution(startNode, minLen);
+                    notFound = false;
+                } catch (HidatoIsFilledWrongException e) {
+                    candidateNodes.remove(startNode);
+                    visited.clear();
+                    startNode.clear();
+                }
             }
 
             if (printTraceOption) System.out.println("START NODE: " + startNode);
@@ -132,36 +188,46 @@ public class Solver {
         //SOLUTION FOUND!
         if (visited.size() == fillSize) return;
 
+        //If we are fixed node, make sure to remove it from the queue.
+        Node nodeRemovedFromQueue = null;
+        if (n.getType() == Node.Type.fixed) {
+            if (fixedNodesDeque.getFirst() == n) {
+                fixedNodesDeque.removeFirst();
+                nodeRemovedFromQueue = n;
+            } else if (!fixedNodesDeque.isEmpty()) {
+                //If we reached a fixed node ignoring middle ones we sure are on the wrong path.
+                throw new HidatoIsFilledWrongException();
+            }
+        }
+
         //Get a list of possible movements.
         ArrayList<Pair<Node, Integer>> moves;
         try {
              moves = nextMove(n);
-        } catch (Node.InvalidTypeException e) {
-            System.err.println("We somehow reached an invalid node!");
-            System.err.println(e);
-            throw new Error();
         } catch (NullPointerException e) {
             System.err.println("NULL POINTER EXCEPTION ON ADJACENCY FOR NODE: " + n);
             System.err.println("Check that the solver is using the correct hidato!");
             throw e;
         }
 
-        //Keep trying until no movements left.
+        //Keep trying movements until no movements left.
         boolean notFound = true;
         while (!moves.isEmpty() && notFound) {
             int i = rand.nextInt(moves.size());
             Pair<Node, Integer> mov = moves.get(i);
             moves.remove(i);
 
+            //If the movement would bring us to a unreachable node (to next fixed) discard it.
+            if (!fixedNodesDeque.isEmpty()) {
+                int h = heuristicFunction(mov.getKey(), fixedNodesDeque.getFirst(), mov.getValue());
+                if (h == 0) continue;
+            }
+
             try {
                 mov.getKey().setValue(mov.getValue());
                 visited.add(mov.getKey());
                 generateSolution(mov.getKey(), minLen);
                 notFound = false;
-            } catch (Node.InvalidTypeException e) {
-                System.err.println("We somehow reached an invalid node!");
-                System.err.println(e);
-                throw new Error();
             } catch (HidatoIsFilledWrongException e) {
                 mov.getKey().clear();
                 visited.remove(mov.getKey());
@@ -171,17 +237,14 @@ public class Solver {
 
         if (notFound) {
 
+            //If failed, and we just removed a node from fixed queue, reinsert it.
+            if (nodeRemovedFromQueue != null) fixedNodesDeque.addFirst(nodeRemovedFromQueue);
+
             //PARTIAL SOLUTION FOUND. I would put this in the line below but fucking linter.
             if (minLen != -1 && visited.size() >= minLen) return;
 
             throw new HidatoIsFilledWrongException();
         }
     }
-
-    /* Generates all possible solutions */
-    /*
-    ArrayList<Hidato> generateAllSolution() {
-        return new ArrayList;
-    }*/
 
 }
