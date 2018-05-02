@@ -9,7 +9,7 @@ public class File {
 
     File() {}
 
-    /*Import from a file given and returns the Hidato */
+    /* Import from a file given and returns the Hidato */
     public static Hidato importHidato(String file)  throws IOException {
         String ruta = "src/files/";
         FileReader fr = new FileReader(ruta+file);
@@ -21,6 +21,8 @@ public class File {
         Hidato hidato;
         String[] params;
 
+        /* If cadena is null it means that the txt file is not correct,
+         then a exception will be thrown. */
         if(cadena !=null) {
             params = cadena.split(",");
             int x = Integer.parseInt(params[2]);
@@ -67,5 +69,26 @@ public class File {
         b.close();
 
         return hidato;
+    }
+
+    /* return the data of ranking from the file in form of matrix */
+    public static ArrayList<ArrayList<String>> getRanking() throws IOException {
+        String ruta = "src/files/ranking.txt";
+        FileReader fr = new FileReader(ruta);
+        BufferedReader b = new BufferedReader(fr);
+        String cadena = b.readLine();
+        ArrayList<ArrayList<String>> ret = new ArrayList<>();
+
+
+        while(cadena != null) {
+            ret.add(new ArrayList<>());
+            String[] line = cadena.split("/");
+            for (String x : line) {
+                ret.get(ret.size() - 1).add(x);
+            }
+            cadena = b.readLine();
+        }
+
+        return ret;
     }
 }
