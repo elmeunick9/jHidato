@@ -17,13 +17,13 @@ public class Generator {
         Pair<Integer, Integer> interval;
         switch (d) {
             case EASY:
-                interval = new Pair<>(3, 6);
+                interval = new Pair<>(3, 4);
                 break;
             case MEDIUM:
-                interval = new Pair<>(7, 9);
+                interval = new Pair<>(5, 7);
                 break;
             case HARD:
-                interval = new Pair<>(10, 20);
+                interval = new Pair<>(8, 10);
                 break;
             default:
                 interval = new Pair<>(3, 6);
