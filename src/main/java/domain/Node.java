@@ -61,15 +61,9 @@ public class Node {
         if (type == Type.variable) type = Type.unset;
     }
 
-    public static Comparator<Node> COMPARE_BY_VALUE = new Comparator<Node>() {
+    public static Comparator<Node> compareByValue = new Comparator<Node>() {
         public int compare(Node a, Node b) {
             return a.getValue() - b.getValue();
-        }
-    };
-
-    public static Comparator<Node> COMPARE_BY_VALUE_DESCENDING = new Comparator<Node>() {
-        public int compare(Node a, Node b) {
-            return b.getValue() - a.getValue();
         }
     };
 }

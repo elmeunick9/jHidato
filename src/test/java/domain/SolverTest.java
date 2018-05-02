@@ -128,7 +128,49 @@ public class SolverTest {
         } catch (Solver.SolutionNotFound e) {
             throw new AssertionError();
         }
-
     }
+
+    //FROM HERE ON SERIOUS TESTS ------------------------------------------------------------------
+
+    @Test
+    public void quadTest1() {
+        //CHECKSTYLE:OFF
+        String[][] matrix = {
+                {"7v", "8",   "#",  "#",  "29",  "30v"},
+                {"6",  "9v",  "#",  "#",  "28v", "31v"},
+                {"5",  "10",  "#",  "#",  "27v",  "32v"},
+                {"4v", "11v", "18v","19v","26v", "33v"},
+                {"3v", "12v", "17v","20v","25",  "34v"},
+                {"2v", "13v", "16v","21v","24v", "35"},
+                {"1v", "14",  "15", "22", "23",  "*"},
+        };
+        //CHECKSTYLE:ON
+
+        data.clear();
+
+        for (String[] list : matrix) {
+            data.add(new ArrayList<>());
+            for (String x : list) {
+                if (x.endsWith("v")) x = "?";
+                data.get(data.size() - 1).add(new Node(x));
+            }
+        }
+
+        Hidato hidato = new QuadHidato(data, Hidato.AdjacencyType.EDGE);
+        Solver solver = new Solver(hidato);
+
+        try {
+            Hidato solution = solver.generateSolution();
+            assertEquals(solution.getNode(1, 1).getValue(), 7);
+            assertEquals(solution.getNode(2, 2).getValue(), 9);
+            assertEquals(solution.getNode(4, 3).getValue(), 18);
+            assertEquals(solution.getNode(4, 4).getValue(), 19);
+            assertEquals(solution.getNode(5, 6).getValue(), 34);
+        } catch (Solver.SolutionNotFound e) {
+            throw new AssertionError();
+        }
+    }
+
+
 
 }
