@@ -1,6 +1,5 @@
 package domain;
 
-
 public class Game {
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
@@ -10,7 +9,7 @@ public class Game {
     private Hidato h;
     private String filename;
     private User user;
-    //time played;
+    private long timeInit;
 
     Game(Difficulty d, User u, HidatoType htype) {
         this(d, u, htype, new Generator(d, htype));
@@ -23,6 +22,7 @@ public class Game {
         filename = g.getHashedFilename();
         user = u;
         ht = htype;
+        timeInit = System.currentTimeMillis();
     }
 
     public int getScore() {
@@ -84,8 +84,11 @@ public class Game {
 
     }
 
-    /*Refresh stats from user and ranking when a game is over*/
-    public void finishGame() {
-
+    /*Refresh stats from user and ranking when a game is over
+    * return the time in miliseconds */
+    public long finishGame() {
+        user.gameFinished();
+        long timePlayed = System.currentTimeMillis() - timeInit;
+        return timePlayed;
     }
 }

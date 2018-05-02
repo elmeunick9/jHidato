@@ -56,14 +56,12 @@ public class File {
                     hidato = new TriHidato(data, adj);
                     break;
                 case "H":
-                    hidato  = new TriHidato(data, adj);
+                    hidato  = new HexHidato(data, adj);
                     break;
                 default:
-                    hidato = new TriHidato(data, adj);
-                    break;
+                    throw new IOException();
             }
         } else {
-            //Modificar a una excepció custom
             throw new FileNotFoundException();
         }
         b.close();
