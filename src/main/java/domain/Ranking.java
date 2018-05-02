@@ -12,4 +12,12 @@ public class Ranking {
     public ArrayList<ArrayList<String>> getRanking() {
        return r;
     }
+
+    public void mostraRanking() {
+        System.out.print("RANKING:  \n");
+        for(int i = 0; i < r.size(); i++){
+            System.out.print(r.get(i));
+            System.out.print("\n");
+        }
+    }
 }
