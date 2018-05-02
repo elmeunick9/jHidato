@@ -91,4 +91,17 @@ public class Game {
         long timePlayed = System.currentTimeMillis() - timeInit;
         return timePlayed;
     }
+
+    public void print() {
+        h.print();
+    }
+
+    public void solve() throws Solver.SolutionNotFound {
+        Solver s = new Solver(h);
+        h = s.generateSolution();
+    }
+
+    public void clear() {
+        h.clear();
+    }
 }
