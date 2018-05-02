@@ -21,7 +21,8 @@ public class File {
         Hidato hidato;
         String[] params;
 
-        /* If cadena is null it means that the txt file is not correct, then a exception will be thrown. */
+        /* If cadena is null it means that the txt file is not correct,
+         then a exception will be thrown. */
         if(cadena !=null) {
             params = cadena.split(",");
             int x = Integer.parseInt(params[2]);
