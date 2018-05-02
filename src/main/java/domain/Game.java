@@ -1,7 +1,5 @@
 package domain;
 
-import java.time.Instant;
-
 public class Game {
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
