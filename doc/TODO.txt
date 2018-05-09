@@ -1,0 +1,35 @@
+    O- Guardar game (amb estat) -> a carpeta amb username.
+    O- Guardar hidatos predefinits per carpetes dificultats.
+    - Guardar ranking i actualitzar. (username substr(5), ordre per puntuació. Temps jugat com a param.)
+    O- Guardar users. Afegir identificador hidatos resolts. Ultim hidato jugat.
+    O- File moure a persistencia. Carpeta file al root. Marcar com Resources Root.
+    - Ctrl. de file.
+    -* Hash per hidatos.
+
+Capa Presentació:
+    - Implementació "getByCoord" i "draw". -> a Capa de Pres!
+    - Ctrl. User.
+    - Ctrl. Game.
+    - Ctrl. Ranking.
+
+    R-Finestra buida inicial.
+
+    R- Pantalla inici
+        Dues subdivisions:
+        Login amb selectpicker.
+        Register amb:
+        - Text box amb username.
+        - Boto register.
+
+    - Seleccionar Hidato:
+        - Carregar partides en curs o finalitzats: carpeta user.
+        - Seleccionar acció (File > Load) | (File > Load Template) | (Generate).
+
+    - Si Generate:
+        - Si custom: pantalla amb paràmetres.
+        - Si no es genera segons la dif selec.
+
+    - Carregar "widget" amb l'hidato.
+
+-* Millorar solver i generator.
+
