@@ -18,7 +18,7 @@ public class File {
 
     /* Import from a file given and returns the Hidato */
     public static Hidato importHidato(String file)  throws IOException {
-        String ruta = "src/files/";
+        String ruta = "Files/";
         FileReader fr = new FileReader(ruta+file);
         BufferedReader b = new BufferedReader(fr);
         String cadena = b.readLine();
@@ -78,7 +78,7 @@ public class File {
 
     /* return the data of ranking from the file in form of matrix */
     public static ArrayList<ArrayList<String>> getRanking() throws IOException {
-        String ruta = "src/files/ranking.txt";
+        String ruta = "Files/ranking.txt";
         FileReader fr = new FileReader(ruta);
         BufferedReader b = new BufferedReader(fr);
         String cadena = b.readLine();
