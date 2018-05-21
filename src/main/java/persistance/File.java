@@ -1,4 +1,10 @@
-package domain;
+package persistance;
+import domain.Hidato;
+import domain.TriHidato;
+import domain.QuadHidato;
+import domain.HexHidato;
+import domain.Node;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

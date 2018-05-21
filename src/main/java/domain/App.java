@@ -1,5 +1,7 @@
 package domain;
 
+import persistance.File;
+
 import java.io.IOException;
 import java.util.Scanner;
 

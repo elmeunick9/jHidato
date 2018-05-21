@@ -7,7 +7,7 @@ public class Node {
     private int value = 0;
     private Type type;
 
-    Node(String data) {
+    public Node(String data) {
         if      ("#".equals(data)) type = Type.invisible;
         else if ("*".equals(data)) type = Type.block;
         else if ("?".equals(data)) type = Type.unset;
