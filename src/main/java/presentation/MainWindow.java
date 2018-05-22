@@ -1,11 +1,6 @@
 package presentation;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.awt.Dimension;
 
 public class MainWindow {
@@ -15,6 +10,7 @@ public class MainWindow {
     private JMenuBar menuMain = new JMenuBar();
     private JMenu menuFile = new JMenu("File");
     private JMenuItem menuitemQuit = new JMenuItem("Quit");
+    private JOptionPane loginDialog = new JOptionPane();
 
     public MainWindow(CtrlPresentation cPres) {
         ctrlPresentation = cPres;
@@ -35,6 +31,29 @@ public class MainWindow {
         frame.setJMenuBar(menuMain);
 
         //Main Content
+
+        //Show Login
+        String usrname = "";
+        while (usrname == "") {
+            String t = (String)JOptionPane.showInputDialog(
+                    frame,
+                    "Username:\n",
+                    "Login / Register",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    "KEK");
+            if (t == null) {
+                throw new ExceptionInInitializerError();
+            }
+            if (t.length() == 3 && t.matches("[A-Za-z0-9]+")) usrname = t.toUpperCase();
+            else {
+                JOptionPane.showMessageDialog(frame,
+                        "Username must consist of exactly 3 alphanumeric values",
+                        "Invalid Username",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     public void makeVisible() {

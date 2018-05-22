@@ -242,8 +242,12 @@ public class App {
 
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(() -> {
-            CtrlPresentation ctrlPresentacion = new CtrlPresentation();
-            ctrlPresentacion.init();
+            try {
+                CtrlPresentation ctrlPresentacion = new CtrlPresentation();
+                ctrlPresentacion.init();
+            } catch (ExceptionInInitializerError e) {
+                System.exit(0);
+            }
         });
     }
 }
