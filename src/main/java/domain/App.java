@@ -1,5 +1,7 @@
 package domain;
 
+import presentation.CtrlPresentation;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -203,7 +205,7 @@ public class App {
         s.generateSolution().print();
     }
 
-    public static void main(String[] args) throws IOException, Solver.SolutionNotFound {
+    public static void mainOld(String[] args) throws IOException, Solver.SolutionNotFound {
         boolean keepPlaying = true;
         Scanner s = new Scanner(System.in);
         getWelcome();
@@ -236,5 +238,12 @@ public class App {
                 leaveMsg();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            CtrlPresentation ctrlPresentacion = new CtrlPresentation();
+            ctrlPresentacion.init();
+        });
     }
 }
