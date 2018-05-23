@@ -158,7 +158,7 @@ public class customFile {
     }
 
     //
-    public static void saveGame(String username, String hidatoName){
+    public static void saveGame(String username, String hidatoName, ArrayList<String> data){
 
     try {
         File folder = new File("Usuaris/" + username + "/Partida");
@@ -175,9 +175,11 @@ public class customFile {
         PrintStream console = System.out;
         PrintStream o = new PrintStream(game);
         System.setOut(o);
-        System.out.print(";");
         System.setOut(console);
-        bw.write("Prova Text");
+        for(String line : data) {
+            bw.write(line);
+            bw.newLine();
+        }
         bw.close();
         fileWriter.close();
 

@@ -108,6 +108,43 @@ public abstract class Hidato implements Iterable<Node> {
         return copy;
     }
 
+    public ArrayList<String> getRawData(Game.HidatoType type) {
+        ArrayList<String> data = new ArrayList<>();
+        String typeString = "";
+        if(type == Game.HidatoType.TRIANGLE) {
+            typeString = "T";
+        } else if (type == Game.HidatoType.SQUARE) {
+            typeString = "Q";
+        } else if (type == Game.HidatoType.HEXAGON) {
+            typeString = "H";
+        }
+        String header = typeString +",";
+        if(AdjacencyType.EDGE == adjacency) {
+            header += "C,";
+        }
+        else if(AdjacencyType.BOTH == adjacency) {
+            header += "CA,";
+        }
+        else if(AdjacencyType.VERTEX == adjacency) {
+            //CANNOT BE A VERTEX TYPE
+        }
+        header+= nodes.size()+","+nodes.get(0).size();
+        data.add(header);
+
+        for (ArrayList<Node> a : nodes) {
+            String line = "";
+            for (Node n : a) {
+                String node = n.toString();
+                if(a.get(a.size()-1) != n){
+                    node += ",";
+                }
+                line += node;
+            }
+            data.add(line);
+        }
+        return data;
+    };
+
     public void print() {
         for (ArrayList<Node> a : nodes) {
             System.out.print("{");

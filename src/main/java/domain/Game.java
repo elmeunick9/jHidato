@@ -83,7 +83,7 @@ public class Game {
 
     /*Save the stats of the game when user pause or leave the game*/
     public void saveGame() {
-        customFile.saveGame(user.getName(), filename);
+        customFile.saveGame(user.getName(), filename, h.getRawData(ht));
     }
 
     /*Refresh stats from user and ranking when a game is over
@@ -110,6 +110,7 @@ public class Game {
     public static void main(String[] args) {
         User u = new User("Oscar");
         Game game = new Game(Difficulty.EASY, u, HidatoType.SQUARE);
+        game.move(1,1,2);
         game.saveGame();
         System.out.println("GUARDAT");
     }
