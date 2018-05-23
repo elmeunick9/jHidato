@@ -121,13 +121,12 @@ public abstract class Hidato implements Iterable<Node> {
         String header = typeString +",";
         if(AdjacencyType.EDGE == adjacency) {
             header += "C,";
-        }
-        else if(AdjacencyType.BOTH == adjacency) {
+        } else if(AdjacencyType.BOTH == adjacency) {
             header += "CA,";
         }
-        else if(AdjacencyType.VERTEX == adjacency) {
+        //else if(AdjacencyType.VERTEX == adjacency) {
             //CANNOT BE A VERTEX TYPE
-        }
+        //}
         header+= nodes.size()+","+nodes.get(0).size();
         data.add(header);
 

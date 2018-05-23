@@ -17,9 +17,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class customFile {
+public class CustomFile {
 
-    customFile() {}
+    CustomFile() {}
 
     /* Import from a file given and returns the Hidato */
     public static Hidato importHidato(String file)  throws IOException {
@@ -160,30 +160,31 @@ public class customFile {
     //
     public static void saveGame(String username, String hidatoName, ArrayList<String> data){
 
-    try {
-        File folder = new File("Usuaris/" + username + "/Partida");
-        if(!folder.exists()) {
-            folder.mkdirs();
-        }
+        try {
+            File folder = new File("Usuaris/" + username + "/Partida");
+            if(!folder.exists()) {
+                folder.mkdirs();
+            }
 
-        System.out.println("Folder created");
-        File game = new File("Usuaris/" + username + "/Partida/", hidatoName);
-        game.delete();
-        game.createNewFile();
-        FileWriter fileWriter = new FileWriter("Usuaris/" + username + "/Partida/" + hidatoName, true);
-        BufferedWriter bw = new BufferedWriter(fileWriter);
-        PrintStream console = System.out;
-        PrintStream o = new PrintStream(game);
-        System.setOut(o);
-        System.setOut(console);
-        for(String line : data) {
-            bw.write(line);
-            bw.newLine();
-        }
-        bw.close();
-        fileWriter.close();
+            System.out.println("Folder created");
+            File game = new File("Usuaris/" + username + "/Partida/", hidatoName);
+            game.delete();
+            game.createNewFile();
+            FileWriter fileWriter = new FileWriter("Usuaris/" + username
+                    + "/Partida/" + hidatoName, true);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            PrintStream console = System.out;
+            PrintStream o = new PrintStream(game);
+            System.setOut(o);
+            System.setOut(console);
+            for(String line : data) {
+                bw.write(line);
+                bw.newLine();
+            }
+            bw.close();
+            fileWriter.close();
 
-    } catch(IOException ex){ex.printStackTrace();}
+        } catch(IOException ex){ex.printStackTrace();}
 
     }
 
