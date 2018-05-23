@@ -5,16 +5,21 @@ import domain.QuadHidato;
 import domain.HexHidato;
 import domain.Node;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+
+import java.io.PrintStream;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class File {
+public class customFile {
 
-    File() {}
+    customFile() {}
 
     /* Import from a file given and returns the Hidato */
     public static Hidato importHidato(String file)  throws IOException {
@@ -69,7 +74,7 @@ public class File {
                     throw new IOException();
             }
         } else {
-            throw new FileNotFoundException();
+            throw new IOException();
         }
         b.close();
 
@@ -146,9 +151,38 @@ public class File {
                     throw new IOException();
             }
         } else {
-            throw new FileNotFoundException();
+            throw new IOException();
         }
 
         return hidato;
     }
+
+    //
+    public static void saveGame(String username, String hidatoName){
+
+    try {
+        File folder = new File("Usuaris/" + username + "/Partida");
+        if(!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        System.out.println("Folder created");
+        File game = new File("Usuaris/" + username + "/Partida/", hidatoName);
+        game.delete();
+        game.createNewFile();
+        FileWriter fileWriter = new FileWriter("Usuaris/" + username + "/Partida/" + hidatoName, true);
+        BufferedWriter bw = new BufferedWriter(fileWriter);
+        PrintStream console = System.out;
+        PrintStream o = new PrintStream(game);
+        System.setOut(o);
+        System.out.print(";");
+        System.setOut(console);
+        bw.write("Prova Text");
+        bw.close();
+        fileWriter.close();
+
+    } catch(IOException ex){ex.printStackTrace();}
+
+    }
+
 }

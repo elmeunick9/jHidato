@@ -1,5 +1,7 @@
 package domain;
 
+import persistance.customFile;
+
 public class Game {
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
@@ -81,7 +83,7 @@ public class Game {
 
     /*Save the stats of the game when user pause or leave the game*/
     public void saveGame() {
-
+        customFile.saveGame(user.getName(), filename);
     }
 
     /*Refresh stats from user and ranking when a game is over
@@ -103,5 +105,12 @@ public class Game {
 
     public void clear() {
         h.clear();
+    }
+
+    public static void main(String[] args) {
+        User u = new User("Oscar");
+        Game game = new Game(Difficulty.EASY, u, HidatoType.SQUARE);
+        game.saveGame();
+        System.out.println("GUARDAT");
     }
 }

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.junit.Test;
-import persistance.File;
+import persistance.customFile;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class FileTest {
     @Test
     public void gettingTriHidato() throws IOException, Node.InvalidTypeException {
-        Hidato hidato = File.importHidato("example.txt");
+        Hidato hidato = customFile.importHidato("example.txt");
         assertEquals(1, hidato.getNode(3,4).getValue());
 
         Node a = hidato.getNode(5, 4);
@@ -32,7 +32,7 @@ public class FileTest {
 
     @Test
     public void gettingQuadHidato() throws IOException, Node.InvalidTypeException {
-        Hidato hidato = File.importHidato("exampleQuadHidato.txt");
+        Hidato hidato = customFile.importHidato("exampleQuadHidato.txt");
         assertEquals(1, hidato.getNode(3,4).getValue());
 
         Node a = hidato.getNode(5, 4);

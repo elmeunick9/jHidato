@@ -1,6 +1,6 @@
 package domain;
 
-import persistance.File;
+import persistance.customFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Ranking {
     private ArrayList<ArrayList<String>> r;
     Ranking() throws IOException {
-        r = File.getRanking();
+        r = customFile.getRanking();
     }
 
     public ArrayList<ArrayList<String>> getRanking() {
