@@ -91,6 +91,64 @@ public class Game {
     public void loadGame(String file) {
         ArrayList<String> infoLoaded = CtrlPersistencia.loadGame(user.getName(), file);
         System.out.print(infoLoaded);
+        String line = infoLoaded.get(0);
+        String[] params = line.split(",");
+        ArrayList<ArrayList<Node>> dataHidato = new ArrayList<>();
+        int x = Integer.parseInt(params[2]);
+        System.out.println("LOAD?");
+
+        //Generate the Matrix of <Node> to import the Hidato.
+        for(int i = 1; i <= x; i++) {
+            line = infoLoaded.get(i);
+            String[] data = line.split(",");
+            dataHidato.add(new ArrayList<>());
+            for(String d : data) {
+                dataHidato.get(dataHidato.size() - 1).add(new Node(d));
+            }
+        }
+        ht = getHidatoType(params[0]);
+        h = loadHidato(dataHidato, getAdjacencyType(params[1]));
+        filename = file;
+        /*
+        dif = d;
+        timeInit = System.currentTimeMillis();*/
+    }
+
+    private Hidato.AdjacencyType getAdjacencyType(String at) {
+        Hidato.AdjacencyType ret = null;
+        switch (at) {
+            case "C":
+                ret = Hidato.AdjacencyType.EDGE;
+            case "CA":
+                ret = Hidato.AdjacencyType.BOTH;
+        }
+        return ret;
+    }
+
+    private Hidato loadHidato(ArrayList<ArrayList<Node>> data, Hidato.AdjacencyType adj) {
+        switch (ht) {
+            case TRIANGLE:
+                return new TriHidato(data, adj);
+            case SQUARE:
+                return new QuadHidato(data, adj);
+            case HEXAGON:
+                return new HexHidato(data, adj);
+            default:
+                return new TriHidato(data, adj);
+        }
+    }
+
+    private HidatoType getHidatoType(String t) {
+        HidatoType ret = null;
+        switch (t) {
+            case "T":
+                ret = HidatoType.TRIANGLE;
+            case "Q":
+                ret = HidatoType.SQUARE;
+            case "H":
+                ret = HidatoType.HEXAGON;
+        }
+        return ret;
     }
 
     /*Refresh stats from user and ranking when a game is over
@@ -117,7 +175,9 @@ public class Game {
     public static void main(String[] args) {
         User u = new User("Oscar");
         Game game = new Game(Difficulty.EASY, u, HidatoType.SQUARE);
+        game.print();
         game.loadGame("5acf9800");
-        System.out.println("LOAD?");
+        game.print();
+        game.clear();
     }
 }
