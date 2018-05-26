@@ -119,8 +119,12 @@ public class Game {
         switch (at) {
             case "C":
                 ret = Hidato.AdjacencyType.EDGE;
+                break;
             case "CA":
                 ret = Hidato.AdjacencyType.BOTH;
+                break;
+            default:
+                break;
         }
         return ret;
     }
@@ -143,10 +147,15 @@ public class Game {
         switch (t) {
             case "T":
                 ret = HidatoType.TRIANGLE;
+                break;
             case "Q":
                 ret = HidatoType.SQUARE;
+                break;
             case "H":
                 ret = HidatoType.HEXAGON;
+                break;
+            default:
+                ret = HidatoType.SQUARE;
         }
         return ret;
     }
