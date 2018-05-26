@@ -88,8 +88,8 @@ public class Game {
         CtrlPersistencia.saveGame(user.getName(), filename, h.getRawData(ht));
     }
 
-    public void loadGame(String filename) { //WIP
-        ArrayList<String> infoLoaded = CtrlPersistencia.loadGame(user.getName(), filename);
+    public void loadGame(String file) {
+        ArrayList<String> infoLoaded = CtrlPersistencia.loadGame(user.getName(), file);
         System.out.print(infoLoaded);
     }
 
