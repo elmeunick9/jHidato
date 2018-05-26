@@ -13,4 +13,8 @@ public class CtrlPersistencia {
     public static Hidato importHidato(String file)  throws IOException {
         return CustomFile.importHidato(file);
     }
+
+    public static void saveGame(String username, String hidatoName, ArrayList<String> data) {
+        CustomFile.saveGame(username, hidatoName, data);
+    }
 }

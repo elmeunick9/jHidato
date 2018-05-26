@@ -1,6 +1,6 @@
 package domain;
 
-import persistance.CustomFile;
+import persistance.CtrlPersistencia;
 
 public class Game {
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
@@ -83,7 +83,7 @@ public class Game {
 
     /*Save the stats of the game when user pause or leave the game*/
     public void saveGame() {
-        CustomFile.saveGame(user.getName(), filename, h.getRawData(ht));
+        CtrlPersistencia.saveGame(user.getName(), filename, h.getRawData(ht));
     }
 
     /*Refresh stats from user and ranking when a game is over
