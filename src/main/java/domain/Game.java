@@ -2,6 +2,8 @@ package domain;
 
 import persistance.CtrlPersistencia;
 
+import java.util.ArrayList;
+
 public class Game {
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
@@ -86,6 +88,11 @@ public class Game {
         CtrlPersistencia.saveGame(user.getName(), filename, h.getRawData(ht));
     }
 
+    public void loadGame(String filename) { //WIP
+        ArrayList<String> infoLoaded = CtrlPersistencia.loadGame(user.getName(), filename);
+        System.out.print(infoLoaded);
+    }
+
     /*Refresh stats from user and ranking when a game is over
     * return the time in miliseconds */
     public long finishGame() {
@@ -110,8 +117,7 @@ public class Game {
     public static void main(String[] args) {
         User u = new User("Oscar");
         Game game = new Game(Difficulty.EASY, u, HidatoType.SQUARE);
-        game.move(1,1,2);
-        game.saveGame();
-        System.out.println("GUARDAT");
+        game.loadGame("5acf9800");
+        System.out.println("LOAD?");
     }
 }

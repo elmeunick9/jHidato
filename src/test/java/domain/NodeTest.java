@@ -40,4 +40,11 @@ public class NodeTest {
         assertEquals(a.getValue(), 91);
         assertEquals(b.getType(), Node.Type.unset);
     }
+
+    @Test
+    public void variableType() throws Node.InvalidTypeException {
+        Node a = new Node("2v");
+        assertEquals(a.getValue(), 2);
+        assertEquals(a.getType(), Node.Type.variable);
+    }
 }

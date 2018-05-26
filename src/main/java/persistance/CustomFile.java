@@ -188,4 +188,25 @@ public class CustomFile {
 
     }
 
+    public static ArrayList<String> loadGame(String username, String hidatoName) {
+        try {
+            FileReader fr = new FileReader("Usuaris/" + username
+                    + "/Partida/" + hidatoName);
+            BufferedReader b = new BufferedReader(fr);
+            ArrayList<String> ret =  new ArrayList<>();
+            String cadena = b.readLine();
+            while(cadena != null) {
+                ret.add(cadena);
+                cadena = b.readLine();
+            }
+            b.close();
+
+            return ret;
+
+        } catch(IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
 }

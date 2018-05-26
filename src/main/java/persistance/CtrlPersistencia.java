@@ -17,4 +17,8 @@ public class CtrlPersistencia {
     public static void saveGame(String username, String hidatoName, ArrayList<String> data) {
         CustomFile.saveGame(username, hidatoName, data);
     }
+
+    public static ArrayList<String> loadGame(String username, String hidatoName) {
+        return CustomFile.loadGame(username, hidatoName);
+    }
 }
