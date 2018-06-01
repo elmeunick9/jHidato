@@ -14,6 +14,7 @@ public class Game {
     private String filename;
     private User user;
     private long timeInit;
+    private long currTime;
 
     Game(Difficulty d, User u, HidatoType htype) {
         this(d, u, htype, new Generator(d, htype));
@@ -27,6 +28,52 @@ public class Game {
         user = u;
         ht = htype;
         timeInit = System.currentTimeMillis();
+        currTime = 0;
+    }
+    //Constructor to load a existent game
+    Game(String file, User u) {
+        user = u;
+        ArrayList<String> infoLoaded = CtrlPersistencia.loadGame(u.getName(), file);
+        System.out.print(infoLoaded);
+        String line = infoLoaded.get(0);
+        String[] params = line.split(",");
+        ArrayList<ArrayList<Node>> dataHidato = new ArrayList<>();
+        int x = Integer.parseInt(params[2]);
+        System.out.println("LOAD?");
+
+        //Generate the Matrix of <Node> to import the Hidato.
+        for(int i = 1; i <= x; i++) {
+            line = infoLoaded.get(i);
+            String[] data = line.split(",");
+            dataHidato.add(new ArrayList<>());
+            for(String d : data) {
+                dataHidato.get(dataHidato.size() - 1).add(new Node(d));
+            }
+        }
+        ht = getHidatoType(params[0]);
+        h = loadHidato(dataHidato, getAdjacencyType(params[1]));
+        filename = file;
+        line = infoLoaded.get(x+1);
+        String[] data = line.split(",");
+        timeInit = System.currentTimeMillis();
+        currTime = Long.parseLong(data[1]);
+        switch (data[0]){
+            case "easy":
+                dif = Difficulty.EASY;
+                break;
+            case "medium":
+                dif = Difficulty.MEDIUM;
+                break;
+            case "hard":
+                dif = Difficulty.HARD;
+                break;
+            default:
+                dif = Difficulty.CUSTOM;
+                break;
+        }
+        /*
+        dif = d;
+        */
     }
 
     public int getScore() {
@@ -85,33 +132,26 @@ public class Game {
 
     /*Save the stats of the game when user pause or leave the game*/
     public void saveGame() {
-        CtrlPersistencia.saveGame(user.getName(), filename, h.getRawData(ht));
+        String dificult;
+        switch (dif){
+            case EASY:
+                dificult = "easy";
+                break;
+            case MEDIUM:
+                dificult = "medium";
+                break;
+            case HARD:
+                dificult = "hard";
+                break;
+            default:
+                dificult = "custom";
+                break;
+        }
+        CtrlPersistencia.saveGame(user.getName(), filename, h.getRawData(ht), dificult, currTime);
     }
 
     public void loadGame(String file) {
-        ArrayList<String> infoLoaded = CtrlPersistencia.loadGame(user.getName(), file);
-        System.out.print(infoLoaded);
-        String line = infoLoaded.get(0);
-        String[] params = line.split(",");
-        ArrayList<ArrayList<Node>> dataHidato = new ArrayList<>();
-        int x = Integer.parseInt(params[2]);
-        System.out.println("LOAD?");
 
-        //Generate the Matrix of <Node> to import the Hidato.
-        for(int i = 1; i <= x; i++) {
-            line = infoLoaded.get(i);
-            String[] data = line.split(",");
-            dataHidato.add(new ArrayList<>());
-            for(String d : data) {
-                dataHidato.get(dataHidato.size() - 1).add(new Node(d));
-            }
-        }
-        ht = getHidatoType(params[0]);
-        h = loadHidato(dataHidato, getAdjacencyType(params[1]));
-        filename = file;
-        /*
-        dif = d;
-        timeInit = System.currentTimeMillis();*/
     }
 
     private Hidato.AdjacencyType getAdjacencyType(String at) {
@@ -164,8 +204,8 @@ public class Game {
     * return the time in miliseconds */
     public long finishGame() {
         user.gameFinished();
-        long timePlayed = System.currentTimeMillis() - timeInit;
-        return timePlayed;
+        currTime += System.currentTimeMillis() - timeInit;
+        return currTime;
     }
 
     public void print() {
@@ -183,10 +223,16 @@ public class Game {
 
     public static void main(String[] args) {
         User u = new User("Oscar");
-        Game game = new Game(Difficulty.EASY, u, HidatoType.SQUARE);
+        Game game = new Game("5acf9800", u);
         game.print();
-        game.loadGame("5acf9800");
-        game.print();
+        int c = 0;
+        while(c < 200000000)
+            c++;
         game.clear();
+        System.out.print(game.finishGame());
+        game.saveGame();
+
     }
+
+
 }

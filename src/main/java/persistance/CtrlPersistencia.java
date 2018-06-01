@@ -14,8 +14,8 @@ public class CtrlPersistencia {
         return CustomFile.importHidato(file);
     }
 
-    public static void saveGame(String username, String hidatoName, ArrayList<String> data) {
-        CustomFile.saveGame(username, hidatoName, data);
+    public static void saveGame(String username, String hidatoName, ArrayList<String> data, String diff, long currTime) {
+        CustomFile.saveGame(username, hidatoName, data, diff, currTime);
     }
 
     public static ArrayList<String> loadGame(String username, String hidatoName) {

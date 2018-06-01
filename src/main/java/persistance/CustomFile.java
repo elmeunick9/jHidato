@@ -158,15 +158,13 @@ public class CustomFile {
     }
 
     //
-    public static void saveGame(String username, String hidatoName, ArrayList<String> data) {
+    public static void saveGame(String username, String hidatoName, ArrayList<String> data, String diff, long currTime) {
 
         try {
             File folder = new File("Usuaris/" + username + "/Partida");
             if(!folder.exists()) {
                 folder.mkdirs();
             }
-
-            System.out.println("Folder created");
             File game = new File("Usuaris/" + username + "/Partida/", hidatoName);
             game.delete();
             game.createNewFile();
@@ -181,6 +179,9 @@ public class CustomFile {
                 bw.write(line);
                 bw.newLine();
             }
+            String line = diff + "," + currTime;
+            bw.write(line);
+            bw.newLine();
             bw.close();
             fileWriter.close();
 
