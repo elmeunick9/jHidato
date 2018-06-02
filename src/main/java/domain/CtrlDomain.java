@@ -9,15 +9,23 @@ public class CtrlDomain {
     }
 
     //Generate a new hidato and game.
-    public void generateGame(int difficulty) {
+    public void generateGame(int difficulty, int type) {
         Game.Difficulty d;
         switch (difficulty) {
-            case 1: d = Game.Difficulty.EASY; break;
-            case 2: d = Game.Difficulty.MEDIUM; break;
-            case 3: d = Game.Difficulty.HARD; break;
+            case 0: d = Game.Difficulty.EASY; break;
+            case 1: d = Game.Difficulty.MEDIUM; break;
+            case 2: d = Game.Difficulty.HARD; break;
             default: d = Game.Difficulty.EASY;
         }
-        Game game = new Game(d, user, Game.HidatoType.SQUARE);
+
+        Game.HidatoType t;
+        switch (type) {
+            case 0: t = Game.HidatoType.TRIANGLE; break;
+            case 1: t = Game.HidatoType.SQUARE; break;
+            case 2: t = Game.HidatoType.HEXAGON; break;
+            default: t = Game.HidatoType.SQUARE;
+        }
+        game = new Game(d, user, t);
         game.print();
     }
 

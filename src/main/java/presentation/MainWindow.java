@@ -6,7 +6,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import java.awt.Dimension;
 
 public class MainWindow {
@@ -67,7 +66,8 @@ public class MainWindow {
         menuitemNewGame.addActionListener(e -> {
             boolean toGenerate = newGameWindow.showDialog();
             int d = newGameWindow.difficulty;
-            if (toGenerate) ctrlPresentation.getCtrlDomain().generateGame(d);
+            int t = newGameWindow.type;
+            if (toGenerate) ctrlPresentation.getCtrlDomain().generateGame(d, t);
             else ctrlPresentation.getCtrlDomain().createGame();
         });
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
