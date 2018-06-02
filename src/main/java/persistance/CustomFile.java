@@ -158,7 +158,8 @@ public class CustomFile {
     }
 
     //
-    public static void saveGame(String username, String hidatoName, ArrayList<String> data, String diff, long currTime) {
+    public static void saveGame(String username, String hidatoName,
+    ArrayList<String> data, String diff, long currTime) {
 
         try {
             File folder = new File("Usuaris/" + username + "/games");
