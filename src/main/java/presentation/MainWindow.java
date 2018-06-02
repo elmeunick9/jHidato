@@ -26,7 +26,7 @@ public class MainWindow {
         ctrlPresentation = cPres;
         initView();
         initActions();
-        askUser();
+        ctrlPresentation.initUser(askUser());
     }
 
     private void initView() {
@@ -59,7 +59,7 @@ public class MainWindow {
         menuitemQuit.addActionListener(e -> System.exit(0));
     }
 
-    private void askUser() {
+    private String askUser() {
         //Show Login
         String usrname = "";
         while (usrname == "") {
@@ -82,6 +82,7 @@ public class MainWindow {
                         JOptionPane.ERROR_MESSAGE);
             }
         }
+        return usrname;
     }
 
     public void makeVisible() {

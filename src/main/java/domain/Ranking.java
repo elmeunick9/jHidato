@@ -1,6 +1,6 @@
 package domain;
 
-import persistance.CtrlPersistencia;
+import persistance.CtrlPersistence;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Ranking {
     private ArrayList<ArrayList<String>> r;
     Ranking() throws IOException {
-        r = CtrlPersistencia.getRanking();
+        r = CtrlPersistence.getRanking();
     }
 
     public ArrayList<ArrayList<String>> getRanking() {

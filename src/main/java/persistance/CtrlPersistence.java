@@ -5,7 +5,7 @@ import domain.Hidato;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CtrlPersistencia {
+public class CtrlPersistence {
     public static ArrayList<ArrayList<String>> getRanking() throws IOException {
         return CustomFile.getRanking();
     }

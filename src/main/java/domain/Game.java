@@ -1,6 +1,6 @@
 package domain;
 
-import persistance.CtrlPersistencia;
+import persistance.CtrlPersistence;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class Game {
     //Constructor to load a existent game
     Game(String file, User u) {
         user = u;
-        ArrayList<String> infoLoaded = CtrlPersistencia.loadGame(u.getName(), file);
+        ArrayList<String> infoLoaded = CtrlPersistence.loadGame(u.getName(), file);
         System.out.print(infoLoaded);
         String line = infoLoaded.get(0);
         String[] params = line.split(",");
@@ -147,7 +147,7 @@ public class Game {
                 dificult = "custom";
                 break;
         }
-        CtrlPersistencia.saveGame(user.getName(), filename, h.getRawData(ht), dificult, currTime);
+        CtrlPersistence.saveGame(user.getName(), filename, h.getRawData(ht), dificult, currTime);
     }
 
     public void loadGame(String file) {
