@@ -70,14 +70,14 @@ public class MainWindow {
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     null,
-                    "KEK");
+                    "YUUSHA");
             if (t == null) {
                 throw new ExceptionInInitializerError();
             }
-            if (t.length() == 3 && t.matches("[A-Za-z0-9]+")) usrname = t.toUpperCase();
+            if (t.length() > 1 && t.length() <= 6 && t.matches("[A-Za-z0-9]+")) usrname = t.toUpperCase();
             else {
                 JOptionPane.showMessageDialog(frame,
-                        "Username must consist of exactly 3 alphanumeric values",
+                        "Username must consist of up to 6 alphanumeric values",
                         "Invalid Username",
                         JOptionPane.ERROR_MESSAGE);
             }
