@@ -161,15 +161,15 @@ public class CustomFile {
     public static void saveGame(String username, String hidatoName, ArrayList<String> data, String diff, long currTime) {
 
         try {
-            File folder = new File("Usuaris/" + username + "/Partida");
+            File folder = new File("Usuaris/" + username + "/games");
             if(!folder.exists()) {
                 folder.mkdirs();
             }
-            File game = new File("Usuaris/" + username + "/Partida/", hidatoName);
+            File game = new File("Usuaris/" + username + "/games/", hidatoName);
             game.delete();
             game.createNewFile();
             FileWriter fileWriter = new FileWriter("Usuaris/" + username
-                    + "/Partida/" + hidatoName, true);
+                    + "/games/" + hidatoName, true);
             BufferedWriter bw = new BufferedWriter(fileWriter);
             PrintStream console = System.out;
             PrintStream o = new PrintStream(game);
@@ -192,7 +192,7 @@ public class CustomFile {
     public static ArrayList<String> loadGame(String username, String hidatoName) {
         try {
             FileReader fr = new FileReader("Usuaris/" + username
-                    + "/Partida/" + hidatoName);
+                    + "/games/" + hidatoName);
             BufferedReader b = new BufferedReader(fr);
             ArrayList<String> ret =  new ArrayList<>();
             String cadena = b.readLine();

@@ -223,7 +223,7 @@ public class Game {
 
     public static void main(String[] args) {
         User u = new User("Oscar");
-        Game game = new Game("5acf9800", u);
+        Game game = new Game(Difficulty.MEDIUM, u, HidatoType.HEXAGON);
         game.print();
         int c = 0;
         while(c < 200000000)
