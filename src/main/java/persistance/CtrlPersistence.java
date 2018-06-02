@@ -23,12 +23,12 @@ public class CtrlPersistence {
         return CustomFile.importHidato(file);
     }
 
-    public static void saveGame(String username, String hidatoName,
-    ArrayList<String> data, String diff, long currTime) {
-        CustomFile.saveGame(username, hidatoName, data, diff, currTime);
+    public void saveGame(String username, String hidatoName, ArrayList<String> data,
+                         String difficulty, long currTime) {
+        CustomFile.saveGame(username, hidatoName, data, difficulty, currTime);
     }
 
-    public static ArrayList<String> loadGame(String username, String hidatoName) {
+    public ArrayList<String> loadGame(String username, String hidatoName) {
         return CustomFile.loadGame(username, hidatoName);
     }
 }

@@ -2,6 +2,7 @@ package presentation;
 
 import javax.swing.*;
 import java.awt.Dimension;
+import java.io.File;
 
 public class MainWindow {
     private CtrlPresentation ctrlPresentation;
@@ -60,14 +61,54 @@ public class MainWindow {
 
     private void initActions() {
         menuitemQuit.addActionListener(e -> System.exit(0));
+
         menuitemNewGame.addActionListener(e -> {
             boolean toGenerate = newGameWindow.showDialog();
             int d = newGameWindow.difficulty;
             int t = newGameWindow.type;
-            if (toGenerate) ctrlPresentation.getCtrlDomain().generateGame(d, t);
-            else ctrlPresentation.getCtrlDomain().createGame();
+            String name = newGameWindow.getFilename();
+            if (toGenerate) ctrlPresentation.getCtrlDomain().generateGame(name, d, t);
+            else ctrlPresentation.getCtrlDomain().createGame(name);
         });
+
+        menuitemSavegame.addActionListener(e -> {
+            try {
+                ctrlPresentation.getCtrlDomain().saveGame();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame,
+                ex.getMessage(),
+                "Exception ocurred!",
+                JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        menuitemLoadgame.addActionListener(e -> loadGameDialog());
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
+    }
+
+    private void loadGameDialog() {
+        String myuser = ctrlPresentation.getCtrlDomain().getUsername();
+        String name = "";
+        while (name.isEmpty()) {
+            fc.setCurrentDirectory(new File(
+                    System.getProperty("user.dir") + "/Usuaris/" + myuser + "/games/"));
+            int c = fc.showDialog(frame, null);
+            if (c == 0) {
+                try {
+                    name = fc.getSelectedFile().getName();
+                    String user = fc.getSelectedFile().getParentFile().getParentFile().getName();
+                    if (!user.equals(myuser)) {
+                        throw new Exception("You must select a game within YOUR folder!");
+                    }
+                    ctrlPresentation.getCtrlDomain().getCtrlPersistence().loadGame(user, name);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(frame,
+                            ex.getMessage(),
+                            "Exception ocurred!",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }
 
     private String askUser() {

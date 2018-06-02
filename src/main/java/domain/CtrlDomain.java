@@ -14,12 +14,17 @@ public class CtrlDomain {
         presentation = present;
     }
 
+    public CtrlPersistence getCtrlPersistence() { return persistence; }
+    public CtrlPresentation getCtrlPresentation() { return presentation; }
+
     public void newPlayer(String username) {
         user = new User(username);
     }
 
+    public String getUsername() { return user.getName(); }
+
     //Generate a new hidato and game.
-    public void generateGame(int difficulty, int type) {
+    public void generateGame(String name, int difficulty, int type) {
         Game.Difficulty d;
         switch (difficulty) {
             case 0: d = Game.Difficulty.EASY; break;
@@ -35,14 +40,18 @@ public class CtrlDomain {
             case 2: t = Game.HidatoType.HEXAGON; break;
             default: t = Game.HidatoType.SQUARE;
         }
-        game = new Game(d, user, t);
+        game = new Game(this, d, user, t);
+        if (!name.isEmpty()) game.setFilename(name);
         game.print();
     }
 
     //Create a custom game from scratch.
-    public void createGame() {
+    public void createGame(String name) {
         System.out.println("NOT IMPLEMENTED!");
     }
 
-    public CtrlPersistence getCtrlPersistence() { return persistence; }
+    public void saveGame() throws Exception {
+        if (game == null) throw new Exception("You must start a game first!");
+        game.saveGame();
+    }
 }

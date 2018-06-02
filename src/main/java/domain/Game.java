@@ -5,35 +5,36 @@ import persistance.CtrlPersistence;
 import java.util.ArrayList;
 
 public class Game {
+    private CtrlDomain domain;
+
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
-    private int score;
+    private int score = 0;
     private HidatoType ht;
     private Difficulty dif;
     private Hidato h;
     private String filename;
     private User user;
     private long timeInit;
-    private long currTime;
+    private long currTime = 0;
 
-    Game(Difficulty d, User u, HidatoType htype) {
-        this(d, u, htype, new Generator(d, htype));
+    Game(CtrlDomain domain, Difficulty d, User u, HidatoType htype) {
+        this(domain, d, u, htype, new Generator(d, htype));
     }
 
-    Game(Difficulty d, User u, HidatoType htype, Generator g) {
-        score = 0;
+    Game(CtrlDomain dom, Difficulty d, User u, HidatoType htype, Generator g) {
+        domain = dom;
         h = g.getHidato();
         dif = d;
         filename = g.getHashedFilename();
         user = u;
         ht = htype;
         timeInit = System.currentTimeMillis();
-        currTime = 0;
     }
     //Constructor to load a existent game
     Game(String file, User u) {
         user = u;
-        ArrayList<String> infoLoaded = CtrlPersistence.loadGame(u.getName(), file);
+        ArrayList<String> infoLoaded = domain.getCtrlPersistence().loadGame(u.getName(), file);
         System.out.print(infoLoaded);
         String line = infoLoaded.get(0);
         String[] params = line.split(",");
@@ -76,10 +77,7 @@ public class Game {
         */
     }
 
-    public int getScore() {
-        return score;
-    }
-
+    public int getScore() { return score; }
     public User getPlayer() {
         return user;
     }
@@ -87,6 +85,7 @@ public class Game {
     public String getFilename() {
         return filename;
     }
+    public void setFilename(String fn) { filename = fn; }
 
     public Difficulty getDif() {
         return dif;
@@ -147,7 +146,7 @@ public class Game {
                 dificult = "custom";
                 break;
         }
-        CtrlPersistence.saveGame(user.getName(), filename, h.getRawData(ht), dificult, currTime);
+        domain.getCtrlPersistence().saveGame(user.getName(), filename, h.getRawData(ht), dificult, currTime);
     }
 
     public void loadGame(String file) {
@@ -220,19 +219,4 @@ public class Game {
     public void clear() {
         h.clear();
     }
-
-    public static void main(String[] args) {
-        User u = new User("Oscar");
-        Game game = new Game(Difficulty.MEDIUM, u, HidatoType.HEXAGON);
-        game.print();
-        int c = 0;
-        while(c < 200000000)
-            c++;
-        game.clear();
-        System.out.print(game.finishGame());
-        game.saveGame();
-
-    }
-
-
 }

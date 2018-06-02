@@ -11,6 +11,7 @@ public class NewGameWindow extends JDialog {
     private JComboBox selectDifficulty = new JComboBox(difficulties);
     private String types[] = { "Triangle", "Quads", "Hexagons" };
     private JComboBox selectType = new JComboBox(types);
+    private JTextField filename = new JTextField();
 
     private boolean toGenerate = true;
     public int difficulty;
@@ -25,9 +26,11 @@ public class NewGameWindow extends JDialog {
         //Components
         JLabel labelDifficulty = new JLabel("Choose difficulty: ");
         JLabel labelType = new JLabel("Choose shape type: ");
+        JLabel labelFile = new JLabel("Name: ");
 
         JPanel rowDifficulty = new JPanel();
         JPanel rowType = new JPanel();
+        JPanel rowText = new JPanel();
         JPanel rowButtons = new JPanel();
 
         //Layout
@@ -39,6 +42,10 @@ public class NewGameWindow extends JDialog {
         rowType.setBorder(border);
         rowType.add(labelType);
         rowType.add(selectType);
+        rowText.setLayout(new BoxLayout(rowText, BoxLayout.X_AXIS));
+        rowText.setBorder(border);
+        rowText.add(labelFile);
+        rowText.add(filename);
         rowButtons.setLayout(new BoxLayout(rowButtons, BoxLayout.X_AXIS));
         rowButtons.setBorder(border);
         rowButtons.add(buttonGenerate);
@@ -47,6 +54,7 @@ public class NewGameWindow extends JDialog {
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.add(rowDifficulty);
         content.add(rowType);
+        content.add(rowText);
         content.add(rowButtons);
 
         pack();
@@ -80,5 +88,9 @@ public class NewGameWindow extends JDialog {
     public boolean showDialog() {
         setVisible(true);
         return toGenerate;
+    }
+
+    public String getFilename() {
+        return filename.getText();
     }
 }
