@@ -3,6 +3,9 @@ package domain;
 import persistance.CtrlPersistence;
 import presentation.CtrlPresentation;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class CtrlDomain {
     private Game game;
     private User user;
@@ -50,8 +53,42 @@ public class CtrlDomain {
         System.out.println("NOT IMPLEMENTED!");
     }
 
-    public void saveGame() throws Exception {
-        if (game == null) throw new Exception("You must start a game first!");
+    public void saveGame() throws IOException {
+        if (game == null) throw new IllegalStateException("You must start a game first!");
         game.saveGame();
+    }
+
+    public void makeGameFromData(ArrayList<ArrayList<String>> data, String name, String adjacency,
+                                 String type) {
+        ArrayList<ArrayList<Node>> nodes = new ArrayList<>();
+        for (ArrayList<String> l : data) {
+            nodes.add(new ArrayList<>());
+            for (String s : l) {
+                nodes.get(nodes.size()-1).add(new Node(s));
+            }
+        }
+
+        Game.HidatoType t = Game.getHidatoType(type);
+        Hidato.AdjacencyType a = Game.getAdjacencyType(adjacency);
+        Hidato h = makeNewHidato(t, a, nodes);
+        game = new Game(this, Game.Difficulty.CUSTOM, user, h, t, name);
+
+        game.print();
+    }
+
+    public ArrayList<String> getClearHidatoData() {
+        Hidato t = game.getHidato().copy();
+        t.clear();
+        return t.getRawData(game.getHt());
+    }
+
+    Hidato makeNewHidato(Game.HidatoType t, Hidato.AdjacencyType adj,
+                                 ArrayList<ArrayList<Node>> nodes) {
+        switch (t) {
+            case TRIANGLE: return new TriHidato(nodes, adj);
+            case SQUARE: return new QuadHidato(nodes, adj);
+            case HEXAGON: return new HexHidato(nodes, adj);
+            default: return new QuadHidato(nodes, adj);
+        }
     }
 }

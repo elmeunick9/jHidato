@@ -1,8 +1,9 @@
 package persistance;
 
 import domain.CtrlDomain;
-import domain.Hidato;
+//import domain.Hidato;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -19,16 +20,22 @@ public class CtrlPersistence {
         return CustomFile.getRanking();
     }
 
-    public static Hidato importHidato(String file)  throws IOException {
-        return CustomFile.importHidato(file);
+    public void importHidato(File file)  throws IOException {
+        CustomFile.HidatoInStrings his = CustomFile.importHidato(file);
+        domain.makeGameFromData(his.data, file.getName(), his.adjacency, his.type);
+    }
+
+    public void exportHidato(File file) throws IOException {
+        ArrayList<String> data = getCtrlDomain().getClearHidatoData();
+        CustomFile.saveTemplate(file, data);
     }
 
     public void saveGame(String username, String hidatoName, ArrayList<String> data,
-                         String difficulty, long currTime) {
+                         String difficulty, long currTime) throws IOException {
         CustomFile.saveGame(username, hidatoName, data, difficulty, currTime);
     }
 
-    public ArrayList<String> loadGame(String username, String hidatoName) {
+    public ArrayList<String> loadGame(String username, String hidatoName) throws IOException {
         return CustomFile.loadGame(username, hidatoName);
     }
 }

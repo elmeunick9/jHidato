@@ -14,7 +14,7 @@ public class GameTest {
     public void before() {
         user = new User("test");
         generator = new GeneratorStub(Game.Difficulty.EASY, Game.HidatoType.TRIANGLE);
-        game = new Game(Game.Difficulty.EASY, user, Game.HidatoType.TRIANGLE, generator);
+        game = new Game(null, Game.Difficulty.EASY, user, Game.HidatoType.TRIANGLE, generator);
     }
 
     @Test

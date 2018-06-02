@@ -14,7 +14,6 @@ public abstract class Hidato implements Iterable<Node> {
     private int sizeY = 0;
     private int sizeX = 0;
 
-
     Hidato(ArrayList<ArrayList<Node>> data, AdjacencyType t) {
         nodes = data;
         adjacency = t;

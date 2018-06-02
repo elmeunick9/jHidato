@@ -15,11 +15,39 @@ import java.io.BufferedReader;
 import java.io.PrintStream;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CustomFile {
 
-    CustomFile() {}
+    public static class HidatoInStrings {
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+        String adjacency;
+        String type;
+    }
+
+    public static HidatoInStrings importHidato(File file) throws IOException {
+        HidatoInStrings his = new HidatoInStrings();
+        FileReader fr = new FileReader(file);
+        BufferedReader b = new BufferedReader(fr);
+        String header = b.readLine();
+        if (header.isEmpty()) throw new IOException("Empty files don't make good hidatos.");
+
+        String[] params = header.split(",");
+        his.type = params[0];
+        his.adjacency = params[1];
+        int x = Integer.parseInt(params[2]);
+        int y = Integer.parseInt(params[3]);
+
+        for(int i = 0; i < x; i++) {
+            String line = b.readLine();
+            String[] values = line.split(",");
+            his.data.add(new ArrayList<>());
+            his.data.get(his.data.size()-1).addAll(Arrays.asList(values));
+        }
+
+        return his;
+    }
 
     /* Import from a file given and returns the Hidato */
     public static Hidato importHidato(String file)  throws IOException {
@@ -157,58 +185,76 @@ public class CustomFile {
         return hidato;
     }
 
-    //
-    public static void saveGame(String username, String hidatoName,
-    ArrayList<String> data, String diff, long currTime) {
+    public static void saveTemplate(File file, ArrayList<String> data) {
+        file.getParentFile().mkdirs();
 
         try {
-            File folder = new File("Usuaris/" + username + "/games");
-            if(!folder.exists()) {
-                folder.mkdirs();
-            }
-            File game = new File("Usuaris/" + username + "/games/", hidatoName);
-            game.delete();
-            game.createNewFile();
-            FileWriter fileWriter = new FileWriter("Usuaris/" + username
-                    + "/games/" + hidatoName, true);
+            file.delete();
+            file.createNewFile();
+
+            FileWriter fileWriter = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fileWriter);
             PrintStream console = System.out;
-            PrintStream o = new PrintStream(game);
+            PrintStream o = new PrintStream(file);
             System.setOut(o);
             System.setOut(console);
             for(String line : data) {
                 bw.write(line);
                 bw.newLine();
             }
-            String line = diff + "," + currTime;
-            bw.write(line);
-            bw.newLine();
             bw.close();
             fileWriter.close();
-
-        } catch(IOException ex){ex.printStackTrace();}
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
 
     }
 
-    public static ArrayList<String> loadGame(String username, String hidatoName) {
-        try {
-            FileReader fr = new FileReader("Usuaris/" + username
-                    + "/games/" + hidatoName);
-            BufferedReader b = new BufferedReader(fr);
-            ArrayList<String> ret =  new ArrayList<>();
-            String cadena = b.readLine();
-            while(cadena != null) {
-                ret.add(cadena);
-                cadena = b.readLine();
-            }
-            b.close();
+    public static void saveGame(File file, ArrayList<String> data, String diff, long currTime)
+            throws IOException {
+        file.getParentFile().mkdirs();
 
-            return ret;
+        file.delete();
+        file.createNewFile();
 
-        } catch(IOException ex) {
-            ex.printStackTrace();
-            return null;
+        FileWriter fileWriter = new FileWriter(file, true);
+        BufferedWriter bw = new BufferedWriter(fileWriter);
+        PrintStream console = System.out;
+        PrintStream o = new PrintStream(file);
+        System.setOut(o);
+        System.setOut(console);
+        for(String line : data) {
+            bw.write(line);
+            bw.newLine();
         }
+        String line = diff + "," + currTime;
+        bw.write(line);
+        bw.newLine();
+        bw.close();
+        fileWriter.close();
+    }
+
+    //
+    public static void saveGame(String username, String hidatoName,
+    ArrayList<String> data, String diff, long currTime) throws IOException {
+            File game = new File("Usuaris/" + username + "/games/", hidatoName);
+            saveGame(game, data, diff, currTime);
+    }
+
+    public static ArrayList<String> loadGame(String username, String hidatoName)
+            throws IOException {
+        FileReader fr = new FileReader("Usuaris/" + username
+                + "/games/" + hidatoName);
+        BufferedReader b = new BufferedReader(fr);
+        ArrayList<String> ret =  new ArrayList<>();
+        String cadena = b.readLine();
+        while(cadena != null) {
+            ret.add(cadena);
+            cadena = b.readLine();
+        }
+        b.close();
+
+        return ret;
     }
 
 }
