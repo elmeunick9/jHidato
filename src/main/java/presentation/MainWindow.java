@@ -2,6 +2,7 @@ package presentation;
 
 import javax.swing.*;
 import java.awt.Dimension;
+import java.awt.event.*;
 
 public class MainWindow {
     private CtrlPresentation ctrlPresentation;
@@ -29,6 +30,8 @@ public class MainWindow {
         menuFile.add(menuitemQuit);
         menuMain.add(menuFile);
         frame.setJMenuBar(menuMain);
+
+        menuitemQuit.addActionListener(e -> System.exit(0));
 
         //Main Content
 
