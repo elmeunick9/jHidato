@@ -4,22 +4,23 @@ import domain.CtrlDomain;
 
 public class CtrlPresentation {
     private MainWindow mainWindow = null;
-    private CtrlDomain domain = new CtrlDomain();
+    private CtrlDomain domain = null;
 
-    public CtrlPresentation() {
+    public void init() {
         if (mainWindow == null) {
             mainWindow = new MainWindow(this);
         }
-    }
-
-    public void init() {
         mainWindow.makeVisible();
     }
 
-    public CtrlDomain getCtrlDomain() { return domain; }
+    public void setCtrlDomain(CtrlDomain d) { domain = d; }
+    CtrlDomain getCtrlDomain() {
+        if (domain == null) throw new Error("Domain not initialized!");
+        return domain;
+    }
 
     public void initUser(String username) {
-        domain.newPlayer(username);
+        getCtrlDomain().newPlayer(username);
     }
 
 }

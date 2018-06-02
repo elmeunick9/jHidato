@@ -1,8 +1,18 @@
 package domain;
 
+import persistance.CtrlPersistence;
+import presentation.CtrlPresentation;
+
 public class CtrlDomain {
     private Game game;
     private User user;
+    private CtrlPersistence persistence = null;
+    private CtrlPresentation presentation = null;
+
+    public CtrlDomain(CtrlPresentation present, CtrlPersistence persist) {
+        persistence = persist;
+        presentation = present;
+    }
 
     public void newPlayer(String username) {
         user = new User(username);
@@ -33,4 +43,6 @@ public class CtrlDomain {
     public void createGame() {
         System.out.println("NOT IMPLEMENTED!");
     }
+
+    public CtrlPersistence getCtrlPersistence() { return persistence; }
 }

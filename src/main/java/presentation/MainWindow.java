@@ -1,11 +1,6 @@
 package presentation;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.Dimension;
 
 public class MainWindow {
@@ -27,6 +22,8 @@ public class MainWindow {
     private JOptionPane loginDialog = new JOptionPane();
     private NewGameWindow newGameWindow = new NewGameWindow(frame);
     private AboutWindow aboutWindow = new AboutWindow(frame);
+
+    final JFileChooser fc = new JFileChooser();
 
     public MainWindow(CtrlPresentation cPres) {
         ctrlPresentation = cPres;
