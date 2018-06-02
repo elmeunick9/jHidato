@@ -16,6 +16,8 @@ public class CtrlPresentation {
         mainWindow.makeVisible();
     }
 
+    public CtrlDomain getCtrlDomain() { return domain; }
+
     public void initUser(String username) {
         domain.newPlayer(username);
     }

@@ -64,7 +64,12 @@ public class MainWindow {
 
     private void initActions() {
         menuitemQuit.addActionListener(e -> System.exit(0));
-        menuitemNewGame.addActionListener(e -> newGameWindow.setVisible(true));
+        menuitemNewGame.addActionListener(e -> {
+            boolean toGenerate = newGameWindow.showDialog();
+            int d = newGameWindow.difficulty;
+            if (toGenerate) ctrlPresentation.getCtrlDomain().generateGame(d);
+            else ctrlPresentation.getCtrlDomain().createGame();
+        });
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
     }
 
@@ -96,7 +101,7 @@ public class MainWindow {
     }
 
     public void makeVisible() {
-        System.out.println("isEventDispatchThread: " + SwingUtilities.isEventDispatchThread());
+        //System.out.println("isEventDispatchThread: " + SwingUtilities.isEventDispatchThread());
         frame.pack();
         frame.setVisible(true);
     }
