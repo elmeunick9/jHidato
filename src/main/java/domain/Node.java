@@ -7,11 +7,14 @@ public class Node {
     private int value = 0;
     private Type type;
 
-    Node(String data) {
+    public Node(String data) {
         if      ("#".equals(data)) type = Type.invisible;
         else if ("*".equals(data)) type = Type.block;
         else if ("?".equals(data)) type = Type.unset;
-        else {
+        else if ("v".equals(data.substring(data.length()-1))) {
+            value = Integer.parseInt(data.substring(0, data.length()-1));
+            type = Type.variable;
+        } else {
             type = Type.fixed;
             value = Integer.parseInt(data);
         }

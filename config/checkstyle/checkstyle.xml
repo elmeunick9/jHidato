@@ -74,7 +74,6 @@
         <!-- <module name="MissingCtor"/> not sure it's a good one -->
         <module name="MissingSwitchDefault"/>
         <module name="MultipleVariableDeclarations"/>
-        <module name="OneStatementPerLine"/>
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="PackageDeclaration"/>
         <module name="SimplifyBooleanExpression"/>
@@ -84,7 +83,6 @@
 
         <!-- Checks for imports -->
         <!-- http://checkstyle.sf.net/config_import.html -->
-        <module name="AvoidStarImport"/>
         <module name="AvoidStaticImport">
             <property name="excludes" value="java.lang.System.out,java.lang.Math.*,org.junit.Assert.*,org.mockito.Mockito.*, org.mockito.Matchers.*, org.mockito.AdditionalMatchers.*, ratpack.handling.Handlers.*, ratpack.test.handling.RequestFixture.*"/>
         </module>
@@ -101,7 +99,6 @@
 
         <!-- Miscellaneous other checks -->
         <!-- http://checkstyle.sf.net/config_misc.html -->
-        <module name="ArrayTypeStyle"/>
         <module name="AvoidEscapedUnicodeCharacters"/>
         <!-- <module name="Indentation"/> It's a bit intrusive -->
         <module name="OuterTypeFilename"/>
@@ -147,8 +144,6 @@
         <module name="GenericWhitespace"/>
         <module name="MethodParamPad"/>
         <module name="NoLineWrap"/>
-        <module name="NoWhitespaceAfter"/>
-        <module name="NoWhitespaceBefore"/>
         <module name="OperatorWrap"/>
         <module name="ParenPad"/>
         <module name="SeparatorWrap">

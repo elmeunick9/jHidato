@@ -1,7 +1,8 @@
     O- Guardar game (amb estat) -> a carpeta amb username.
     O- Guardar hidatos predefinits per carpetes dificultats.
     - Guardar ranking i actualitzar. (username substr(5), ordre per puntuació. Temps jugat com a param.)
-    O- Guardar users. Afegir identificador hidatos resolts. Ultim hidato jugat.
+    O- Guardar users. Afegir identificador hidatos resolts.
+        - Afegir password a carpeta user.
     O- File moure a persistencia. Carpeta file al root. Marcar com Resources Root.
     - Ctrl. de file.
     -* Hash per hidatos.
@@ -9,7 +10,7 @@
 Capa Presentació:
     - Implementació "getByCoord" i "draw". -> a Capa de Pres!
     - Ctrl. User.
-    - Ctrl. Game.
+    - Ctrl. Game. IMPORTANT!
     - Ctrl. Ranking.
 
     R-Finestra buida inicial.

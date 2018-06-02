@@ -1,5 +1,9 @@
 package domain;
 
+import persistance.CtrlPersistence;
+import presentation.CtrlPresentation;
+import persistance.CustomFile;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -190,7 +194,7 @@ public class App {
                 + "with the structure given in the pdf. "
                 + "You could find a example inside the 'files' folder called 'example.txt'\n";
         System.out.print(msg);
-        Hidato h = File.enterHidato();
+        Hidato h = CustomFile.enterHidato();
 
         msg = "This is the representation of your Hidato.\n";
         System.out.print(msg);
@@ -203,7 +207,7 @@ public class App {
         s.generateSolution().print();
     }
 
-    public static void main(String[] args) throws IOException, Solver.SolutionNotFound {
+    public static void mainOld(String[] args) throws IOException, Solver.SolutionNotFound {
         boolean keepPlaying = true;
         Scanner s = new Scanner(System.in);
         getWelcome();
@@ -236,5 +240,22 @@ public class App {
                 leaveMsg();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            try {
+                CtrlPersistence ctrlPersistence = new CtrlPersistence();
+                CtrlPresentation ctrlPresentation = new CtrlPresentation();
+                CtrlDomain ctrlDomain = new CtrlDomain(ctrlPresentation, ctrlPersistence);
+
+                ctrlPersistence.setCtrlDomain(ctrlDomain);
+                ctrlPresentation.setCtrlDomain(ctrlDomain);
+
+                ctrlPresentation.init();
+            } catch (ExceptionInInitializerError e) {
+                System.exit(0);
+            }
+        });
     }
 }
