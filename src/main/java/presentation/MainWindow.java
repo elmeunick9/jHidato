@@ -1,8 +1,13 @@
 package presentation;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import java.awt.Dimension;
-import java.awt.event.*;
 
 public class MainWindow {
     private CtrlPresentation ctrlPresentation;
@@ -21,6 +26,8 @@ public class MainWindow {
     private JMenuItem menuitemManual = new JMenuItem("Manual");
 
     private JOptionPane loginDialog = new JOptionPane();
+    private NewGameWindow newGameWindow = new NewGameWindow(frame);
+    private AboutWindow aboutWindow = new AboutWindow(frame);
 
     public MainWindow(CtrlPresentation cPres) {
         ctrlPresentation = cPres;
@@ -57,12 +64,14 @@ public class MainWindow {
 
     private void initActions() {
         menuitemQuit.addActionListener(e -> System.exit(0));
+        menuitemNewGame.addActionListener(e -> newGameWindow.setVisible(true));
+        menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
     }
 
     private String askUser() {
         //Show Login
         String usrname = "";
-        while (usrname == "") {
+        while (usrname.isEmpty()) {
             String t = (String)JOptionPane.showInputDialog(
                     frame,
                     "Username:\n",
@@ -74,8 +83,9 @@ public class MainWindow {
             if (t == null) {
                 throw new ExceptionInInitializerError();
             }
-            if (t.length() > 1 && t.length() <= 6 && t.matches("[A-Za-z0-9]+")) usrname = t.toUpperCase();
-            else {
+            if (t.length() > 1 && t.length() <= 6 && t.matches("[A-Za-z0-9]+")) {
+                usrname = t.toUpperCase();
+            } else {
                 JOptionPane.showMessageDialog(frame,
                         "Username must consist of up to 6 alphanumeric values",
                         "Invalid Username",
