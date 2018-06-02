@@ -1,6 +1,7 @@
 package domain;
 
 import presentation.CtrlPresentation;
+import persistance.CustomFile;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -192,7 +193,7 @@ public class App {
                 + "with the structure given in the pdf. "
                 + "You could find a example inside the 'files' folder called 'example.txt'\n";
         System.out.print(msg);
-        Hidato h = File.enterHidato();
+        Hidato h = CustomFile.enterHidato();
 
         msg = "This is the representation of your Hidato.\n";
         System.out.print(msg);

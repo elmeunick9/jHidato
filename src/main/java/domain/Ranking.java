@@ -1,12 +1,14 @@
 package domain;
 
+import persistance.CtrlPersistencia;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Ranking {
     private ArrayList<ArrayList<String>> r;
     Ranking() throws IOException {
-        r = File.getRanking();
+        r = CtrlPersistencia.getRanking();
     }
 
     public ArrayList<ArrayList<String>> getRanking() {

@@ -1,18 +1,29 @@
-package domain;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+package persistance;
+import domain.Hidato;
+import domain.TriHidato;
+import domain.QuadHidato;
+import domain.HexHidato;
+import domain.Node;
+
 import java.io.IOException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+
+import java.io.PrintStream;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class File {
+public class CustomFile {
 
-    File() {}
+    CustomFile() {}
 
     /* Import from a file given and returns the Hidato */
     public static Hidato importHidato(String file)  throws IOException {
-        String ruta = "src/files/";
+        String ruta = "Files/";
         FileReader fr = new FileReader(ruta+file);
         BufferedReader b = new BufferedReader(fr);
         String cadena = b.readLine();
@@ -63,7 +74,7 @@ public class File {
                     throw new IOException();
             }
         } else {
-            throw new FileNotFoundException();
+            throw new IOException();
         }
         b.close();
 
@@ -72,7 +83,7 @@ public class File {
 
     /* return the data of ranking from the file in form of matrix */
     public static ArrayList<ArrayList<String>> getRanking() throws IOException {
-        String ruta = "src/files/ranking.txt";
+        String ruta = "Files/ranking.txt";
         FileReader fr = new FileReader(ruta);
         BufferedReader b = new BufferedReader(fr);
         String cadena = b.readLine();
@@ -140,9 +151,64 @@ public class File {
                     throw new IOException();
             }
         } else {
-            throw new FileNotFoundException();
+            throw new IOException();
         }
 
         return hidato;
     }
+
+    //
+    public static void saveGame(String username, String hidatoName,
+    ArrayList<String> data, String diff, long currTime) {
+
+        try {
+            File folder = new File("Usuaris/" + username + "/games");
+            if(!folder.exists()) {
+                folder.mkdirs();
+            }
+            File game = new File("Usuaris/" + username + "/games/", hidatoName);
+            game.delete();
+            game.createNewFile();
+            FileWriter fileWriter = new FileWriter("Usuaris/" + username
+                    + "/games/" + hidatoName, true);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            PrintStream console = System.out;
+            PrintStream o = new PrintStream(game);
+            System.setOut(o);
+            System.setOut(console);
+            for(String line : data) {
+                bw.write(line);
+                bw.newLine();
+            }
+            String line = diff + "," + currTime;
+            bw.write(line);
+            bw.newLine();
+            bw.close();
+            fileWriter.close();
+
+        } catch(IOException ex){ex.printStackTrace();}
+
+    }
+
+    public static ArrayList<String> loadGame(String username, String hidatoName) {
+        try {
+            FileReader fr = new FileReader("Usuaris/" + username
+                    + "/games/" + hidatoName);
+            BufferedReader b = new BufferedReader(fr);
+            ArrayList<String> ret =  new ArrayList<>();
+            String cadena = b.readLine();
+            while(cadena != null) {
+                ret.add(cadena);
+                cadena = b.readLine();
+            }
+            b.close();
+
+            return ret;
+
+        } catch(IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
 }
