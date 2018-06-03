@@ -3,6 +3,8 @@ package domain;
 import persistance.CtrlPersistence;
 import presentation.CtrlPresentation;
 
+import java.util.ArrayList;
+
 public class CtrlDomain {
     private Game game;
     private User user;
@@ -19,7 +21,7 @@ public class CtrlDomain {
     }
 
     //Generate a new hidato and game.
-    public void generateGame(int difficulty, int type) {
+    public ArrayList<ArrayList<String>> generateGame(int difficulty, int type) {
         Game.Difficulty d;
         switch (difficulty) {
             case 0: d = Game.Difficulty.EASY; break;
@@ -37,6 +39,7 @@ public class CtrlDomain {
         }
         game = new Game(d, user, t);
         game.print();
+        return game.getRawData();
     }
 
     //Create a custom game from scratch.

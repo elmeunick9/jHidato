@@ -1,7 +1,10 @@
 package presentation;
 
+import domain.CtrlDomain;
+
 import javax.swing.*;
-import java.awt.Dimension;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class MainWindow {
     private CtrlPresentation ctrlPresentation;
@@ -22,6 +25,9 @@ public class MainWindow {
     private JOptionPane loginDialog = new JOptionPane();
     private NewGameWindow newGameWindow = new NewGameWindow(frame);
     private AboutWindow aboutWindow = new AboutWindow(frame);
+
+    private ArrayList<ArrayList<String>> data;
+    private Board boardHidato;
 
     final JFileChooser fc = new JFileChooser();
 
@@ -64,8 +70,14 @@ public class MainWindow {
             boolean toGenerate = newGameWindow.showDialog();
             int d = newGameWindow.difficulty;
             int t = newGameWindow.type;
-            if (toGenerate) ctrlPresentation.getCtrlDomain().generateGame(d, t);
+            if (toGenerate) data = ctrlPresentation.getCtrlDomain().generateGame(d, t);
             else ctrlPresentation.getCtrlDomain().createGame();
+            //checkIfExists
+            if(boardHidato != null) frame.remove(boardHidato);
+            boardHidato = new Board(new SquareNode(), data);
+            frame.add(boardHidato);
+            frame.pack();
+            frame.setVisible(true);
         });
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
     }
@@ -101,5 +113,13 @@ public class MainWindow {
         //System.out.println("isEventDispatchThread: " + SwingUtilities.isEventDispatchThread());
         frame.pack();
         frame.setVisible(true);
+
     }
+
+    public static void main(String[] args) {
+    	CtrlPresentation caca = new CtrlPresentation();
+    	caca.setCtrlDomain(new CtrlDomain(caca, null));
+    	caca.init();
+    }
+    
 }

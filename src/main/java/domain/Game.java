@@ -2,7 +2,9 @@ package domain;
 
 import persistance.CtrlPersistence;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Game {
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
@@ -221,16 +223,23 @@ public class Game {
         h.clear();
     }
 
+    public ArrayList<ArrayList<String>> getRawData() {
+        ArrayList<String> a = h.getRawData(ht);
+        //FirstLine of Info Unused on Presentation.
+        a.remove(0);
+        ArrayList<ArrayList<String>> ret = new ArrayList<>();
+        for(String d : a) {
+            ArrayList aux= new ArrayList(Arrays.asList(d.split(",")));
+            ret.add(aux);
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
         User u = new User("Oscar");
         Game game = new Game(Difficulty.MEDIUM, u, HidatoType.HEXAGON);
         game.print();
-        int c = 0;
-        while(c < 200000000)
-            c++;
-        game.clear();
-        System.out.print(game.finishGame());
-        game.saveGame();
+        System.out.print(game.getRawData());
 
     }
 
