@@ -1,7 +1,5 @@
 package presentation;
 
-import static java.lang.Math.sqrt;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -19,11 +17,12 @@ public class SquareNode extends NodeCell{
         this.size = size;
     }
 
-    private Polygon node (int x0, int y0) {
+    private Polygon node(int x0, int y0) {
         int y = y0 + borderTop;
         int x = x0 + borderLeft;
 
-        int[] cx,cy;
+        int[] cx;
+        int[] cy;
 
         cx = new int[] {x, x+roundToInt(size), x+roundToInt(size), x};
         cy = new int[] {y, y, y+roundToInt(size), y+roundToInt(size)};
@@ -42,7 +41,7 @@ public class SquareNode extends NodeCell{
     }
 
     @Override
-    public void paintNode(int i, int j, String n, int last, Graphics2D g2) {
+    public void paintNode(int i, int j, String n, Graphics2D g2) {
         String str;
         int x = j * roundToInt(size);
         int y = i * roundToInt(size);
@@ -52,22 +51,18 @@ public class SquareNode extends NodeCell{
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
-        }
-
-        else if(n.equals("?")) {
+        } else if(n.equals("?")) {
             g2.setColor(new Color(249, 248, 229));
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
-        }
-
-        else {
+        } else {
             g2.setColor(new Color(195, 198, 198));
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
             g2.setColor(Color.BLACK);
-            g2.drawString(n, x+(int)Math.round(size)/10+borderLeft, y+(int)Math.round(size)/2+borderTop+4);
+            g2.drawString(n, x+(int)Math.round(size)/10+borderLeft+((int)Math.round(size)/4), (y+(int)Math.round(size)/2)+(borderTop+10));
         }
     }
 
@@ -105,23 +100,23 @@ public class SquareNode extends NodeCell{
 
         double nodeSize;
 
-        if ((double)screenHeight/(double)screenWidth >= nodeHeight/nodeWidth) { //relacio d'aspecte de la pantalla es mes alta que la del hidato
+        //screen with ra higher than the hidato
+        if ((double)screenHeight/(double)screenWidth >= nodeHeight/nodeWidth) {
             nodeSize = (double)screenWidth/nodeWidth;
-        }
-        else {
+        } else {
             nodeSize = (double)screenHeight/nodeHeight;
         }
 
-        int borderTop = 0;
-        int borderLeft = 0;
+        int bTop = 0;
+        int bLeft = 0;
 
-        borderLeft = (int) (screenWidth - nodeWidth*nodeSize)/2;
-        borderTop = (int) (screenHeight - nodeHeight*nodeSize)/2+1;
+        bLeft = (int) (screenWidth - nodeWidth*nodeSize)/2;
+        bTop = (int) (screenHeight - nodeHeight*nodeSize)/2+1;
 
         Vector<Double> properties = new Vector<Double>();
         properties.add(nodeSize);
-        properties.add((double)borderTop);
-        properties.add((double)borderLeft);
+        properties.add((double)bTop);
+        properties.add((double)bLeft);
 
         return properties;
     }

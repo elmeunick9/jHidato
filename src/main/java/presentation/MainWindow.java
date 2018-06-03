@@ -72,14 +72,18 @@ public class MainWindow {
             int t = newGameWindow.type;
             if (toGenerate) data = ctrlPresentation.getCtrlDomain().generateGame(d, t);
             else ctrlPresentation.getCtrlDomain().createGame();
-            //checkIfExists
-            if(boardHidato != null) frame.remove(boardHidato);
-            boardHidato = new Board(new SquareNode(), data);
-            frame.add(boardHidato);
-            frame.pack();
-            frame.setVisible(true);
+            initGame();
         });
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
+    }
+
+    private void initGame() {
+        //checkIfExists
+        if(boardHidato != null) frame.remove(boardHidato);
+        boardHidato = new Board(new SquareNode(), data);
+        frame.add(boardHidato);
+        frame.pack();
+        frame.setVisible(true);
     }
 
     private String askUser() {
@@ -117,9 +121,9 @@ public class MainWindow {
     }
 
     public static void main(String[] args) {
-    	CtrlPresentation caca = new CtrlPresentation();
-    	caca.setCtrlDomain(new CtrlDomain(caca, null));
-    	caca.init();
+        CtrlPresentation caca = new CtrlPresentation();
+        caca.setCtrlDomain(new CtrlDomain(caca, null));
+        caca.init();
     }
     
 }

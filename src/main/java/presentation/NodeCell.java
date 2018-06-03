@@ -1,9 +1,7 @@
 package presentation;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.util.Vector;
 
 
@@ -13,7 +11,7 @@ abstract class NodeCell {
 
     abstract public void drawNode(int i, int j, Graphics2D g2);
 
-    abstract public void paintNode(int i, int j, String n, int last, Graphics2D g2);
+    abstract public void paintNode(int i, int j, String n, Graphics2D g2);
 
 
     abstract public Point pixelsToCoord(int posx, int posy);

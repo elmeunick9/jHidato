@@ -1,19 +1,11 @@
     O- Guardar game (amb estat) -> a carpeta amb username.
-    O- Guardar hidatos predefinits per carpetes dificultats.
     - Guardar ranking i actualitzar. (username substr(5), ordre per puntuació. Temps jugat com a param.)
-    O- Guardar users. Afegir identificador hidatos resolts.
-        - Afegir password a carpeta user.
-    O- File moure a persistencia. Carpeta file al root. Marcar com Resources Root.
-    - Ctrl. de file.
-    -* Hash per hidatos.
+    - Afegir password a carpeta user.
 
 Capa Presentació:
-    - Implementació "getByCoord" i "draw". -> a Capa de Pres!
     - Ctrl. User.
     - Ctrl. Game. IMPORTANT!
     - Ctrl. Ranking.
-
-    R-Finestra buida inicial.
 
     R- Pantalla inici
         Dues subdivisions:
@@ -33,4 +25,19 @@ Capa Presentació:
     - Carregar "widget" amb l'hidato.
 
 -* Millorar solver i generator.
+
+-Afegir event de click
+-afegir botó de solver
+-Afegir botó de desfer
+-Afegir triangles
+-Afegir Hexagons
+
+-Al seleccionar Load mostrar explorador d'arxius?
+
+-Al guardar com template:
+ - Crear a game saveAsTemplate();
+ - A CustomFile crear SaveAsTemplate() i que guardi a la carpeta templates.
+ - Aplicar en el controlador de persistencia.
+
+
 
