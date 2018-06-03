@@ -106,10 +106,16 @@ public class Game {
         this.dif = d;
     }
 
-    public void move(int x, int y, int value) throws Node.InvalidTypeException {
+    public boolean move(int x, int y, int value) throws Node.InvalidTypeException {
+        if(value == -1) {
+            this.h.getNode(x,y).clear();
+            return true;
+        }
         if(moveIsvalid(this.h.getNode(x, y))) {
             this.h.getNode(x, y).setValue(value);
+            return true;
         }
+        return false;
     }
 
     /*Save the stats of the game when user pause or leave the game*/

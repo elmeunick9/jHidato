@@ -1,5 +1,7 @@
 package presentation;
 
+import domain.CtrlDomain;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -87,16 +89,17 @@ public class Board extends JPanel {
     }
 
     class MouseListener extends MouseAdapter {
-        CtrlPresentation ctrlP = CtrlPresentation.getInstance();
+        //CtrlPresentation ctrlP = CtrlPresentation.getInstance();
         public void mousePressed(MouseEvent e){
             Point p = new Point(node.pixelsToCoord(e.getX(),e.getY()));
             if (p.x < 0 || p.y < 0 || p.x >= matrixHidato.get(0).size() || p.y >= matrixHidato.size()) return;
             if (SwingUtilities.isLeftMouseButton(e)) {
-                System.out.print(p);
-                if (ctrlP.leftClick(p.y,p.x, nextMove))
-                    matrixHidato = ctrlP.getCtrlDomain().getMatrix();
+                if (CtrlPresentation.getInstance().leftClick(p.y,p.x, nextMove))
+                    matrixHidato = CtrlDomain.getInstance().getMatrix();
             }
-            //if (SwingUtilities.isRightMouseButton(e)) if (controller.tractaClick(p.y,p.x, 1)) matriuHidato = controller.getMatriu();
+            if (SwingUtilities.isRightMouseButton(e))
+                if (CtrlPresentation.getInstance().rightClick(p.y,p.x))
+                    matrixHidato = CtrlDomain.getInstance().getMatrix();
 
             repaint();
         }

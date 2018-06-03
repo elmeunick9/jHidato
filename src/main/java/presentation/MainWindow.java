@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class MainWindow {
-    private CtrlPresentation ctrlPresentation;
     private JFrame frame = new JFrame("jHidato 21.1");
     private JPanel panelContent = new JPanel();
     private JMenuBar menuMain = new JMenuBar();
@@ -30,10 +29,9 @@ public class MainWindow {
     final JFileChooser fc = new JFileChooser();
 
     public MainWindow() {
-        ctrlPresentation = CtrlPresentation.getInstance();
         initView();
         initActions();
-        ctrlPresentation.initUser(askUser());
+        CtrlPresentation.getInstance().initUser(askUser());
     }
 
     private void initView() {
@@ -68,8 +66,8 @@ public class MainWindow {
             boolean toGenerate = newGameWindow.showDialog();
             int d = newGameWindow.difficulty;
             int t = newGameWindow.type;
-            if (toGenerate) data = ctrlPresentation.getCtrlDomain().generateGame(d, t);
-            else ctrlPresentation.getCtrlDomain().createGame();
+            if (toGenerate) data = CtrlPresentation.getInstance().getCtrlDomain().generateGame(d, t);
+            else CtrlPresentation.getInstance().getCtrlDomain().createGame();
             initGame();
         });
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
@@ -119,8 +117,7 @@ public class MainWindow {
     }
 
     public static void main(String[] args) {
-        CtrlPresentation caca = CtrlPresentation.getInstance();
-        caca.init();
+        CtrlPresentation.getInstance().init();
     }
     
 }

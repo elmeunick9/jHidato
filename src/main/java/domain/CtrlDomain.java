@@ -53,8 +53,8 @@ public class CtrlDomain {
         System.out.println("NOT IMPLEMENTED!");
     }
 
-    public void setVal(int x, int y, int val) {
-        game.move(x,y,val);
+    public boolean setVal(int x, int y, int val) {
+        return game.move(x,y,val);
     }
 
     public CtrlPersistence getCtrlPersistence() { return CtrlPersistence.getInstance(); }

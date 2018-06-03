@@ -55,6 +55,13 @@ public class SquareNode extends NodeCell{
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
+        } else if(n.contains("v")){
+            g2.setColor(new Color(195, 198, 198));
+            g2.fillPolygon(node(x,y));
+            g2.setColor(Color.BLACK);
+            g2.drawPolygon(node(x,y));
+            g2.setColor(Color.BLACK);
+            g2.drawString(n.substring(0,n.length()-1), x+(int)Math.round(size)/10+borderLeft+((int)Math.round(size)/4), (y+(int)Math.round(size)/2)+(borderTop+10));
         } else {
             g2.setColor(new Color(195, 198, 198));
             g2.fillPolygon(node(x,y));
