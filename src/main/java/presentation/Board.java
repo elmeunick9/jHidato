@@ -89,7 +89,7 @@ public class Board extends JPanel {
     class MouseListener extends MouseAdapter {
         CtrlPresentation ctrlP = CtrlPresentation.getInstance();
         public void mousePressed(MouseEvent e){
-            Point p = new Point( node.pixelsToCoord(e.getX(),e.getY()) );
+            Point p = new Point(node.pixelsToCoord(e.getX(),e.getY()));
             if (p.x < 0 || p.y < 0 || p.x >= matrixHidato.get(0).size() || p.y >= matrixHidato.size()) return;
             if (SwingUtilities.isLeftMouseButton(e)) {
                 System.out.print(p);
