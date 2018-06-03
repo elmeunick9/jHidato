@@ -1,13 +1,12 @@
 package presentation;
 
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 
 public class Board extends JPanel {
@@ -22,7 +21,7 @@ public class Board extends JPanel {
     private double screenHeight;
     private int boardWidth;
     private int boardHeight;
-    private int nextMove = -1;
+    private int nextMove = 1;
 
     //necessita que el creador faci panel.setPreferredSize(dim);
     //Aquesta constructora es fa servir per jugar una nova partida
@@ -35,6 +34,9 @@ public class Board extends JPanel {
         boardHeight = matrixHidato.size();
 
         setOpaque(false);
+
+        MouseListener mouseListener = new MouseListener();
+        addMouseListener(mouseListener);
 
         this.screenWidth = 500;
         this.screenHeight = 500;
@@ -82,5 +84,21 @@ public class Board extends JPanel {
 
     public void setNextMove(int nextM) {
         this.nextMove = nextM;
+    }
+
+    class MouseListener extends MouseAdapter {
+        CtrlPresentation ctrlP = CtrlPresentation.getInstance();
+        public void mousePressed(MouseEvent e){
+            Point p = new Point( node.pixelsToCoord(e.getX(),e.getY()) );
+            if (p.x < 0 || p.y < 0 || p.x >= matrixHidato.get(0).size() || p.y >= matrixHidato.size()) return;
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                System.out.print(p);
+                if (ctrlP.leftClick(p.y,p.x, nextMove))
+                    matrixHidato = ctrlP.getCtrlDomain().getMatrix();
+            }
+            //if (SwingUtilities.isRightMouseButton(e)) if (controller.tractaClick(p.y,p.x, 1)) matriuHidato = controller.getMatriu();
+
+            repaint();
+        }
     }
 }

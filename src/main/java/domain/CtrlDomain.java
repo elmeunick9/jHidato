@@ -8,12 +8,15 @@ import java.util.ArrayList;
 public class CtrlDomain {
     private Game game;
     private User user;
-    private CtrlPersistence persistence = null;
-    private CtrlPresentation presentation = null;
+    private static CtrlDomain domain = null;
+    protected CtrlDomain() {
 
-    public CtrlDomain(CtrlPresentation present, CtrlPersistence persist) {
-        persistence = persist;
-        presentation = present;
+    }
+
+    public static CtrlDomain getInstance() {
+        if(domain == null)
+            domain = new CtrlDomain();
+        return domain;
     }
 
     public void newPlayer(String username) {
@@ -42,10 +45,18 @@ public class CtrlDomain {
         return game.getRawData();
     }
 
+    public ArrayList<ArrayList<String>> getMatrix() {
+        return game.getRawData();
+    }
+
     //Create a custom game from scratch.
     public void createGame() {
         System.out.println("NOT IMPLEMENTED!");
     }
 
-    public CtrlPersistence getCtrlPersistence() { return persistence; }
+    public void setVal(int x, int y, int val) {
+        game.move(x,y,val);
+    }
+
+    public CtrlPersistence getCtrlPersistence() { return CtrlPersistence.getInstance(); }
 }

@@ -7,12 +7,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CtrlPersistence {
-    private CtrlDomain domain = null;
+    private static CtrlPersistence persistence = null;
+    protected CtrlPersistence() {
 
-    public void setCtrlDomain(CtrlDomain d) { domain = d; }
+    }
+
+    public static CtrlPersistence getInstance() {
+        if(persistence == null)
+            persistence = new CtrlPersistence();
+        return persistence;
+    }
+
     CtrlDomain getCtrlDomain() {
-        if (domain == null) throw new Error("Domain not initialized!");
-        return domain;
+        return CtrlDomain.getInstance();
     }
 
     public static ArrayList<ArrayList<String>> getRanking() throws IOException {

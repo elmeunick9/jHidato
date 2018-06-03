@@ -42,7 +42,6 @@ public class SquareNode extends NodeCell{
 
     @Override
     public void paintNode(int i, int j, String n, Graphics2D g2) {
-        String str;
         int x = j * roundToInt(size);
         int y = i * roundToInt(size);
         //block
@@ -52,7 +51,7 @@ public class SquareNode extends NodeCell{
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
         } else if(n.equals("?")) {
-            g2.setColor(new Color(249, 248, 229));
+            g2.setColor(new Color(222, 222, 222));
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));

@@ -31,8 +31,8 @@ public class MainWindow {
 
     final JFileChooser fc = new JFileChooser();
 
-    public MainWindow(CtrlPresentation cPres) {
-        ctrlPresentation = cPres;
+    public MainWindow() {
+        ctrlPresentation = CtrlPresentation.getInstance();
         initView();
         initActions();
         ctrlPresentation.initUser(askUser());
@@ -121,8 +121,7 @@ public class MainWindow {
     }
 
     public static void main(String[] args) {
-        CtrlPresentation caca = new CtrlPresentation();
-        caca.setCtrlDomain(new CtrlDomain(caca, null));
+        CtrlPresentation caca = CtrlPresentation.getInstance();
         caca.init();
     }
     
