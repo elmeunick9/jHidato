@@ -1,21 +1,13 @@
     O- Guardar game (amb estat) -> a carpeta amb username.
-    O- Guardar hidatos predefinits per carpetes dificultats.
-    - Guardar ranking i actualitzar. (username substr(5), ordre per puntuació. Temps jugat com a param.)
-    O- Guardar users. Afegir identificador hidatos resolts.
-        - Afegir password a carpeta user.
-    O- File moure a persistencia. Carpeta file al root. Marcar com Resources Root.
-    - Ctrl. de file.
-    -* Hash per hidatos.
+    - Guardar ranking i actualitzar. (username substr(6), ordre per puntuació. Temps jugat com a param.)
+    - Afegir password a carpeta user. <-- NO THANKS
 
 Capa Presentació:
-    - Implementació "getByCoord" i "draw". -> a Capa de Pres!
     - Ctrl. User.
     - Ctrl. Game. IMPORTANT!
     - Ctrl. Ranking.
 
-    R-Finestra buida inicial.
-
-    R- Pantalla inici
+    R- Pantalla inici <-- (+-) FET
         Dues subdivisions:
         Login amb selectpicker.
         Register amb:
@@ -23,14 +15,30 @@ Capa Presentació:
         - Boto register.
 
     - Seleccionar Hidato:
-        - Carregar partides en curs o finalitzats: carpeta user.
-        - Seleccionar acció (File > Load) | (File > Load Template) | (Generate).
+        - Carregar partides en curs o finalitzats: carpeta user. <-- FET
+        - Seleccionar acció (File > Load) | (File > Load Template) | (Generate). <-- FET
 
     - Si Generate:
-        - Si custom: pantalla amb paràmetres.
-        - Si no es genera segons la dif selec.
+        - Si custom: pantalla amb paràmetres. <-- NO?
+        - Si no es genera segons la dif selec. <-- FET
 
     - Carregar "widget" amb l'hidato.
 
 -* Millorar solver i generator.
+
+-Afegir event de click
+-afegir botó de solver
+-Afegir botó de desfer
+-Afegir triangles
+-Afegir Hexagons
+
+FET -Al seleccionar Load mostrar explorador d'arxius?
+
+
+FET -Al guardar com template:
+ - Crear a game saveAsTemplate();
+ - A CustomFile crear SaveAsTemplate() i que guardi a la carpeta templates.
+ - Aplicar en el controlador de persistencia.
+
+
 

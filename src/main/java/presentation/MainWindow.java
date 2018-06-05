@@ -4,9 +4,10 @@ import javax.swing.*;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 
 public class MainWindow {
-    private CtrlPresentation ctrlPresentation;
     private JFrame frame = new JFrame("jHidato 21.1");
     private JPanel panelContent = new JPanel();
     private JMenuBar menuMain = new JMenuBar();
@@ -25,14 +26,16 @@ public class MainWindow {
     private NewGameWindow newGameWindow = new NewGameWindow(frame);
     private AboutWindow aboutWindow = new AboutWindow(frame);
 
+    private ArrayList<ArrayList<String>> data;
+    private Board boardHidato;
+
     final JFileChooser fc = new JFileChooser();
     final JFileChooser fcTemplates = new JFileChooser();
 
-    public MainWindow(CtrlPresentation cPres) {
-        ctrlPresentation = cPres;
+    public MainWindow() {
         initView();
         initActions();
-        ctrlPresentation.initUser(askUser());
+        CtrlPresentation.getInstance().initUser(askUser());
     }
 
     private void initView() {
@@ -70,13 +73,15 @@ public class MainWindow {
             int d = newGameWindow.difficulty;
             int t = newGameWindow.type;
             String name = newGameWindow.getFilename();
-            if (toGenerate) ctrlPresentation.getCtrlDomain().generateGame(name, d, t);
-            else ctrlPresentation.getCtrlDomain().createGame(name);
+            if (toGenerate) CtrlPresentation.getInstance().getCtrlDomain().generateGame(name, d, t);
+            else CtrlPresentation.getInstance().getCtrlDomain().createGame(name);
+
+            initGame();
         });
 
         menuitemSavegame.addActionListener(e -> {
             try {
-                ctrlPresentation.getCtrlDomain().saveGame();
+                CtrlPresentation.getInstance().getCtrlDomain().saveGame();
             } catch (IllegalStateException | IOException ex) {
                 JOptionPane.showMessageDialog(frame,
                 ex.getMessage(),
@@ -92,6 +97,7 @@ public class MainWindow {
     }
 
     private void loadGameDialog() {
+        CtrlPresentation ctrlPresentation = CtrlPresentation.getInstance();
         String myuser = ctrlPresentation.getCtrlDomain().getUsername();
         String name = "";
         while (name.isEmpty()) {
@@ -105,7 +111,7 @@ public class MainWindow {
                     if (!user.equals(myuser)) {
                         throw new IOException("You must select a game within YOUR folder!");
                     }
-                    ctrlPresentation.getCtrlDomain().getCtrlPersistence().loadGame(user, name);
+                    ctrlPresentation.getCtrlDomain().loadGame(name);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(frame,
                             ex.getClass().toString() + "\n" + ex.getMessage(),
@@ -114,9 +120,11 @@ public class MainWindow {
                 }
             } else break;
         }
+        initGame();
     }
 
     private void saveTemplateDialog() {
+        CtrlPresentation ctrlPresentation = CtrlPresentation.getInstance();
         String myuser = ctrlPresentation.getCtrlDomain().getUsername();
 
         fcTemplates.setDialogTitle("Save Game as Template");
@@ -140,6 +148,7 @@ public class MainWindow {
     }
 
     private void loadTemplateDialog() {
+        CtrlPresentation ctrlPresentation = CtrlPresentation.getInstance();
         String myuser = ctrlPresentation.getCtrlDomain().getUsername();
 
         fcTemplates.setDialogTitle("Load Template");
@@ -160,6 +169,17 @@ public class MainWindow {
                 }
             } else loop = false;
         }
+        initGame();
+    }
+
+    private void initGame() {
+        //checkIfExists
+        if(boardHidato != null) frame.remove(boardHidato);
+        boardHidato = new Board(new SquareNode(),
+                CtrlPresentation.getInstance().getCtrlDomain().getMatrix());
+        frame.add(boardHidato);
+        frame.pack();
+        frame.setVisible(true);
     }
 
     private String askUser() {
@@ -200,5 +220,6 @@ public class MainWindow {
         //System.out.println("isEventDispatchThread: " + SwingUtilities.isEventDispatchThread());
         frame.pack();
         frame.setVisible(true);
+
     }
 }

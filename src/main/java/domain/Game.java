@@ -2,13 +2,14 @@ package domain;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Game {
     private CtrlDomain domain;
 
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
-    private int score = 0;
+
     private HidatoType ht;
     private Difficulty dif;
     private Hidato h;
@@ -36,7 +37,6 @@ public class Game {
         this(dom, d, u, g.getHidato(), htype, g.getHashedFilename());
     }
 
-    public int getScore() { return score; }
     public User getPlayer() {
         return user;
     }
@@ -58,15 +58,6 @@ public class Game {
         return ht;
     }
 
-    /*Add or substract the score with minimum of 0*/
-    private void changeScore(int s) {
-        if(s > 0  || (this.score + s) >= 0)
-            this.score += s;
-        else if(s < 0) {
-            this.score = 0;
-        }
-    }
-
     private boolean moveIsvalid(Node n) {
         boolean ret = false;
         if(n.editable())
@@ -74,18 +65,16 @@ public class Game {
         return ret;
     }
 
-    public void setDif(Difficulty d) {
-        this.dif = d;
-    }
-
-    public void move(int x, int y, int value) throws Node.InvalidTypeException {
+    public boolean move(int x, int y, int value) throws Node.InvalidTypeException {
+        if(value == -1) {
+            this.h.getNode(x,y).clear();
+            return true;
+        }
         if(moveIsvalid(this.h.getNode(x, y))) {
             this.h.getNode(x, y).setValue(value);
-            changeScore(1);
-        } else {
-            changeScore(-1);
+            return true;
         }
-
+        return false;
     }
 
     /*Save the stats of the game when user pause or leave the game*/
@@ -109,8 +98,14 @@ public class Game {
                 filename, h.getRawData(ht), dificult, currTime);
     }
 
-    public void loadGame(String file) {
-
+    public static Difficulty getDifficultyType(String dif) {
+        switch (dif) {
+            case "easy": return Difficulty.EASY;
+            case "medium": return Difficulty.MEDIUM;
+            case "hard": return Difficulty.HARD;
+            case "custom": return Difficulty.CUSTOM;
+            default: return Difficulty.CUSTOM;
+        }
     }
 
     public static Hidato.AdjacencyType getAdjacencyType(String at) {
@@ -126,19 +121,6 @@ public class Game {
                 break;
         }
         return ret;
-    }
-
-    private Hidato loadHidato(ArrayList<ArrayList<Node>> data, Hidato.AdjacencyType adj) {
-        switch (ht) {
-            case TRIANGLE:
-                return new TriHidato(data, adj);
-            case SQUARE:
-                return new QuadHidato(data, adj);
-            case HEXAGON:
-                return new HexHidato(data, adj);
-            default:
-                return new TriHidato(data, adj);
-        }
     }
 
     public static HidatoType getHidatoType(String t) {
@@ -177,4 +159,20 @@ public class Game {
     }
 
     public Hidato getHidato() { return h; }
+
+    public void clear() {
+        h.clear();
+    }
+
+    public ArrayList<ArrayList<String>> getRawData() {
+        ArrayList<String> a = h.getRawData(ht);
+        //FirstLine of Info Unused on Presentation.
+        a.remove(0);
+        ArrayList<ArrayList<String>> ret = new ArrayList<>();
+        for(String d : a) {
+            ArrayList aux= new ArrayList(Arrays.asList(d.split(",")));
+            ret.add(aux);
+        }
+        return ret;
+    }
 }

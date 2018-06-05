@@ -8,21 +8,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CtrlPersistence {
-    private CtrlDomain domain = null;
+    private static CtrlPersistence persistence = null;
+    protected CtrlPersistence() {
 
-    public void setCtrlDomain(CtrlDomain d) { domain = d; }
+    }
+
+    public static CtrlPersistence getInstance() {
+        if(persistence == null)
+            persistence = new CtrlPersistence();
+        return persistence;
+    }
+
     CtrlDomain getCtrlDomain() {
-        if (domain == null) throw new Error("Domain not initialized!");
-        return domain;
+        return CtrlDomain.getInstance();
     }
 
     public static ArrayList<ArrayList<String>> getRanking() throws IOException {
         return CustomFile.getRanking();
     }
 
+    private void loadGameFromDomain(String name, CustomFile.GameInStrings g) {
+        CtrlDomain.getInstance().makeGameFromData(
+                g.data, name, g.adjacency, g.type, g.difficulty, g.time);
+    }
+
     public void importHidato(File file)  throws IOException {
-        CustomFile.HidatoInStrings his = CustomFile.importHidato(file);
-        domain.makeGameFromData(his.data, file.getName(), his.adjacency, his.type);
+        CustomFile.GameInStrings his = CustomFile.importHidato(file);
+        loadGameFromDomain(file.getName(), his);
     }
 
     public void exportHidato(File file) throws IOException {
@@ -35,7 +47,8 @@ public class CtrlPersistence {
         CustomFile.saveGame(username, hidatoName, data, difficulty, currTime);
     }
 
-    public ArrayList<String> loadGame(String username, String hidatoName) throws IOException {
-        return CustomFile.loadGame(username, hidatoName);
+    public void loadGame(String username, String hidatoName) throws IOException {
+        CustomFile.GameInStrings g = CustomFile.loadGame(username, hidatoName);
+        loadGameFromDomain(hidatoName, g);
     }
 }

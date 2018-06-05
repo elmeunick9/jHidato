@@ -3,22 +3,25 @@ package domain;
 import persistance.CtrlPersistence;
 import presentation.CtrlPresentation;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.io.IOException;
 
 public class CtrlDomain {
     private Game game;
     private User user;
-    private CtrlPersistence persistence = null;
-    private CtrlPresentation presentation = null;
+    private static CtrlDomain domain = null;
+    protected CtrlDomain() {
 
-    public CtrlDomain(CtrlPresentation present, CtrlPersistence persist) {
-        persistence = persist;
-        presentation = present;
     }
 
-    public CtrlPersistence getCtrlPersistence() { return persistence; }
-    public CtrlPresentation getCtrlPresentation() { return presentation; }
+    public static CtrlDomain getInstance() {
+        if(domain == null)
+            domain = new CtrlDomain();
+        return domain;
+    }
+
+    public CtrlPersistence getCtrlPersistence() { return CtrlPersistence.getInstance(); }
+    public CtrlPresentation getCtrlPresentation() { return CtrlPresentation.getInstance(); }
 
     public void newPlayer(String username) {
         user = new User(username);
@@ -48,6 +51,10 @@ public class CtrlDomain {
         game.print();
     }
 
+    public ArrayList<ArrayList<String>> getMatrix() {
+        return game.getRawData();
+    }
+
     //Create a custom game from scratch.
     public void createGame(String name) {
         System.out.println("NOT IMPLEMENTED!");
@@ -58,8 +65,12 @@ public class CtrlDomain {
         game.saveGame();
     }
 
+    public void loadGame(String name) throws IOException {
+        getCtrlPersistence().loadGame(user.getName(), name);
+    }
+
     public void makeGameFromData(ArrayList<ArrayList<String>> data, String name, String adjacency,
-                                 String type) {
+                                 String type, String difficulty, String time) {
         ArrayList<ArrayList<Node>> nodes = new ArrayList<>();
         for (ArrayList<String> l : data) {
             nodes.add(new ArrayList<>());
@@ -70,8 +81,9 @@ public class CtrlDomain {
 
         Game.HidatoType t = Game.getHidatoType(type);
         Hidato.AdjacencyType a = Game.getAdjacencyType(adjacency);
+        Game.Difficulty d = Game.getDifficultyType(difficulty);
         Hidato h = makeNewHidato(t, a, nodes);
-        game = new Game(this, Game.Difficulty.CUSTOM, user, h, t, name);
+        game = new Game(this, d, user, h, t, name);
 
         game.print();
     }
@@ -90,5 +102,9 @@ public class CtrlDomain {
             case HEXAGON: return new HexHidato(nodes, adj);
             default: return new QuadHidato(nodes, adj);
         }
+    }
+
+    public boolean setVal(int x, int y, int val) {
+        return game.move(x,y,val);
     }
 }

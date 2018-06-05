@@ -1,39 +1,24 @@
 package persistance;
-import domain.Hidato;
-import domain.TriHidato;
-import domain.QuadHidato;
-import domain.HexHidato;
-import domain.Node;
 
-import java.io.IOException;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.BufferedReader;
-
-import java.io.PrintStream;
-
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class CustomFile {
 
-    public static class HidatoInStrings {
+    public static class GameInStrings {
         ArrayList<ArrayList<String>> data = new ArrayList<>();
         String adjacency;
         String type;
+        String difficulty = "custom";
+        String time = "0";
     }
 
-    public static HidatoInStrings importHidato(File file) throws IOException {
-        HidatoInStrings his = new HidatoInStrings();
-        FileReader fr = new FileReader(file);
-        BufferedReader b = new BufferedReader(fr);
+    private static GameInStrings importHidato(BufferedReader b) throws IOException {
+        GameInStrings his = new GameInStrings();
         String header = b.readLine();
-        if (header.isEmpty()) throw new IOException("Empty files don't make good hidatos.");
-
         String[] params = header.split(",");
+        if (params.length < 3) throw new IOException("Invalid header!");
         his.type = params[0];
         his.adjacency = params[1];
         int x = Integer.parseInt(params[2]);
@@ -49,64 +34,46 @@ public class CustomFile {
         return his;
     }
 
-    /* Import from a file given and returns the Hidato */
-    public static Hidato importHidato(String file)  throws IOException {
-        String ruta = "Files/";
-        FileReader fr = new FileReader(ruta+file);
+    public static GameInStrings importHidato(String file) throws IOException {
+        StringReader fr = new StringReader(file);
         BufferedReader b = new BufferedReader(fr);
-        String cadena = b.readLine();
-        Hidato.AdjacencyType adj = Hidato.AdjacencyType.BOTH;
-        ArrayList<ArrayList<Node>> data = new ArrayList<>();
-        //False init, if is not setted later, will return an empty hidato.
-        Hidato hidato;
-        String[] params;
+        return importHidato(b);
+    }
 
-        /* If cadena is null it means that the txt file is not correct,
-         then a exception will be thrown. */
-        if(cadena !=null) {
-            params = cadena.split(",");
-            int x = Integer.parseInt(params[2]);
-            int y = Integer.parseInt(params[3]);
-            switch (params[1]) {
-                case "C":
-                    adj = Hidato.AdjacencyType.EDGE;
-                    break;
-                case "CA":
-                    adj = Hidato.AdjacencyType.BOTH;
-                    break;
-                default:
-                    adj = Hidato.AdjacencyType.BOTH;
-                    break;
-            }
+    public static GameInStrings importHidato(File file) throws IOException {
+        FileReader fr = new FileReader(file);
+        BufferedReader b = new BufferedReader(fr);
+        return importHidato(b);
+    }
 
-            for(int i = 0; i < x; i++) {
-                String line = b.readLine();
-                String[] values = line.split(",");
-                data.add(new ArrayList<>());
-                for(int j = 0; j < y; j++){
-                    data.get(data.size() - 1).add(new Node(values[j]));
-                }
-            }
+    private static GameInStrings loadGame(BufferedReader b) throws IOException {
+        GameInStrings g = importHidato(b);
+        String footer = b.readLine();
+        String[] params = footer.split(",");
+        if (params.length < 2) throw new IOException("Invalid game! Is this a template?");
+        g.difficulty = params[0];
+        g.time = params[1];
+        return g;
+    }
 
-            switch(params[0]) {
-                case "Q":
-                    hidato = new QuadHidato(data, adj);
-                    break;
-                case "T":
-                    hidato = new TriHidato(data, adj);
-                    break;
-                case "H":
-                    hidato  = new HexHidato(data, adj);
-                    break;
-                default:
-                    throw new IOException();
-            }
-        } else {
-            throw new IOException();
-        }
-        b.close();
+    public static GameInStrings loadGame(File file) throws IOException {
+        FileReader fr = new FileReader(file);
+        BufferedReader b = new BufferedReader(fr);
+        return loadGame(b);
+    }
 
-        return hidato;
+    public static GameInStrings loadGame(String file) throws IOException {
+        StringReader fr = new StringReader(file);
+        BufferedReader b = new BufferedReader(fr);
+        return loadGame(b);
+    }
+
+    public static GameInStrings loadGame(String username, String hidatoName)
+            throws IOException {
+        FileReader fr = new FileReader("Usuaris/" + username
+                + "/games/" + hidatoName);
+        BufferedReader b = new BufferedReader(fr);
+        return loadGame(b);
     }
 
     /* return the data of ranking from the file in form of matrix */
@@ -128,61 +95,6 @@ public class CustomFile {
         }
 
         return ret;
-    }
-
-    /*Wait a hidato entered by the terminal with the correct structure
-      and return a Hidato*/
-    public static Hidato enterHidato() throws IOException {
-        Scanner s = new Scanner(System.in);
-        String cadena = s.nextLine();
-        String[] params;
-        Hidato.AdjacencyType adj;
-        ArrayList<ArrayList<Node>> data = new ArrayList<>();
-        Hidato hidato;
-
-        if(cadena.isEmpty()) {
-            params = cadena.split(",");
-            int x = Integer.parseInt(params[2]);
-            int y = Integer.parseInt(params[3]);
-            switch (params[1]) {
-                case "C":
-                    adj = Hidato.AdjacencyType.EDGE;
-                    break;
-                case "CA":
-                    adj = Hidato.AdjacencyType.BOTH;
-                    break;
-                default:
-                    adj = Hidato.AdjacencyType.BOTH;
-                    break;
-            }
-
-            for(int i = 0; i < x; i++) {
-                String line = s.nextLine();
-                String[] values = line.split(",");
-                data.add(new ArrayList<>());
-                for(int j = 0; j < y; j++){
-                    data.get(data.size() - 1).add(new Node(values[j]));
-                }
-            }
-
-            switch(params[0]) {
-                case "Q":
-                    hidato = new QuadHidato(data, adj);
-                    break;
-                case "T":
-                    hidato = new TriHidato(data, adj);
-                    break;
-                case "H":
-                    hidato  = new HexHidato(data, adj);
-                    break;
-                default:
-                    throw new IOException();
-            }
-        } else {
-            throw new IOException();
-        }
-
-        return hidato;
     }
 
     public static void saveTemplate(File file, ArrayList<String> data) {
@@ -240,21 +152,4 @@ public class CustomFile {
             File game = new File("Usuaris/" + username + "/games/", hidatoName);
             saveGame(game, data, diff, currTime);
     }
-
-    public static ArrayList<String> loadGame(String username, String hidatoName)
-            throws IOException {
-        FileReader fr = new FileReader("Usuaris/" + username
-                + "/games/" + hidatoName);
-        BufferedReader b = new BufferedReader(fr);
-        ArrayList<String> ret =  new ArrayList<>();
-        String cadena = b.readLine();
-        while(cadena != null) {
-            ret.add(cadena);
-            cadena = b.readLine();
-        }
-        b.close();
-
-        return ret;
-    }
-
 }

@@ -7,12 +7,9 @@ public class App {
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(() -> {
             try {
-                CtrlPersistence ctrlPersistence = new CtrlPersistence();
-                CtrlPresentation ctrlPresentation = new CtrlPresentation();
-                CtrlDomain ctrlDomain = new CtrlDomain(ctrlPresentation, ctrlPersistence);
-
-                ctrlPersistence.setCtrlDomain(ctrlDomain);
-                ctrlPresentation.setCtrlDomain(ctrlDomain);
+                CtrlPersistence ctrlPersistence = CtrlPersistence.getInstance();
+                CtrlPresentation ctrlPresentation = CtrlPresentation.getInstance();
+                CtrlDomain ctrlDomain = CtrlDomain.getInstance();
 
                 ctrlPresentation.init();
             } catch (ExceptionInInitializerError e) {
