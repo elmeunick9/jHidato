@@ -46,7 +46,7 @@ public class CtrlDomain {
             case 2: t = Game.HidatoType.HEXAGON; break;
             default: t = Game.HidatoType.SQUARE;
         }
-        game = new Game(this, d, user, t);
+        game = new Game(d, user, t);
         if (!name.isEmpty()) game.setFilename(name);
         game.print();
     }
@@ -83,7 +83,7 @@ public class CtrlDomain {
         Hidato.AdjacencyType a = Game.getAdjacencyType(adjacency);
         Game.Difficulty d = Game.getDifficultyType(difficulty);
         Hidato h = makeNewHidato(t, a, nodes);
-        game = new Game(this, d, user, h, t, name);
+        game = new Game(d, user, h, t, name);
 
         game.print();
     }

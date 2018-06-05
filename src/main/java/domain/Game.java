@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Game {
-    private CtrlDomain domain;
-
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
 
@@ -18,13 +16,12 @@ public class Game {
     private long timeInit;
     private long currTime = 0;
 
-    Game(CtrlDomain domain, Difficulty d, User u, HidatoType htype) {
-        this(domain, d, u, htype, new Generator(d, htype));
+    Game(Difficulty d, User u, HidatoType htype) {
+        this(d, u, htype, new Generator(d, htype));
     }
 
-    Game(CtrlDomain dom, Difficulty d, User u, Hidato hidato, HidatoType hidatoType,
+    Game(Difficulty d, User u, Hidato hidato, HidatoType hidatoType,
          String filename) {
-        domain = dom;
         h = hidato;
         dif = d;
         this.filename = filename;
@@ -33,8 +30,8 @@ public class Game {
         timeInit = System.currentTimeMillis();
     }
 
-    Game(CtrlDomain dom, Difficulty d, User u, HidatoType htype, Generator g) {
-        this(dom, d, u, g.getHidato(), htype, g.getHashedFilename());
+    Game(Difficulty d, User u, HidatoType htype, Generator g) {
+        this(d, u, g.getHidato(), htype, g.getHashedFilename());
     }
 
     public User getPlayer() {
@@ -94,7 +91,7 @@ public class Game {
                 dificult = "custom";
                 break;
         }
-        domain.getCtrlPersistence().saveGame(user.getName(),
+        CtrlDomain.getInstance().getCtrlPersistence().saveGame(user.getName(),
                 filename, h.getRawData(ht), dificult, currTime);
     }
 
