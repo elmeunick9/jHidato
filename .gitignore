@@ -23,3 +23,5 @@ build
 .metadata
 .apt_generated
 classes/*
+Usuaris/*
+users/*

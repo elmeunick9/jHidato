@@ -1,13 +1,13 @@
     O- Guardar game (amb estat) -> a carpeta amb username.
-    - Guardar ranking i actualitzar. (username substr(5), ordre per puntuació. Temps jugat com a param.)
-    - Afegir password a carpeta user.
+    - Guardar ranking i actualitzar. (username substr(6), ordre per puntuació. Temps jugat com a param.)
+    - Afegir password a carpeta user. <-- NO THANKS
 
 Capa Presentació:
     - Ctrl. User.
     - Ctrl. Game. IMPORTANT!
     - Ctrl. Ranking.
 
-    R- Pantalla inici
+    R- Pantalla inici <-- (+-) FET
         Dues subdivisions:
         Login amb selectpicker.
         Register amb:
@@ -15,12 +15,12 @@ Capa Presentació:
         - Boto register.
 
     - Seleccionar Hidato:
-        - Carregar partides en curs o finalitzats: carpeta user.
-        - Seleccionar acció (File > Load) | (File > Load Template) | (Generate).
+        - Carregar partides en curs o finalitzats: carpeta user. <-- FET
+        - Seleccionar acció (File > Load) | (File > Load Template) | (Generate). <-- FET
 
     - Si Generate:
-        - Si custom: pantalla amb paràmetres.
-        - Si no es genera segons la dif selec.
+        - Si custom: pantalla amb paràmetres. <-- NO?
+        - Si no es genera segons la dif selec. <-- FET
 
     - Carregar "widget" amb l'hidato.
 
@@ -32,9 +32,10 @@ Capa Presentació:
 -Afegir triangles
 -Afegir Hexagons
 
--Al seleccionar Load mostrar explorador d'arxius?
+FET -Al seleccionar Load mostrar explorador d'arxius?
 
--Al guardar com template:
+
+FET -Al guardar com template:
  - Crear a game saveAsTemplate();
  - A CustomFile crear SaveAsTemplate() i que guardi a la carpeta templates.
  - Aplicar en el controlador de persistencia.

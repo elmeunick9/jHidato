@@ -1,78 +1,37 @@
 package domain;
 
-import persistance.CtrlPersistence;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Game {
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
+
     private HidatoType ht;
     private Difficulty dif;
     private Hidato h;
     private String filename;
     private User user;
     private long timeInit;
-    private long currTime;
+    private long currTime = 0;
 
     Game(Difficulty d, User u, HidatoType htype) {
         this(d, u, htype, new Generator(d, htype));
     }
 
-    Game(Difficulty d, User u, HidatoType htype, Generator g) {
-        h = g.getHidato();
+    Game(Difficulty d, User u, Hidato hidato, HidatoType hidatoType,
+         String filename) {
+        h = hidato;
         dif = d;
-        filename = g.getHashedFilename();
+        this.filename = filename;
         user = u;
-        ht = htype;
+        ht = hidatoType;
         timeInit = System.currentTimeMillis();
-        currTime = 0;
     }
-    //Constructor to load a existent game
-    Game(String file, User u) {
-        user = u;
-        ArrayList<String> infoLoaded = CtrlPersistence.loadGame(u.getName(), file);
-        System.out.print(infoLoaded);
-        String line = infoLoaded.get(0);
-        String[] params = line.split(",");
-        ArrayList<ArrayList<Node>> dataHidato = new ArrayList<>();
-        int x = Integer.parseInt(params[2]);
-        System.out.println("LOAD?");
 
-        //Generate the Matrix of <Node> to import the Hidato.
-        for(int i = 1; i <= x; i++) {
-            line = infoLoaded.get(i);
-            String[] data = line.split(",");
-            dataHidato.add(new ArrayList<>());
-            for(String d : data) {
-                dataHidato.get(dataHidato.size() - 1).add(new Node(d));
-            }
-        }
-        ht = getHidatoType(params[0]);
-        h = loadHidato(dataHidato, getAdjacencyType(params[1]));
-        filename = file;
-        line = infoLoaded.get(x+1);
-        String[] data = line.split(",");
-        timeInit = System.currentTimeMillis();
-        currTime = Long.parseLong(data[1]);
-        switch (data[0]){
-            case "easy":
-                dif = Difficulty.EASY;
-                break;
-            case "medium":
-                dif = Difficulty.MEDIUM;
-                break;
-            case "hard":
-                dif = Difficulty.HARD;
-                break;
-            default:
-                dif = Difficulty.CUSTOM;
-                break;
-        }
-        /*
-        dif = d;
-        */
+    Game(Difficulty d, User u, HidatoType htype, Generator g) {
+        this(d, u, g.getHidato(), htype, g.getHashedFilename());
     }
 
     public User getPlayer() {
@@ -82,6 +41,7 @@ public class Game {
     public String getFilename() {
         return filename;
     }
+    public void setFilename(String fn) { filename = fn; }
 
     public Difficulty getDif() {
         return dif;
@@ -102,10 +62,6 @@ public class Game {
         return ret;
     }
 
-    public void setDif(Difficulty d) {
-        this.dif = d;
-    }
-
     public boolean move(int x, int y, int value) throws Node.InvalidTypeException {
         if(value == -1) {
             this.h.getNode(x,y).clear();
@@ -119,7 +75,7 @@ public class Game {
     }
 
     /*Save the stats of the game when user pause or leave the game*/
-    public void saveGame() {
+    public void saveGame() throws IOException {
         String dificult;
         switch (dif){
             case EASY:
@@ -135,14 +91,21 @@ public class Game {
                 dificult = "custom";
                 break;
         }
-        CtrlPersistence.saveGame(user.getName(), filename, h.getRawData(ht), dificult, currTime);
+        CtrlDomain.getInstance().getCtrlPersistence().saveGame(user.getName(),
+                filename, h.getRawData(ht), dificult, currTime);
     }
 
-    public void loadGame(String file) {
-
+    public static Difficulty getDifficultyType(String dif) {
+        switch (dif) {
+            case "easy": return Difficulty.EASY;
+            case "medium": return Difficulty.MEDIUM;
+            case "hard": return Difficulty.HARD;
+            case "custom": return Difficulty.CUSTOM;
+            default: return Difficulty.CUSTOM;
+        }
     }
 
-    private Hidato.AdjacencyType getAdjacencyType(String at) {
+    public static Hidato.AdjacencyType getAdjacencyType(String at) {
         Hidato.AdjacencyType ret = null;
         switch (at) {
             case "C":
@@ -157,20 +120,7 @@ public class Game {
         return ret;
     }
 
-    private Hidato loadHidato(ArrayList<ArrayList<Node>> data, Hidato.AdjacencyType adj) {
-        switch (ht) {
-            case TRIANGLE:
-                return new TriHidato(data, adj);
-            case SQUARE:
-                return new QuadHidato(data, adj);
-            case HEXAGON:
-                return new HexHidato(data, adj);
-            default:
-                return new TriHidato(data, adj);
-        }
-    }
-
-    private HidatoType getHidatoType(String t) {
+    public static HidatoType getHidatoType(String t) {
         HidatoType ret = null;
         switch (t) {
             case "T":
@@ -205,6 +155,8 @@ public class Game {
         h = s.generateSolution();
     }
 
+    public Hidato getHidato() { return h; }
+
     public void clear() {
         h.clear();
     }
@@ -220,14 +172,4 @@ public class Game {
         }
         return ret;
     }
-
-    public static void main(String[] args) {
-        User u = new User("Oscar");
-        Game game = new Game(Difficulty.MEDIUM, u, HidatoType.HEXAGON);
-        game.print();
-        System.out.print(game.getRawData());
-
-    }
-
-
 }

@@ -1,8 +1,10 @@
 package domain;
 
 import persistance.CtrlPersistence;
+import presentation.CtrlPresentation;
 
 import java.util.ArrayList;
+import java.io.IOException;
 
 public class CtrlDomain {
     private Game game;
@@ -18,12 +20,17 @@ public class CtrlDomain {
         return domain;
     }
 
+    public CtrlPersistence getCtrlPersistence() { return CtrlPersistence.getInstance(); }
+    public CtrlPresentation getCtrlPresentation() { return CtrlPresentation.getInstance(); }
+
     public void newPlayer(String username) {
         user = new User(username);
     }
 
+    public String getUsername() { return user.getName(); }
+
     //Generate a new hidato and game.
-    public ArrayList<ArrayList<String>> generateGame(int difficulty, int type) {
+    public void generateGame(String name, int difficulty, int type) {
         Game.Difficulty d;
         switch (difficulty) {
             case 0: d = Game.Difficulty.EASY; break;
@@ -40,8 +47,8 @@ public class CtrlDomain {
             default: t = Game.HidatoType.SQUARE;
         }
         game = new Game(d, user, t);
+        if (!name.isEmpty()) game.setFilename(name);
         game.print();
-        return game.getRawData();
     }
 
     public ArrayList<ArrayList<String>> getMatrix() {
@@ -49,13 +56,55 @@ public class CtrlDomain {
     }
 
     //Create a custom game from scratch.
-    public void createGame() {
+    public void createGame(String name) {
         System.out.println("NOT IMPLEMENTED!");
+    }
+
+    public void saveGame() throws IOException {
+        if (game == null) throw new IllegalStateException("You must start a game first!");
+        game.saveGame();
+    }
+
+    public void loadGame(String name) throws IOException {
+        getCtrlPersistence().loadGame(user.getName(), name);
+    }
+
+    public void makeGameFromData(ArrayList<ArrayList<String>> data, String name, String adjacency,
+                                 String type, String difficulty, String time) {
+        ArrayList<ArrayList<Node>> nodes = new ArrayList<>();
+        for (ArrayList<String> l : data) {
+            nodes.add(new ArrayList<>());
+            for (String s : l) {
+                nodes.get(nodes.size()-1).add(new Node(s));
+            }
+        }
+
+        Game.HidatoType t = Game.getHidatoType(type);
+        Hidato.AdjacencyType a = Game.getAdjacencyType(adjacency);
+        Game.Difficulty d = Game.getDifficultyType(difficulty);
+        Hidato h = makeNewHidato(t, a, nodes);
+        game = new Game(d, user, h, t, name);
+
+        game.print();
+    }
+
+    public ArrayList<String> getClearHidatoData() {
+        Hidato t = game.getHidato().copy();
+        t.clear();
+        return t.getRawData(game.getHt());
+    }
+
+    Hidato makeNewHidato(Game.HidatoType t, Hidato.AdjacencyType adj,
+                                 ArrayList<ArrayList<Node>> nodes) {
+        switch (t) {
+            case TRIANGLE: return new TriHidato(nodes, adj);
+            case SQUARE: return new QuadHidato(nodes, adj);
+            case HEXAGON: return new HexHidato(nodes, adj);
+            default: return new QuadHidato(nodes, adj);
+        }
     }
 
     public boolean setVal(int x, int y, int val) {
         return game.move(x,y,val);
     }
-
-    public CtrlPersistence getCtrlPersistence() { return CtrlPersistence.getInstance(); }
 }

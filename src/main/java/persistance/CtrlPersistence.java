@@ -1,8 +1,9 @@
 package persistance;
 
 import domain.CtrlDomain;
-import domain.Hidato;
+//import domain.Hidato;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -26,16 +27,28 @@ public class CtrlPersistence {
         return CustomFile.getRanking();
     }
 
-    public static Hidato importHidato(String file)  throws IOException {
-        return CustomFile.importHidato(file);
+    private void loadGameFromDomain(String name, CustomFile.GameInStrings g) {
+        CtrlDomain.getInstance().makeGameFromData(
+                g.data, name, g.adjacency, g.type, g.difficulty, g.time);
     }
 
-    public static void saveGame(String username, String hidatoName,
-    ArrayList<String> data, String diff, long currTime) {
-        CustomFile.saveGame(username, hidatoName, data, diff, currTime);
+    public void importHidato(File file)  throws IOException {
+        CustomFile.GameInStrings his = CustomFile.importHidato(file);
+        loadGameFromDomain(file.getName(), his);
     }
 
-    public static ArrayList<String> loadGame(String username, String hidatoName) {
-        return CustomFile.loadGame(username, hidatoName);
+    public void exportHidato(File file) throws IOException {
+        ArrayList<String> data = getCtrlDomain().getClearHidatoData();
+        CustomFile.saveTemplate(file, data);
+    }
+
+    public void saveGame(String username, String hidatoName, ArrayList<String> data,
+                         String difficulty, long currTime) throws IOException {
+        CustomFile.saveGame(username, hidatoName, data, difficulty, currTime);
+    }
+
+    public void loadGame(String username, String hidatoName) throws IOException {
+        CustomFile.GameInStrings g = CustomFile.loadGame(username, hidatoName);
+        loadGameFromDomain(hidatoName, g);
     }
 }
