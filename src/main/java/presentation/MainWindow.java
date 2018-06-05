@@ -1,10 +1,10 @@
 package presentation;
 
 import javax.swing.*;
-import java.awt.Dimension;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class MainWindow {
-    private CtrlPresentation ctrlPresentation;
     private JFrame frame = new JFrame("jHidato 21.1");
     private JPanel panelContent = new JPanel();
     private JMenuBar menuMain = new JMenuBar();
@@ -23,13 +23,15 @@ public class MainWindow {
     private NewGameWindow newGameWindow = new NewGameWindow(frame);
     private AboutWindow aboutWindow = new AboutWindow(frame);
 
+    private ArrayList<ArrayList<String>> data;
+    private Board boardHidato;
+
     final JFileChooser fc = new JFileChooser();
 
-    public MainWindow(CtrlPresentation cPres) {
-        ctrlPresentation = cPres;
+    public MainWindow() {
         initView();
         initActions();
-        ctrlPresentation.initUser(askUser());
+        CtrlPresentation.getInstance().initUser(askUser());
     }
 
     private void initView() {
@@ -64,10 +66,20 @@ public class MainWindow {
             boolean toGenerate = newGameWindow.showDialog();
             int d = newGameWindow.difficulty;
             int t = newGameWindow.type;
-            if (toGenerate) ctrlPresentation.getCtrlDomain().generateGame(d, t);
-            else ctrlPresentation.getCtrlDomain().createGame();
+            if (toGenerate) data = CtrlPresentation.getInstance().getCtrlDomain().generateGame(d, t);
+            else CtrlPresentation.getInstance().getCtrlDomain().createGame();
+            initGame();
         });
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
+    }
+
+    private void initGame() {
+        //checkIfExists
+        if(boardHidato != null) frame.remove(boardHidato);
+        boardHidato = new Board(new SquareNode(), data);
+        frame.add(boardHidato);
+        frame.pack();
+        frame.setVisible(true);
     }
 
     private String askUser() {
@@ -101,5 +113,11 @@ public class MainWindow {
         //System.out.println("isEventDispatchThread: " + SwingUtilities.isEventDispatchThread());
         frame.pack();
         frame.setVisible(true);
+
     }
+
+    public static void main(String[] args) {
+        CtrlPresentation.getInstance().init();
+    }
+    
 }
