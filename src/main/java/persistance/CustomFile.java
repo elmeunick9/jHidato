@@ -70,7 +70,7 @@ public class CustomFile {
 
     public static GameInStrings loadGame(String username, String hidatoName)
             throws IOException {
-        FileReader fr = new FileReader("Usuaris/" + username
+        FileReader fr = new FileReader("Users/" + username
                 + "/games/" + hidatoName);
         BufferedReader b = new BufferedReader(fr);
         return loadGame(b);
@@ -149,7 +149,7 @@ public class CustomFile {
     //
     public static void saveGame(String username, String hidatoName,
     ArrayList<String> data, String diff, long currTime) throws IOException {
-            File game = new File("Usuaris/" + username + "/games/", hidatoName);
+            File game = new File("Users/" + username + "/games/", hidatoName);
             saveGame(game, data, diff, currTime);
     }
 }

@@ -1,44 +1,14 @@
-    O- Guardar game (amb estat) -> a carpeta amb username.
-    - Guardar ranking i actualitzar. (username substr(6), ordre per puntuació. Temps jugat com a param.)
-    - Afegir password a carpeta user. <-- NO THANKS
 
-Capa Presentació:
-    - Ctrl. User.
-    - Ctrl. Game. IMPORTANT!
-    - Ctrl. Ranking.
+Pantalla que s'ha guardat correctament.
+Usabilitat. Selecció de números. Clicar, incrementar; ctrl click decrem.
+Les dos formes.
+Desfer guardar node i valor.
+Seleccionar adjacencies en new game.
+Ranking -> puntuació temps/numCel·les.
+Pantalla de final de game.
 
-    R- Pantalla inici <-- (+-) FET
-        Dues subdivisions:
-        Login amb selectpicker.
-        Register amb:
-        - Text box amb username.
-        - Boto register.
+Generar el .jar
+Generar pdf. (Manual)
+Diagrama de classes.
 
-    - Seleccionar Hidato:
-        - Carregar partides en curs o finalitzats: carpeta user. <-- FET
-        - Seleccionar acció (File > Load) | (File > Load Template) | (Generate). <-- FET
-
-    - Si Generate:
-        - Si custom: pantalla amb paràmetres. <-- NO?
-        - Si no es genera segons la dif selec. <-- FET
-
-    - Carregar "widget" amb l'hidato.
-
--* Millorar solver i generator.
-
--Afegir event de click
--afegir botó de solver
--Afegir botó de desfer
--Afegir triangles
--Afegir Hexagons
-
-FET -Al seleccionar Load mostrar explorador d'arxius?
-
-
-FET -Al guardar com template:
- - Crear a game saveAsTemplate();
- - A CustomFile crear SaveAsTemplate() i que guardi a la carpeta templates.
- - Aplicar en el controlador de persistencia.
-
-
-
+Obrir manual desde interficie.

@@ -23,7 +23,7 @@ public class CtrlPersistence {
         return CtrlDomain.getInstance();
     }
 
-    public static ArrayList<ArrayList<String>> getRanking() throws IOException {
+    public ArrayList<ArrayList<String>> getRanking() throws IOException {
         return CustomFile.getRanking();
     }
 
