@@ -102,7 +102,7 @@ public class MainWindow {
         String name = "";
         while (name.isEmpty()) {
             fc.setCurrentDirectory(new File(
-                    System.getProperty("user.dir") + "/Usuaris/" + myuser + "/games/"));
+                    System.getProperty("user.dir") + "/Users/" + myuser + "/games/"));
             int c = fc.showDialog(frame, null);
             if (c == 0) {
                 try {
