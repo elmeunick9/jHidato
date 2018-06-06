@@ -1,5 +1,7 @@
 package presentation;
 
+import domain.CtrlDomain;
+
 import javax.swing.*;
 import java.awt.Dimension;
 import java.io.File;
@@ -81,7 +83,11 @@ public class MainWindow {
 
         menuitemSavegame.addActionListener(e -> {
             try {
-                CtrlPresentation.getInstance().getCtrlDomain().saveGame();
+                String filename = CtrlPresentation.getInstance().getCtrlDomain().saveGame();
+                JOptionPane.showMessageDialog(frame,
+                        "Game saved with name " + filename,
+                        "Game saved",
+                        JOptionPane.INFORMATION_MESSAGE);
             } catch (IllegalStateException | IOException ex) {
                 JOptionPane.showMessageDialog(frame,
                 ex.getMessage(),
@@ -112,6 +118,7 @@ public class MainWindow {
                         throw new IOException("You must select a game within YOUR folder!");
                     }
                     ctrlPresentation.getCtrlDomain().loadGame(name);
+                    initGame();
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(frame,
                             ex.getClass().toString() + "\n" + ex.getMessage(),
@@ -120,7 +127,6 @@ public class MainWindow {
                 }
             } else break;
         }
-        initGame();
     }
 
     private void saveTemplateDialog() {
@@ -160,6 +166,7 @@ public class MainWindow {
                 try {
                     File file = fcTemplates.getSelectedFile();
                     ctrlPresentation.getCtrlDomain().getCtrlPersistence().importHidato(file);
+                    initGame();
                     loop = false;
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(frame,
@@ -169,7 +176,6 @@ public class MainWindow {
                 }
             } else loop = false;
         }
-        initGame();
     }
 
     private void initGame() {
