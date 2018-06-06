@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Ranking {
     private ArrayList<ArrayList<String>> r;
     Ranking() throws IOException {
-        r = CtrlPersistence.getRanking();
+        r = CtrlPersistence.getInstance().getRanking();
     }
 
     public ArrayList<ArrayList<String>> getRanking() {

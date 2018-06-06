@@ -9,6 +9,9 @@ Pantalla de final de game.
 
 Generar el .jar
 Generar pdf. (Manual)
+
+Detallar solver. Heurística optimista (Documentació general).
+
 Diagrama de classes.
 
 Obrir manual desde interficie.
