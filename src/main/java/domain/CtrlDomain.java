@@ -60,9 +60,14 @@ public class CtrlDomain {
         System.out.println("NOT IMPLEMENTED!");
     }
 
-    public void saveGame() throws IOException {
+    /** Saves the current game.
+     * @return Name of the game saved.
+     * @throws IOException If there has been an error with IO
+     * @throws IllegalStateException If user is not currently playing any game. */
+    public String saveGame() throws IOException {
         if (game == null) throw new IllegalStateException("You must start a game first!");
         game.saveGame();
+        return game.getFilename();
     }
 
     public void loadGame(String name) throws IOException {
