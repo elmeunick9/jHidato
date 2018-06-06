@@ -32,11 +32,9 @@ public class TriangleNode extends NodeCell{
         int[] cy;
 
         cx = new int[] {x, x+roundToInt(x1), x+roundToInt(x2)};
-        if (isVertical(i,j)) { 		//o sigui, cella dreta, no de l'inreves
+        if (isVertical(i,j)) {
             cy = new int[] {y+roundToInt(size), y, y+roundToInt(size)};
-        }
-
-        else {
+        } else {
             cy = new int[] {y, y+roundToInt(size), y};
         }
 
@@ -103,22 +101,16 @@ public class TriangleNode extends NodeCell{
         else auxX = ((x+1) * x1) - posx;
         double auxY = ((y+1) * size) - posy;
 
-        if ( y%2==0) {
-            if ( x%2==0 && (auxY/auxX > half) ) {
+        if(y%2==0) {
+            if(x%2==0 && (auxY/auxX > half)) {
+                --x;
+            } else if(x%2!=0 && (auxY/auxX < half)) {
                 --x;
             }
-
-            else if ( x%2!=0 && (auxY/auxX < half) ) {
+        } else {
+            if(x%2!=0 && (auxY/auxX > half)) {
                 --x;
-            }
-        }
-
-        else {
-            if ( x%2!=0 && (auxY/auxX > half) ) { 	//si fas click a la meitat de dalt/esquerra
-                --x;
-            }
-
-            else if ( x%2==0 && (auxY/auxX < half) ) { 	//si fas click a la meitat de dalt/esquerra
+            } else if(x%2==0 && (auxY/auxX < half)) {
                 --x;
             }
         }

@@ -1,6 +1,5 @@
 package domain;
 
-import persistance.CtrlPersistence;
 import presentation.CtrlPresentation;
 
 public class App {
