@@ -1,17 +1,14 @@
 package presentation;
 
-import domain.CtrlDomain;
-
 import javax.swing.*;
 import java.awt.Dimension;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class MainWindow {
     private JFrame frame = new JFrame("jHidato 21.1");
-    private JPanel panelContent = new JPanel();
     private JMenuBar menuMain = new JMenuBar();
     private JMenu menuFile = new JMenu("File");
     private JMenuItem menuitemNewGame = new JMenuItem("New Game");
@@ -93,6 +90,20 @@ public class MainWindow {
                 ex.getMessage(),
                 "Exception ocurred!",
                 JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        menuitemManual.addActionListener(e -> {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    File myFile = new File("./Files/manual.pdf");
+                    Desktop.getDesktop().open(myFile);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(frame,
+                            ex.getMessage(),
+                            "Exception ocurred!",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

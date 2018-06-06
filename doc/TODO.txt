@@ -1,5 +1,4 @@
 
-Pantalla que s'ha guardat correctament.
 Usabilitat. Selecció de números. Clicar, incrementar; ctrl click decrem.
 Les dos formes.
 Desfer guardar node i valor.
@@ -13,5 +12,3 @@ Generar pdf. (Manual)
 Detallar solver. Heurística optimista (Documentació general).
 
 Diagrama de classes.
-
-Obrir manual desde interficie.
