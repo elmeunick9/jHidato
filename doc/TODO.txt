@@ -4,7 +4,7 @@ Afegir "Please wait!" Label en mig de la pantalla, a mostrar quan el programa es
 Detallar solver. Heurística optimista (Documentació general). <- Fer TODO
 
 Dijous:
-Usabilitat. Selecció de números. Clicar, incrementar; ctrl click decrem.
+Usabilitat. Selecció de números. Clicar, incrementar; ctrl click decrem. Clic dret borrar.
 Les dos formes.
 Desfer guardar node i valor.
 Seleccionar adjacencies en new game.
