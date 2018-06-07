@@ -58,8 +58,8 @@ public class HexHidatoTest {
         Node c = hidato.getNode(5, 4);
 
         ArrayList<Node> list = hidato.adjacentNodes(hidato.getNode(4, 5));
-        assertTrue(list.contains(a));
+        assertTrue(!list.contains(a));
         assertTrue(list.contains(b));
-        assertTrue(list.contains(c));
+        assertTrue(!list.contains(c));
     }
 }

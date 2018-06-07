@@ -118,8 +118,7 @@ public class HexagonNode extends NodeCell{
                 --y;
                 if (y%2 == 0){
                     if (distxc < 0) ++x;
-                }
-                else{
+                } else{
                     if (distxc > 0) --x;
                 }
             }
