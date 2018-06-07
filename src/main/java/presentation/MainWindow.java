@@ -17,6 +17,7 @@ public class MainWindow {
     private JMenuItem menuitemSaveAs = new JMenuItem("Save Game As Template...");
     private JMenuItem menuitemLoadTemplate = new JMenuItem("Load Template");
     private JMenuItem menuitemQuit = new JMenuItem("Quit");
+    
     private JMenu menuRanking = new JMenu("Ranking");
     private JMenu menuHelp = new JMenu("Help");
     private JMenuItem menuitemAbout = new JMenuItem("About");
