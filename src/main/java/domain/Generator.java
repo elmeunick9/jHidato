@@ -30,25 +30,23 @@ public class Generator {
             throw new RuntimeException("Trying to generate hidato with no possible solutions!");
         }
 
-        boolean found = true;
-        while(found && minLen <= unsetNum) {
+
+        Hidato f = h;
+        int c = f.count();
+        for (int i = 0; i<20; i++) {
             try {
                 h = solver.generateSolution(minLen);
-
-                //Advance, try find a more filled solution, but not linearly.
-                minLen += (int) ((double)minLen / 2);
-
-                // Small random chance to consider the hidato OK if at least half unset nodes
-                // are filled.
-                if (minLen > unsetNum-5 && rn.nextInt(10) == 5) break;
-
+                int c2 = h.count();
+                if (c2 > c) {
+                    c = c2;
+                    f = h;
+                }
             } catch (Solver.SolutionNotFound e) {
-                //Once we find there is no solution, we stop and let h be the final choice.
-                found = false;
+                i--; //If not found doesn't count.
             }
         }
 
-        data = h.copyData();
+        data = f.copyData();
         for(int i = 0; i < data.size(); i++) {
             for(int j = 0; j < data.get(i).size(); j++) {
                 Node t = data.get(i).get(j);
@@ -93,9 +91,9 @@ public class Generator {
     public static Pair<Integer, Integer> getInterval(Game.Difficulty difficulty) {
         Pair<Integer, Integer> interval;
         switch (difficulty) {
-            case EASY: return new Pair<>(3, 4);
-            case MEDIUM: return new Pair<>(5, 7);
-            case HARD: return new Pair<>(8, 10);
+            case EASY: return new Pair<>(3, 5);
+            case MEDIUM: return new Pair<>(6, 9);
+            case HARD: return new Pair<>(10, 15);
             default: return new Pair<>(3, 6);
         }
     }
