@@ -30,7 +30,7 @@ public class CtrlDomain {
     public String getUsername() { return user.getName(); }
 
     //Generate a new hidato and game.
-    public void generateGame(String name, int difficulty, int type) {
+    public void generateGame(String name, int difficulty, int type, int adj) {
         Game.Difficulty d;
         switch (difficulty) {
             case 0: d = Game.Difficulty.EASY; break;
@@ -46,7 +46,16 @@ public class CtrlDomain {
             case 2: t = Game.HidatoType.HEXAGON; break;
             default: t = Game.HidatoType.SQUARE;
         }
-        game = new Game(d, user, t);
+
+        Hidato.AdjacencyType adjT;
+        switch (adj) {
+            case 0: adjT = Hidato.AdjacencyType.EDGE; break;
+            case 1: adjT = Hidato.AdjacencyType.VERTEX; break;
+            case 2: adjT = Hidato.AdjacencyType.BOTH; break;
+            default: adjT = Hidato.AdjacencyType.EDGE;
+        }
+
+        game = new Game(d, user, t, adjT);
         if (!name.isEmpty()) game.setFilename(name);
         game.print();
     }
