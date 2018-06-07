@@ -118,9 +118,9 @@ public class MainWindow {
         menuitemSolve.addActionListener(e -> {
             if (!CtrlDomain.getInstance().solve()) {
                 JOptionPane.showMessageDialog(frame,
-                        "Cant solve! Either there is no game, no solution, " +
-                                "or something is broken.\n" +
-                                "P.S. Try to clear.",
+                        "Cant solve! Either there is no game, no solution, "
+                                + "or something is broken.\n"
+                                + "P.S. Try to clear.",
                         "Unsolvable. May God have mercy on yOUR soul.",
                         JOptionPane.ERROR_MESSAGE);
                 return;

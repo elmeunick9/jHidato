@@ -62,11 +62,10 @@ public class CtrlDomain {
         if (!empty) {
             game = new Game(d, user, t, adjT);
             if (!name.isEmpty()) game.setFilename(name);
-        }
-        else {
+        } else {
             ArrayList<ArrayList<Node>> nodes = Generator.makeEmptyDataMatrix(d);
             Hidato h = makeNewHidato(t, adjT, nodes);
-            String filename = (name.isEmpty() ? Integer.toHexString(h.hashCode()) : name);
+            String filename = name.isEmpty() ? Integer.toHexString(h.hashCode()) : name;
             game = new Game(d, user, h, t, filename);
         }
         game.print();
