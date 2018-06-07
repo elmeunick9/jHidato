@@ -46,24 +46,24 @@ public class SquareNode extends NodeCell{
         int y = i * roundToInt(size);
         //block
         if (n.equals("*")) {
-            g2.setColor(new Color(175, 174, 156));
+            g2.setColor(BLOCK_NODE_BGCOLOR);
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
         } else if(n.equals("?")) {
-            g2.setColor(new Color(222, 222, 222));
+            g2.setColor(VALOR_NODE_BGCOLOR);
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
         } else if(n.contains("v")){
-            g2.setColor(new Color(195, 198, 198));
+            g2.setColor(VALOR_NODE_BGCOLOR);
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawString(n.substring(0,n.length()-1), x+(int)Math.round(size)/10+borderLeft+((int)Math.round(size)/4), (y+(int)Math.round(size)/2)+(borderTop+10));
         } else {
-            g2.setColor(new Color(195, 198, 198));
+            g2.setColor(FIXED_NODE_BGCOLOR);
             g2.fillPolygon(node(x,y));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y));
@@ -84,6 +84,7 @@ public class SquareNode extends NodeCell{
 
         p.x=x;
         p.y=y;
+
         return p;
     }
 

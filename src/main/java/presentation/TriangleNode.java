@@ -57,24 +57,24 @@ public class TriangleNode extends NodeCell{
         int y = i * roundToInt(size);
         //block
         if (n.equals("*")) {
-            g2.setColor(new Color(175, 174, 156));
+            g2.setColor(BLOCK_NODE_BGCOLOR);
             g2.fillPolygon(node(x,y,i,j));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y,i,j));
         } else if(n.equals("?")) {
-            g2.setColor(new Color(222, 222, 222));
+            g2.setColor(VALOR_NODE_BGCOLOR);
             g2.fillPolygon(node(x,y,i,j));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y,i,j));
         } else if(n.contains("v")){
-            g2.setColor(new Color(195, 198, 198));
+            g2.setColor(VALOR_NODE_BGCOLOR);
             g2.fillPolygon(node(x,y,i,j));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y,i,j));
             g2.setColor(Color.BLACK);
             g2.drawString(n.substring(0,n.length()-1), x+(int)Math.round(x1)/2+borderLeft+((int)Math.round(x1)/4), (y+(int)Math.round(size)/2)+(borderTop+10));
         } else {
-            g2.setColor(new Color(149, 152, 152));
+            g2.setColor(FIXED_NODE_BGCOLOR);
             g2.fillPolygon(node(x,y,i,j));
             g2.setColor(Color.BLACK);
             g2.drawPolygon(node(x,y,i,j));

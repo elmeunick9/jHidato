@@ -48,12 +48,9 @@ public class Generator {
         Hidato s = createHidato(data, adj, ht);
         int unsetNum = s.count();
         int minLen = unsetNum / 2;
-        System.out.println("MinLen: " + minLen);
         Solver solver = new Solver(s);
         try {
             h = solver.generateSolution(minLen);
-            h.print();
-            System.out.println("First try");
         } catch (Solver.SolutionNotFound e) {
             throw new RuntimeException("Trying to generate hidato with no possible solutions!");
         }
@@ -62,8 +59,6 @@ public class Generator {
         while(found && minLen <= unsetNum) {
             try {
                 h = solver.generateSolution(minLen);
-                h.print();
-                System.out.println("More Tries");
 
                 //Advance, try find a more filled solution, but not linearly.
                 minLen += (int) ((double)minLen / 2);
