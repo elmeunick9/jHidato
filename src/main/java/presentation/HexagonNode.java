@@ -43,8 +43,11 @@ public class HexagonNode extends NodeCell{
 
     @Override
     public void drawNode(int i, int j, Graphics2D g2) {
-        int x = j * roundToInt(x1);
-        int y = i * roundToInt(size);
+        int x = j * roundToInt(x2);
+        int y = i * roundToInt(y2);
+        if(i%2==1) {
+            x+=x1;
+        }
         g2.setColor(new Color(222, 222, 222));
         g2.fillPolygon(node(x,y,i,j));
         g2.setColor(Color.BLACK);
@@ -53,8 +56,12 @@ public class HexagonNode extends NodeCell{
 
     @Override
     public void paintNode(int i, int j, String n, Graphics2D g2) {
-        int x = j * roundToInt(x1);
-        int y = i * roundToInt(size);
+        int x = j * roundToInt(x2);
+        int y = i * roundToInt(y2);
+        if(i%2==1) {
+            x+=x1;
+        }
+
         //block
         if (n.equals("*")) {
             g2.setColor(BLOCK_NODE_BGCOLOR);
@@ -90,28 +97,31 @@ public class HexagonNode extends NodeCell{
         posx -= borderLeft;
         posy -= borderTop;
 
-        int y = (int)Math.floor(posy/size);
-        int x = (int)Math.floor(posx/x1);
+        int y = (int) (posy / y2);
 
-        //half
-        double half = size/x1;
+        double xleft = ((posx - ((y%2)*x1))/ (x2)); //per controlar que si cliques a la esquerra de les filles parelles, no sigui x = 0;
+        int x = -1;
+        if (xleft >= 0) x = (int) xleft;
 
-        double auxX;
-        if (isVertical(y,x)) auxX = posx - ((x) * x1);
-        else auxX = ((x+1) * x1) - posx;
-        double auxY = ((y+1) * size) - posy;
+        double distxf = ((x+1)*x2 - posx + (y%2)*x1);
+        double distxi = (posx - x*x2 - (y%2)*x1);
+        double distxc = (distxf - distxi)/2;
+        double distyi = (posy - y*y2);
 
-        if(y%2==0) {
-            if(x%2==0 && (auxY/auxX > half)) {
-                --x;
-            } else if(x%2!=0 && (auxY/auxX < half)) {
-                --x;
-            }
-        } else {
-            if(x%2!=0 && (auxY/auxX > half)) {
-                --x;
-            } else if(x%2==0 && (auxY/auxX < half)) {
-                --x;
+        if (y%2 == 0) { //files parelles, on l'hexagon esta desplaçat cap a la dreta mig hexagon
+            int aux = (int) (posx - x1);
+
+        }
+
+        if (distyi <= y1){                 //quadrat de dalt de cada hexagon, incloent un triangle de cadascun dels hexagons adjacents per dalt
+            if (Math.abs(distyi/distxc) < 0.5){
+                --y;
+                if (y%2 == 0){
+                    if (distxc < 0) ++x;
+                }
+                else{
+                    if (distxc > 0) --x;
+                }
             }
         }
 
@@ -119,6 +129,8 @@ public class HexagonNode extends NodeCell{
         p.y=y;
         return p;
     }
+
+
 
     @Override
     public void setBorderTop(int border) {

@@ -22,12 +22,22 @@ public class HexHidato extends Hidato {
         ArrayList<Node> nodes = new ArrayList<>();
 
         if (adjacency == Hidato.AdjacencyType.EDGE) {
-            addNodeIfValid(i-1, j-1, nodes);
-            addNodeIfValid(i-1, j+1, nodes);
-            addNodeIfValid(i+1, j+1, nodes);
-            addNodeIfValid(i+1, j-1, nodes);
-            addNodeIfValid(i+2, j, nodes);
-            addNodeIfValid(i-2, j, nodes);
+            if(i%2==1){
+                addNodeIfValid(i-1, j, nodes);
+                addNodeIfValid(i-1, j-1, nodes);
+                addNodeIfValid(i+1, j-1, nodes);
+                addNodeIfValid(i+1, j, nodes);
+                addNodeIfValid(i, j-1, nodes);
+                addNodeIfValid(i, j+1, nodes);
+            } else {
+                addNodeIfValid(i-1, j, nodes);
+                addNodeIfValid(i-1, j+1, nodes);
+                addNodeIfValid(i+1, j+1, nodes);
+                addNodeIfValid(i+1, j, nodes);
+                addNodeIfValid(i, j-1, nodes);
+                addNodeIfValid(i, j+1, nodes);
+            }
+
         }
 
         return nodes;
