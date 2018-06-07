@@ -131,4 +131,8 @@ public class CtrlDomain {
             return -1;
         }
     }
+
+    public String getTypeHidato() {
+        return game.getTypeToPresentation();
+    }
 }

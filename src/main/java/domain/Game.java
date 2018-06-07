@@ -138,6 +138,25 @@ public class Game {
         return ret;
     }
 
+    public String getTypeToPresentation(){
+        String ret;
+        switch(ht) {
+            case TRIANGLE:
+                ret = "T";
+                break;
+            case SQUARE:
+                ret = "Q";
+                break;
+            case HEXAGON:
+                ret = "H";
+                break;
+            default:
+                ret = "Q";
+                break;
+        }
+        return ret;
+    }
+
     /*Refresh stats from user and ranking when a game is over
     * return the time in miliseconds */
     public long finishGame() {
