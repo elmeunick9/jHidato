@@ -95,14 +95,15 @@ public class Board extends JPanel {
             if (p.x < 0 || p.y < 0 || p.x >= matrixHidato.get(0).size() || p.y >= matrixHidato.size()) return;
 
             if (SwingUtilities.isLeftMouseButton(e)) {
-                nextMove++;
                 if (CtrlPresentation.getInstance().leftClick(p.y,p.x, nextMove))
                     matrixHidato = CtrlDomain.getInstance().getMatrix();
+                nextMove++;
             }
-            if (SwingUtilities.isRightMouseButton(e))
-                if (CtrlPresentation.getInstance().rightClick(p.y,p.x))
+            if (SwingUtilities.isRightMouseButton(e)) {
+                if (CtrlPresentation.getInstance().rightClick(p.y, p.x))
                     matrixHidato = CtrlDomain.getInstance().getMatrix();
-
+                nextMove--;
+            }
             repaint();
         }
     }
