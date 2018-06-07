@@ -34,6 +34,10 @@ public class CtrlPresentation {
         getCtrlDomain().newPlayer(username);
     }
 
+    public void finishGame() {
+        mainWindow.showFinishGameDialog();
+    }
+
     public boolean leftClick(int x, int y, int val) {
         int v = CtrlDomain.getInstance().getValue(x+1,y+1);
         if (v != -1) {

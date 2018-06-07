@@ -265,6 +265,15 @@ public class MainWindow {
         }
     }
 
+    public void showFinishGameDialog() {
+        if (boardHidato == null) return;
+        JOptionPane.showMessageDialog(frame,
+                "CONGRATULATIONS. YOU WIN!\n",
+                "Maou-sama has been beaten!",
+                JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
     private void initGame() {
         //checkIfExists
         if(boardHidato != null) frame.remove(boardHidato);

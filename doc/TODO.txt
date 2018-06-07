@@ -1,14 +1,8 @@
 
-Dijous:
-Usabilitat. Selecció de números. Clicar, incrementar; ctrl click decrem. Clic dret borrar.
-Les dos formes.
+Divendres:
 Desfer guardar node i valor.
 Ranking -> puntuació temps/numCel·les.
-Pantalla de final de game.
-
-Divendres:
 Diagrama de classes.
 Generar el .jar
 Generar pdf. (Manual)
-Millorar generador.
 Tests.

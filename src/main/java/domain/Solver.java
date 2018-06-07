@@ -15,6 +15,7 @@ public class Solver {
     private HashMap<Node, HashMap<Node, Integer>> distance = new HashMap<>();
     private int fillSize = 0;
     private boolean printTraceOption = false;
+    int heuristicOptimizerConstant = 2;
 
     /** Generates a solver for a given hidato. On this call some precomputation is done.
      @param h Hidato. */
@@ -23,6 +24,37 @@ public class Solver {
         for (Node n : hidato) {
             if (n.getType() == Node.Type.unset || n.getType() == Node.Type.fixed) fillSize++;
         }
+
+        if (hidato.getClass() == QuadHidato.class) {
+            if (hidato.getAdjacency() == Hidato.AdjacencyType.EDGE) heuristicOptimizerConstant = 1;
+            else heuristicOptimizerConstant = 3;
+        } else if (hidato.getClass() == HexHidato.class) {
+            heuristicOptimizerConstant = 3;
+        }
+    }
+
+    public boolean isSolved() {
+        //Find 1
+        Node start = null;
+        int len = hidato.count();
+        for (Node n : hidato) {
+            if (n.hasValue() && n.getValue() == 1) start = n;
+        }
+        if (start == null) return false;
+
+        //Find everything else
+        Node n = start;
+        for (int i = 2; i<=len; i++) {
+            ArrayList<Node> adjacent = hidato.adjacentNodes(n);
+            Node next = null;
+            for (Node x : adjacent) {
+                if (x.hasValue() && x.getValue() == i) next = x;
+            }
+            if (next == null) return false;
+            n = next;
+        }
+
+        return true;
     }
 
     private void precompute() {
@@ -76,7 +108,7 @@ public class Solver {
         int diff = target.getValue() - fromValue;
         if (diff <= 0) return 1;
         if (fromValue > target.getValue()) return 1;
-        int mind = distance.get(n).get(target) / 3;
+        int mind = distance.get(n).get(target) / heuristicOptimizerConstant;
         return mind > diff ? 0 : 1;
     }
 

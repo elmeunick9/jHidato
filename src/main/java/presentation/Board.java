@@ -110,6 +110,11 @@ public class Board extends JPanel {
                     matrixHidato = CtrlDomain.getInstance().getMatrix();
             }
             repaint();
+
+            //Check if you just solved the hidato!
+            if (CtrlDomain.getInstance().isSolved()) {
+                CtrlPresentation.getInstance().finishGame();
+            }
         }
     }
 }

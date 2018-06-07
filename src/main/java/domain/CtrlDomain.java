@@ -172,6 +172,12 @@ public class CtrlDomain {
         return true;
     }
 
+    public boolean isSolved() {
+        if (game == null) return false;
+        Solver s = new Solver(game.getHidato());
+        return s.isSolved();
+    }
+
     public boolean isClearerd() {
         if (game == null) throw new RuntimeException("No game no life.");
         return game.getHidato().isCleared();

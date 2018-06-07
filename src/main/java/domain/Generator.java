@@ -58,7 +58,7 @@ public class Generator {
                 Node t = data.get(i).get(j);
                 if (t.getType() == Node.Type.variable) {
                     Node n;
-                    if (rn.nextInt(z/2+2) != 1) n = new Node("?");
+                    if (rn.nextInt(z/2+2) != 1 && t.getValue() != 1) n = new Node("?");
                     else n = new Node(t.toString().replace("v", ""));
                     data.get(i).set(j, n);
                 } else if (t.getType() == Node.Type.unset) {
