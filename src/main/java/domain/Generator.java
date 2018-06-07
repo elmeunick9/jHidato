@@ -11,6 +11,10 @@ public class Generator {
 
     protected Generator() {}
 
+    Generator(Game.Difficulty d, Game.HidatoType ht) {
+        this(d, ht, Hidato.AdjacencyType.EDGE);
+    }
+
     Generator(Game.Difficulty d, Game.HidatoType ht, Hidato.AdjacencyType adj) {
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
         Pair<Integer, Integer> interval;

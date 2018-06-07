@@ -57,7 +57,6 @@
             <property name="ignoreSetter" value="true"/>
             <property name="setterCanReturnItsClass" value="true"/>
         </module>
-        <module name="IllegalCatch"/>
         <module name="IllegalThrows"/>
         <module name="InnerAssignment"/>
         <!-- <module name="MagicNumber"/> we need magic numbers on tests, not actual magic though-->
@@ -91,7 +90,6 @@
         <module name="AvoidEscapedUnicodeCharacters"/>
         <!-- <module name="Indentation"/> It's a bit intrusive -->
         <module name="OuterTypeFilename"/>
-        <module name="TrailingComment"/>
         <module name="UpperEll"/>
 
         <!-- Checks for modifiers -->
