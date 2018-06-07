@@ -114,9 +114,6 @@ public class Solver {
         // If not, all adjacent unset nodes may have an increasing value.
         for (Node b : nodes) {
             if (b.getType() == Node.Type.unset) {
-
-                //The heuristic determines on h = 0 nodes out of reach.
-                //int h = heuristicFunction(b)
                 moves.add(new Pair<>(b, nv));
             }
         }
@@ -136,16 +133,18 @@ public class Solver {
 
     /** Generates a random partial solution.
      * <p>
-     * The algorithm does a random deep first search (DFS) taking as the root node a node with
-     * the value of 1. If such node doesn't exists it ties randomly to set to 1 a given unset Node
+     * The algorithm does a random backtracking algorithm taking as the root node a node with
+     * the value of 1. If such node doesn't exists it randomly tries to set to 1 a given unset Node
      * and continues from there.
      * <p>
-     * Some optimizations it does:
+     * Some optimizations (pruning) it does:
      * <ul>
-     *     <li>If a node with a given value is too far from the next fixed node, it discards it.</li>
+     *     <li>If a node with a given value is too far from the next fixed node, discard it.</li>
      *     <li>If a fixed node is reached where there are still smaller fixed nodes, discard it.</li>
-     *     <li>TODO: If a the current node value is equal to the next fixed node but it's not that node, discard it.</li>
+     *     <li>If a the current node value is equal to the next fixed node but it's not that node, discard it.</li>
      * </ul>
+     * <p>
+     * For more information consult the manual.
      * @param minLen The minimum length of the solution to find. If it's smaller than the amount of nodes
      *               that can hold a value, the solution will be partial.
      * @return A copy of the hidato to be solved, but solved.
@@ -223,6 +222,12 @@ public class Solver {
                 nodeRemovedFromQueue = n;
             } else if (!fixedNodesDeque.isEmpty()) {
                 //If we reached a fixed node ignoring middle ones we sure are on the wrong path.
+                throw new HidatoIsFilledWrongException();
+            }
+        } else {
+            // If the next fixed node value is equal to this one, which is not fixed, we are on a
+            // wrong path.
+            if (!fixedNodesDeque.isEmpty() && fixedNodesDeque.getFirst().getValue() == n.getValue()) {
                 throw new HidatoIsFilledWrongException();
             }
         }
