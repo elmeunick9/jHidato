@@ -86,7 +86,7 @@ public class MainWindow {
             try {
                 if (toGenerate)
                     CtrlPresentation.getInstance().getCtrlDomain().generateGame(name, d, t, a);
-                else CtrlPresentation.getInstance().getCtrlDomain().createGame(name);
+                else CtrlPresentation.getInstance().getCtrlDomain().createGame(name, d, t, a);
                 initGame();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame,

@@ -16,34 +16,9 @@ public class Generator {
     }
 
     Generator(Game.Difficulty d, Game.HidatoType ht, Hidato.AdjacencyType adj) {
-        ArrayList<ArrayList<Node>> data = new ArrayList<>();
-        Pair<Integer, Integer> interval;
-        switch (d) {
-            case EASY:
-                interval = new Pair<>(3, 4);
-                break;
-            case MEDIUM:
-                interval = new Pair<>(5, 7);
-                break;
-            case HARD:
-                interval = new Pair<>(8, 10);
-                break;
-            default:
-                interval = new Pair<>(3, 6);
-                break;
-        }
         Random rn = new Random();
-        int x = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
-        int y = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
-        int z = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
-
-        for(int i = 0; i < x; i++) {
-            data.add(new ArrayList<>());
-            for(int j = 0; j < y; j++){
-                String elem = "?";
-                data.get(data.size() - 1).add(new Node(elem));
-            }
-        }
+        int z = getRangedRandom(d);
+        ArrayList<ArrayList<Node>> data = makeEmptyDataMatrix(d);
 
         Hidato s = createHidato(data, adj, ht);
         int unsetNum = s.count();
@@ -113,6 +88,40 @@ public class Generator {
 
     public String getHashedFilename() {
         return Integer.toHexString(getHidato().hashCode());
+    }
+
+    public static Pair<Integer, Integer> getInterval(Game.Difficulty difficulty) {
+        Pair<Integer, Integer> interval;
+        switch (difficulty) {
+            case EASY: return new Pair<>(3, 4);
+            case MEDIUM: return new Pair<>(5, 7);
+            case HARD: return new Pair<>(8, 10);
+            default: return new Pair<>(3, 6);
+        }
+    }
+
+    public static int getRangedRandom(Game.Difficulty difficulty) {
+        Random rn = new Random();
+        Pair<Integer, Integer> interval = getInterval(difficulty);
+        return rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
+    }
+
+    public static ArrayList<ArrayList<Node>> makeEmptyDataMatrix(Game.Difficulty difficulty) {
+        int x = getRangedRandom(difficulty);
+        int y = getRangedRandom(difficulty);
+        return makeEmptyDataMatrix(x, y);
+    }
+
+    public static ArrayList<ArrayList<Node>> makeEmptyDataMatrix(int x, int y) {
+        ArrayList<ArrayList<Node>> data = new ArrayList<>();
+        for(int i = 0; i < x; i++) {
+            data.add(new ArrayList<>());
+            for(int j = 0; j < y; j++){
+                String elem = "?";
+                data.get(data.size() - 1).add(new Node(elem));
+            }
+        }
+        return data;
     }
 
     public static void main(String[] args) throws Solver.SolutionNotFound {

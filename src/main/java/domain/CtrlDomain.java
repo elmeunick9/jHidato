@@ -31,12 +31,16 @@ public class CtrlDomain {
 
     //Generate a new hidato and game.
     public void generateGame(String name, int difficulty, int type, int adj) {
+        generateGame(name, difficulty, type, adj, false);
+    }
+
+    public void generateGame(String name, int difficulty, int type, int adj, boolean empty) {
         Game.Difficulty d;
         switch (difficulty) {
             case 0: d = Game.Difficulty.EASY; break;
             case 1: d = Game.Difficulty.MEDIUM; break;
             case 2: d = Game.Difficulty.HARD; break;
-            default: d = Game.Difficulty.EASY;
+            default: d = Game.Difficulty.HARD;
         }
 
         Game.HidatoType t;
@@ -55,8 +59,16 @@ public class CtrlDomain {
             default: adjT = Hidato.AdjacencyType.EDGE;
         }
 
-        game = new Game(d, user, t, adjT);
-        if (!name.isEmpty()) game.setFilename(name);
+        if (!empty) {
+            game = new Game(d, user, t, adjT);
+            if (!name.isEmpty()) game.setFilename(name);
+        }
+        else {
+            ArrayList<ArrayList<Node>> nodes = Generator.makeEmptyDataMatrix(d);
+            Hidato h = makeNewHidato(t, adjT, nodes);
+            String filename = (name.isEmpty() ? Integer.toHexString(h.hashCode()) : name);
+            game = new Game(d, user, h, t, filename);
+        }
         game.print();
     }
 
@@ -65,8 +77,8 @@ public class CtrlDomain {
     }
 
     //Create a custom game from scratch.
-    public void createGame(String name) {
-        System.out.println("NOT IMPLEMENTED!");
+    public void createGame(String name, int difficulty, int type, int adj) {
+        generateGame(name, difficulty, type, adj, true);
     }
 
     /** Saves the current game.
