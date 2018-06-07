@@ -118,7 +118,17 @@ public class CtrlDomain {
         }
     }
 
+    public int getHidatoSize() { return game.getHidato().count(); }
+
     public boolean setVal(int x, int y, int val) {
         return game.move(x,y,val);
+    }
+
+    public int getValue(int x, int y) {
+        try {
+            return game.getHidato().getNode(x, y).getValue();
+        } catch (Node.InvalidTypeException e) {
+            return -1;
+        }
     }
 }

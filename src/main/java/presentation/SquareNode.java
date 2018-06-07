@@ -84,6 +84,7 @@ public class SquareNode extends NodeCell{
 
         p.x=x;
         p.y=y;
+
         return p;
     }
 

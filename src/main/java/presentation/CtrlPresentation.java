@@ -33,7 +33,14 @@ public class CtrlPresentation {
     }
 
     public boolean leftClick(int x, int y, int val) {
-        return CtrlDomain.getInstance().setVal(x+1, y+1, val);
+        int v = CtrlDomain.getInstance().getValue(x+1,y+1);
+        if (v != -1) val = v;
+
+        int s = CtrlDomain.getInstance().getHidatoSize();
+        mainWindow.getBoard().setNextMove(val);
+        val = val % s;
+
+        return CtrlDomain.getInstance().setVal(x+1, y+1, val+1);
     }
 
     public boolean rightClick(int x, int y) {

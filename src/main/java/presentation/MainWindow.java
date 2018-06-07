@@ -61,7 +61,6 @@ public class MainWindow {
 
         //Main Content
 
-
     }
 
     private void initActions() {
@@ -241,6 +240,8 @@ public class MainWindow {
 
         return usrname;
     }
+
+    public Board getBoard() { return boardHidato; }
 
     public void makeVisible() {
         //System.out.println("isEventDispatchThread: " + SwingUtilities.isEventDispatchThread());

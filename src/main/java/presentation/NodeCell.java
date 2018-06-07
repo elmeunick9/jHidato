@@ -1,11 +1,12 @@
 package presentation;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.util.Vector;
 
 
 abstract class NodeCell {
+
+    protected Color VALOR_NODE_BGCOLOR = new Color(195, 198, 198);
 
     abstract public void setSize(double givenSize);
 
