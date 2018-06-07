@@ -135,4 +135,19 @@ public class CtrlDomain {
     public String getTypeHidato() {
         return game.getTypeToPresentation();
     }
+
+    public boolean solve() {
+        Solver s = new Solver(game.getHidato());
+        try {
+            Hidato h = s.generateSolution();
+            game = new Game(game.getDif(), user, h, game.getHt(), game.getFilename());
+        } catch (Solver.SolutionNotFound e) {
+            return false;
+        }
+        return true;
+    }
+
+    public void clear() {
+        game.getHidato().clear();
+    }
 }
