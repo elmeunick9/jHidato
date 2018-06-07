@@ -87,6 +87,7 @@ public class MainWindow {
                 if (toGenerate)
                     CtrlPresentation.getInstance().getCtrlDomain().generateGame(name, d, t, a);
                 else CtrlPresentation.getInstance().getCtrlDomain().createGame(name, d, t, a);
+                CtrlPresentation.getInstance().editorMode = !toGenerate;
                 initGame();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame,
@@ -97,12 +98,14 @@ public class MainWindow {
         });
 
         menuitemSavegame.addActionListener(e -> {
+            CtrlPresentation.getInstance().editorMode = false;
             try {
                 String filename = CtrlPresentation.getInstance().getCtrlDomain().saveGame();
                 JOptionPane.showMessageDialog(frame,
                         "Game saved with name " + filename,
                         "Game saved",
                         JOptionPane.INFORMATION_MESSAGE);
+                CtrlPresentation.getInstance().editorMode = false;
             } catch (IllegalStateException | IOException ex) {
                 JOptionPane.showMessageDialog(frame,
                 ex.getMessage(),
@@ -182,6 +185,7 @@ public class MainWindow {
                         throw new IOException("You must select a game within YOUR folder!");
                     }
                     ctrlPresentation.getCtrlDomain().loadGame(name);
+                    CtrlPresentation.getInstance().editorMode = false;
                     initGame();
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(frame,
@@ -248,6 +252,7 @@ public class MainWindow {
                 try {
                     File file = fcTemplates.getSelectedFile();
                     ctrlPresentation.getCtrlDomain().getCtrlPersistence().importHidato(file);
+                    CtrlPresentation.getInstance().editorMode = false;
                     initGame();
                     loop = false;
                 } catch (IOException ex) {
@@ -285,6 +290,12 @@ public class MainWindow {
         frame.add(boardHidato);
         frame.pack();
         frame.setVisible(true);
+        if (CtrlPresentation.getInstance().editorMode) {
+            frame.setTitle("jHidato 21.1 - Editor Mode");
+        } else {
+            frame.setTitle(CtrlPresentation.getInstance().getCtrlDomain().getUsername()
+                    + " - jHidato 21.1");
+        }
     }
 
     private String askUser() {

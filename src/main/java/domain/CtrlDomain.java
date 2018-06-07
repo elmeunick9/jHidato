@@ -150,6 +150,12 @@ public class CtrlDomain {
         return game.getHidato().getNode(x, y).getType() == Node.Type.fixed;
     }
 
+    public boolean makeNodeABlock(int x, int y) {
+        if (game == null) return false;
+        game.getHidato().setNode(x, y, new Node("*"));
+        return true;
+    }
+
     public String getTypeHidato() {
         return game.getTypeToPresentation();
     }

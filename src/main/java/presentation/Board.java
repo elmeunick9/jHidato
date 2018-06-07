@@ -104,6 +104,11 @@ public class Board extends JPanel {
                     matrixHidato = CtrlDomain.getInstance().getMatrix();
                 nextMove--;
             }
+            boolean editorMode = CtrlPresentation.getInstance().editorMode;
+            if (SwingUtilities.isMiddleMouseButton(e) && editorMode) {
+                if (CtrlPresentation.getInstance().middleClick(p.y, p.x))
+                    matrixHidato = CtrlDomain.getInstance().getMatrix();
+            }
             repaint();
         }
     }

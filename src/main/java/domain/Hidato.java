@@ -114,6 +114,10 @@ public abstract class Hidato implements Iterable<Node> {
         return nodes.get(x-1).get(y-1);
     }
 
+    public void setNode(int x, int y, Node n) throws IndexOutOfBoundsException {
+        nodes.get(x-1).set(y-1, n);
+    }
+
     public AdjacencyType getAdjacency() {
         return adjacency;
     }

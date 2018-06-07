@@ -6,6 +6,8 @@ public class CtrlPresentation {
     private MainWindow mainWindow = null;
     private static CtrlPresentation presentation = null;
 
+    public boolean editorMode = false;
+
     protected CtrlPresentation() {
         //Avoid instance.
     }
@@ -41,6 +43,7 @@ public class CtrlPresentation {
 
         int s = CtrlDomain.getInstance().getHidatoSize();
         mainWindow.getBoard().setNextMove(val);
+        if (val < 0) val = 1;
         val = (val-1) % s;
 
         return CtrlDomain.getInstance().setVal(x+1, y+1, val + 1);
@@ -48,6 +51,10 @@ public class CtrlPresentation {
 
     public boolean rightClick(int x, int y) {
         return CtrlDomain.getInstance().setVal(x+1, y+1, -1);
+    }
+
+    public boolean middleClick(int x, int y) {
+        return getCtrlDomain().makeNodeABlock(x+1, y+1);
     }
 
 }
