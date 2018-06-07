@@ -18,11 +18,17 @@ public class Generator {
     Generator(Game.Difficulty d, Game.HidatoType ht, Hidato.AdjacencyType adj) {
         Random rn = new Random();
         int z = getRangedRandom(d);
-        ArrayList<ArrayList<Node>> data = makeEmptyDataMatrix(d);
 
+        ArrayList<ArrayList<Node>> data = makeEmptyDataMatrix(d);
         Hidato s = createHidato(data, adj, ht);
         int unsetNum = s.count();
         int minLen = unsetNum / 2;
+
+        //Special cases
+        if (ht == Game.HidatoType.SQUARE && adj == Hidato.AdjacencyType.VERTEX) {
+            minLen = unsetNum / 3;
+        }
+
         Solver solver = new Solver(s);
         try {
             h = solver.generateSolution(minLen);
@@ -42,7 +48,7 @@ public class Generator {
                     f = h;
                 }
             } catch (Solver.SolutionNotFound e) {
-                i--; //If not found doesn't count.
+                i+=2; //If not found maybe there is something wrong. Let's speed up.
             }
         }
 
