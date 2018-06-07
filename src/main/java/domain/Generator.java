@@ -48,7 +48,6 @@ public class Generator {
         Hidato s = createHidato(data, adj, ht);
         int unsetNum = s.count();
         int minLen = unsetNum / 2;
-        System.out.println("MinLen: " + minLen);
         Solver solver = new Solver(s);
         try {
             h = solver.generateSolution(minLen);
