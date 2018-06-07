@@ -1,7 +1,4 @@
 
-Demecres:
-Detallar solver. Heurística optimista (Documentació general). <- Fer TODO
-
 Dijous:
 Usabilitat. Selecció de números. Clicar, incrementar; ctrl click decrem. Clic dret borrar.
 Les dos formes.
@@ -14,3 +11,4 @@ Diagrama de classes.
 Generar el .jar
 Generar pdf. (Manual)
 Millorar generador.
+Tests.

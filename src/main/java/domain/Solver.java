@@ -74,7 +74,7 @@ public class Solver {
     //Rather than a heuristic, it actually is a restriction.
     private int heuristicFunction(Node n, Node target, int fromValue) {
         int diff = target.getValue() - fromValue;
-        if (diff == 0) return 1;
+        if (diff <= 0) return 1;
         if (fromValue > target.getValue()) return 1;
         int mind = distance.get(n).get(target) / 2;
         return mind > diff ? 0 : 1;
@@ -190,7 +190,9 @@ public class Solver {
                 visited.add(startNode);
                 try {
                     generateSolution(startNode, minLen);
-                    notFound = false;
+
+                    //Check minLen is corect
+                    if (visited.size() >= minLen) notFound = false;
                 } catch (HidatoIsFilledWrongException e) {
                     candidateNodes.remove(startNode);
                     visited.clear();

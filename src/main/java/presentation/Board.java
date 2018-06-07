@@ -40,8 +40,8 @@ public class Board extends JPanel {
         MouseListener mouseListener = new MouseListener();
         addMouseListener(mouseListener);
 
-        this.screenWidth = 700;
-        this.screenHeight = 700;
+        this.screenWidth = 600;
+        this.screenHeight = 600;
         nodeSize();
     }
 

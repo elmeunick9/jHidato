@@ -202,4 +202,12 @@ public abstract class Hidato implements Iterable<Node> {
         }
     }
 
+    /** This helper function returns the size of the hidato as in cells with values */
+    public int count() {
+        int c = 0;
+        for (Node n : this) {
+            if (n.editable() || n.hasValue()) c++;
+        }
+        return c;
+    }
 }
