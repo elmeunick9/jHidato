@@ -6,7 +6,6 @@ Dijous:
 Usabilitat. Selecció de números. Clicar, incrementar; ctrl click decrem. Clic dret borrar.
 Les dos formes.
 Desfer guardar node i valor.
-Seleccionar adjacencies en new game.
 Ranking -> puntuació temps/numCel·les.
 Pantalla de final de game.
 

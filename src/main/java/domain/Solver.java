@@ -74,7 +74,7 @@ public class Solver {
         int diff = target.getValue() - fromValue;
         if (diff == 0) return 1;
         if (fromValue > target.getValue()) return 1;
-        int mind = distance.get(n).get(target);
+        int mind = distance.get(n).get(target) / 2;
         return mind > diff ? 0 : 1;
     }
 

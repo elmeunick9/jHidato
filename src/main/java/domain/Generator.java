@@ -11,8 +11,7 @@ public class Generator {
 
     protected Generator() {}
 
-    Generator(Game.Difficulty d, Game.HidatoType ht) {
-        Hidato.AdjacencyType adj = Hidato.AdjacencyType.EDGE;
+    Generator(Game.Difficulty d, Game.HidatoType ht, Hidato.AdjacencyType adj) {
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
         Pair<Integer, Integer> interval;
         switch (d) {
@@ -65,6 +64,10 @@ public class Generator {
             }
         }
 
+        if (notFound) {
+            throw new RuntimeException("Trying to generate hidato with no possible solutions!");
+        }
+
         data = h.copyData();
         for(int i = 0; i < data.size(); i++) {
             for(int j = 0; j < data.get(i).size(); j++) {
@@ -108,7 +111,8 @@ public class Generator {
     }
 
     public static void main(String[] args) throws Solver.SolutionNotFound {
-        Generator a = new Generator(Game.Difficulty.EASY, Game.HidatoType.TRIANGLE);
+        Generator a = new Generator(Game.Difficulty.EASY, Game.HidatoType.TRIANGLE,
+                Hidato.AdjacencyType.EDGE);
         System.out.print(a.filename);
         System.out.print(a.h.getNode(1,1));
     }

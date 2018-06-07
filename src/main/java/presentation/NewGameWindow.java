@@ -3,6 +3,7 @@ package presentation;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class NewGameWindow extends JDialog {
     private JButton buttonGenerate = new JButton("Generate");
@@ -11,51 +12,45 @@ public class NewGameWindow extends JDialog {
     private JComboBox selectDifficulty = new JComboBox(difficulties);
     private String types[] = { "Triangle", "Quads", "Hexagons" };
     private JComboBox selectType = new JComboBox(types);
+    ButtonGroup chooseAdjacency  = new ButtonGroup();
+    private JRadioButton rEdge = new JRadioButton("Edge");
+    private JRadioButton rVertex = new JRadioButton("Vertex");
+    private JRadioButton rBoth = new JRadioButton("Both");
+    JComponent[] adjacencyList = {rEdge, rVertex, rBoth};
     private JTextField filename = new JTextField();
 
-    private boolean toGenerate = true;
-    public int difficulty;
-    public int type;
+    private Container content;
+    private EmptyBorder border;
+
+    //True if when you click either generate o make buttons.
+    private boolean ready = false;
+    private int adjacency = 0;
+    private int difficulty;
+    private int type;
+
+    public boolean toGenerate = true;
+
 
     NewGameWindow(JFrame parent) {
         super(parent);
-        Container content = this.getContentPane();
-        EmptyBorder border = new EmptyBorder(5,5,5,5);
+        content = this.getContentPane();
+        border = new EmptyBorder(5,5,5,5);
         buttonMake.setEnabled(false);
 
-        //Components
-        JLabel labelDifficulty = new JLabel("Choose difficulty: ");
-        JLabel labelType = new JLabel("Choose shape type: ");
-        JLabel labelFile = new JLabel("Name: ");
+        addRow("Choose difficulty: ", selectDifficulty);
+        addRow("Choose shape type: ", selectType);
+        addRow("Adjacency: ", adjacencyList);
+        addRow("Name: ", filename);
+        JComponent[] list1 = {buttonGenerate, buttonMake};
+        addRow(null, list1);
 
-        JPanel rowDifficulty = new JPanel();
-        JPanel rowType = new JPanel();
-        JPanel rowText = new JPanel();
-        JPanel rowButtons = new JPanel();
+        chooseAdjacency.add(rEdge);
+        chooseAdjacency.add(rVertex);
+        chooseAdjacency.add(rBoth);
+        chooseAdjacency.setSelected(rEdge.getModel(), true);
 
         //Layout
-        rowDifficulty.setLayout(new BoxLayout(rowDifficulty, BoxLayout.X_AXIS));
-        rowDifficulty.setBorder(border);
-        rowDifficulty.add(labelDifficulty);
-        rowDifficulty.add(selectDifficulty);
-        rowType.setLayout(new BoxLayout(rowType, BoxLayout.X_AXIS));
-        rowType.setBorder(border);
-        rowType.add(labelType);
-        rowType.add(selectType);
-        rowText.setLayout(new BoxLayout(rowText, BoxLayout.X_AXIS));
-        rowText.setBorder(border);
-        rowText.add(labelFile);
-        rowText.add(filename);
-        rowButtons.setLayout(new BoxLayout(rowButtons, BoxLayout.X_AXIS));
-        rowButtons.setBorder(border);
-        rowButtons.add(buttonGenerate);
-        rowButtons.add(buttonMake);
-
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.add(rowDifficulty);
-        content.add(rowType);
-        content.add(rowText);
-        content.add(rowButtons);
 
         pack();
         setModalityType(ModalityType.APPLICATION_MODAL);
@@ -65,6 +60,25 @@ public class NewGameWindow extends JDialog {
         setLocationRelativeTo(getParent());
 
         initActions();
+    }
+
+    private void addRow(String text, JComponent component) {
+        JComponent[] c = {component};
+        addRow(text, c);
+    }
+
+    private void addRow(String text, JComponent[] components) {
+        JPanel row = new JPanel();
+        row.setLayout(new BoxLayout(row, BoxLayout.X_AXIS));
+        row.setBorder(border);
+        if (text != null) {
+            JLabel label = new JLabel(text);
+            row.add(label);
+        }
+        for (JComponent e : components) {
+            row.add(e);
+        }
+        content.add(row);
     }
 
     private void initActions() {
@@ -81,14 +95,32 @@ public class NewGameWindow extends JDialog {
         });
         type = selectType.getSelectedIndex();
         selectType.addActionListener(e -> type = selectType.getSelectedIndex());
-        buttonGenerate.addActionListener(e -> { toGenerate = true; dispose(); });
-        buttonMake.addActionListener(e -> { toGenerate = false; dispose(); });
+        buttonGenerate.addActionListener(e -> { toGenerate = true; finish(); });
+        buttonMake.addActionListener(e -> { toGenerate = false; finish(); });
+    }
+
+    private void finish() {
+        adjacency = -1;
+        int i = 0;
+        for (JComponent c : adjacencyList) {
+            JRadioButton b = (JRadioButton) c;
+            if (b.isSelected()) adjacency = i;
+            i++;
+        }
+
+        ready = true;
+        dispose();
     }
 
     public boolean showDialog() {
+        ready = false;
         setVisible(true);
-        return toGenerate;
+        return ready;
     }
+
+    public int getAdjacency() { return adjacency; }
+    public int getDifficulty() { return difficulty; }
+    public int getHType() { return type; }
 
     public String getFilename() {
         return filename.getText();
