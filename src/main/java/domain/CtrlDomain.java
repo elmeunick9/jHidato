@@ -121,4 +121,8 @@ public class CtrlDomain {
     public boolean setVal(int x, int y, int val) {
         return game.move(x,y,val);
     }
+
+    public String getTypeHidato() {
+        return game.getTypeToPresentation();
+    }
 }

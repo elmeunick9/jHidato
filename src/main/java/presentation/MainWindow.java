@@ -201,7 +201,24 @@ public class MainWindow {
     private void initGame() {
         //checkIfExists
         if(boardHidato != null) frame.remove(boardHidato);
-        boardHidato = new Board(new SquareNode(),
+        String tp = CtrlPresentation.getInstance().getCtrlDomain().getTypeHidato();
+        NodeCell nc;
+        switch(tp) {
+            case "T":
+                nc = new TriangleNode();
+                break;
+            case "Q":
+                nc = new SquareNode();
+                break;
+            // case "H":
+            //     nc = new HexagonNode();
+            //     break;
+            default:
+                nc = new SquareNode();
+                break;
+        }
+
+        boardHidato = new Board(nc,
                 CtrlPresentation.getInstance().getCtrlDomain().getMatrix());
         frame.add(boardHidato);
         frame.pack();
