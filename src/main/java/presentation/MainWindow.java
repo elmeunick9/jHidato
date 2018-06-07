@@ -1,8 +1,12 @@
 package presentation;
 
+import domain.CtrlDomain;
+
 import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.Desktop;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +21,10 @@ public class MainWindow {
     private JMenuItem menuitemSaveAs = new JMenuItem("Save Game As Template...");
     private JMenuItem menuitemLoadTemplate = new JMenuItem("Load Template");
     private JMenuItem menuitemQuit = new JMenuItem("Quit");
-
+    private JMenu menuHidato = new JMenu("Hidato");
+    private JMenuItem menuItemSolve = new JMenuItem("Solve");
+    private JMenuItem menuitemClear = new JMenuItem("Clear");
+    private JMenuItem menuItemFix = new JMenuItem("Fix");
     private JMenu menuRanking = new JMenu("Ranking");
     private JMenu menuHelp = new JMenu("Help");
     private JMenuItem menuitemAbout = new JMenuItem("About");
@@ -54,6 +61,10 @@ public class MainWindow {
         menuFile.add(menuitemLoadTemplate);
         menuFile.add(menuitemQuit);
         menuMain.add(menuFile);
+        menuHidato.add(menuItemSolve);
+        menuHidato.add(menuitemClear);
+        menuHidato.add(menuItemFix);
+        menuMain.add(menuHidato);
         menuMain.add(menuRanking);
         menuHelp.add(menuitemManual);
         menuHelp.add(menuitemAbout);
@@ -102,6 +113,26 @@ public class MainWindow {
             }
         });
 
+        menuitemLoadgame.addActionListener(e -> loadGameDialog());
+        menuitemSaveAs.addActionListener(e -> saveTemplateDialog());
+        menuitemLoadTemplate.addActionListener(e -> loadTemplateDialog());
+
+        menuItemSolve.addActionListener(e -> {
+            if (!CtrlDomain.getInstance().solve()) {
+                JOptionPane.showMessageDialog(frame,
+                        "Cant solve! Try to clear.",
+                        "Unsolvable. May God have mercy on your soul.",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            boardHidato.updateMatrix(CtrlDomain.getInstance().getMatrix());
+        });
+
+        menuitemClear.addActionListener(e -> {
+            CtrlDomain.getInstance().clear();
+            boardHidato.updateMatrix(CtrlDomain.getInstance().getMatrix());
+        });
+
+        menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
         menuitemManual.addActionListener(e -> {
             if (Desktop.isDesktopSupported()) {
                 try {
@@ -116,10 +147,21 @@ public class MainWindow {
             }
         });
 
-        menuitemLoadgame.addActionListener(e -> loadGameDialog());
-        menuitemSaveAs.addActionListener(e -> saveTemplateDialog());
-        menuitemLoadTemplate.addActionListener(e -> loadTemplateDialog());
-        menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyChar() == ' ' && boardHidato != null) {
+                    boardHidato.setNextMove(1);
+                }
+            }
+        });
+
     }
 
     private void loadGameDialog() {
