@@ -12,7 +12,10 @@ public class Generator {
     protected Generator() {}
 
     Generator(Game.Difficulty d, Game.HidatoType ht) {
-        Hidato.AdjacencyType adj = Hidato.AdjacencyType.EDGE;
+        this(d, ht, Hidato.AdjacencyType.EDGE);
+    }
+
+    Generator(Game.Difficulty d, Game.HidatoType ht, Hidato.AdjacencyType adj) {
         ArrayList<ArrayList<Node>> data = new ArrayList<>();
         Pair<Integer, Integer> interval;
         switch (d) {
@@ -34,34 +37,44 @@ public class Generator {
         int y = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
         int z = rn.nextInt(interval.getValue() - interval.getKey()) + interval.getKey();
 
-        int unsetNum = 0;
         for(int i = 0; i < x; i++) {
             data.add(new ArrayList<>());
             for(int j = 0; j < y; j++){
                 String elem = "?";
                 data.get(data.size() - 1).add(new Node(elem));
-                unsetNum++;
             }
         }
 
         Hidato s = createHidato(data, adj, ht);
+        int unsetNum = s.count();
+        int minLen = unsetNum / 2;
+        System.out.println("MinLen: " + minLen);
+        Solver solver = new Solver(s);
+        try {
+            h = solver.generateSolution(minLen);
+            h.print();
+            System.out.println("First try");
+        } catch (Solver.SolutionNotFound e) {
+            throw new RuntimeException("Trying to generate hidato with no possible solutions!");
+        }
 
-        int minLen = 4;
-        boolean notFound = false;
-        while(!notFound && minLen <= unsetNum) {
-            Solver solver = new Solver(s);
+        boolean found = true;
+        while(found && minLen <= unsetNum) {
             try {
                 h = solver.generateSolution(minLen);
+                h.print();
+                System.out.println("More Tries");
 
                 //Advance, try find a more filled solution, but not linearly.
-                minLen = (int) ((double)minLen * 1.3 + 1);
+                minLen += (int) ((double)minLen / 2);
 
                 // Small random chance to consider the hidato OK if at least half unset nodes
                 // are filled.
-                if (minLen > unsetNum/2 && rn.nextInt(5) == 1) notFound = true;
+                if (minLen > unsetNum-5 && rn.nextInt(10) == 5) break;
 
             } catch (Solver.SolutionNotFound e) {
-                notFound = true;
+                //Once we find there is no solution, we stop and let h be the final choice.
+                found = false;
             }
         }
 
@@ -108,7 +121,8 @@ public class Generator {
     }
 
     public static void main(String[] args) throws Solver.SolutionNotFound {
-        Generator a = new Generator(Game.Difficulty.EASY, Game.HidatoType.TRIANGLE);
+        Generator a = new Generator(Game.Difficulty.EASY, Game.HidatoType.TRIANGLE,
+                Hidato.AdjacencyType.EDGE);
         System.out.print(a.filename);
         System.out.print(a.h.getNode(1,1));
     }

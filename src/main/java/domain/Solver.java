@@ -16,6 +16,8 @@ public class Solver {
     private int fillSize = 0;
     private boolean printTraceOption = false;
 
+    /** Generates a solver for a given hidato. On this call some precomputation is done.
+     @param h Hidato. */
     Solver(Hidato h) {
         hidato = h;
         for (Node n : hidato) {
@@ -72,13 +74,19 @@ public class Solver {
     //Rather than a heuristic, it actually is a restriction.
     private int heuristicFunction(Node n, Node target, int fromValue) {
         int diff = target.getValue() - fromValue;
-        if (diff == 0) return 1;
+        if (diff <= 0) return 1;
         if (fromValue > target.getValue()) return 1;
-        int mind = distance.get(n).get(target);
+        int mind = distance.get(n).get(target) / 2;
         return mind > diff ? 0 : 1;
     }
 
-    /* Generates a list of valid next movements, an empty list indicates no movements */
+    /** Generates a list of valid next movements, an empty list indicates no movements.
+     * Internally it filters out visited nodes. If you want a list of all possible
+     * movements instead, use Hidato::adjacentNodes.
+     * <p>
+     * A movement is a pair of (Node, Integer) with the next node to go and the value it should have.
+     * @param a The node to look from.
+     * @return A list movements. */
     ArrayList<Pair<Node, Integer>> nextMove(Node a) throws Node.InvalidTypeException {
         ArrayList<Node>                 nodes = hidato.adjacentNodes(a);
         ArrayList<Pair<Node, Integer>>  moves = new ArrayList<>();
@@ -106,9 +114,6 @@ public class Solver {
         // If not, all adjacent unset nodes may have an increasing value.
         for (Node b : nodes) {
             if (b.getType() == Node.Type.unset) {
-
-                //The heuristic determines on h = 0 nodes out of reach.
-                //int h = heuristicFunction(b)
                 moves.add(new Pair<>(b, nv));
             }
         }
@@ -119,11 +124,32 @@ public class Solver {
     private class HidatoIsFilledWrongException extends Exception {}
     public class SolutionNotFound extends Exception {}
 
+    /** Generates a random solution.
+     * @return A copy of the Hidato to be solved, but solved.
+     * @throws SolutionNotFound If a solution doesn't exist. */
     public Hidato generateSolution() throws SolutionNotFound{
         return generateSolution(fillSize);
     }
 
-    /* Generates a random solution  */
+    /** Generates a random partial solution.
+     * <p>
+     * The algorithm does a random backtracking algorithm taking as the root node a node with
+     * the value of 1. If such node doesn't exists it randomly tries to set to 1 a given unset Node
+     * and continues from there.
+     * <p>
+     * Some optimizations (pruning) it does:
+     * <ul>
+     *     <li>If a node with a given value is too far from the next fixed node, discard it.</li>
+     *     <li>If a fixed node is reached where there are still smaller fixed nodes, discard it.</li>
+     *     <li>If a the current node value is equal to the next fixed node but it's not that node, discard it.</li>
+     * </ul>
+     * <p>
+     * For more information consult the manual.
+     * @param minLen The minimum length of the solution to find. If it's smaller than the amount of nodes
+     *               that can hold a value, the solution will be partial.
+     * @return A copy of the hidato to be solved, but solved.
+     * @throws SolutionNotFound If a partial solution of the required minimum length doesn't exist.
+      */
     public Hidato generateSolution(int minLen) throws SolutionNotFound {
         Node startNode = null;
         ArrayList<Node> candidateNodes = new ArrayList<>();
@@ -164,7 +190,9 @@ public class Solver {
                 visited.add(startNode);
                 try {
                     generateSolution(startNode, minLen);
-                    notFound = false;
+
+                    //Check minLen is corect
+                    if (visited.size() >= minLen) notFound = false;
                 } catch (HidatoIsFilledWrongException e) {
                     candidateNodes.remove(startNode);
                     visited.clear();
@@ -196,6 +224,12 @@ public class Solver {
                 nodeRemovedFromQueue = n;
             } else if (!fixedNodesDeque.isEmpty()) {
                 //If we reached a fixed node ignoring middle ones we sure are on the wrong path.
+                throw new HidatoIsFilledWrongException();
+            }
+        } else {
+            // If the next fixed node value is equal to this one, which is not fixed, we are on a
+            // wrong path.
+            if (!fixedNodesDeque.isEmpty() && fixedNodesDeque.getFirst().getValue() == n.getValue()) {
                 throw new HidatoIsFilledWrongException();
             }
         }
@@ -240,7 +274,7 @@ public class Solver {
             //If failed, and we just removed a node from fixed queue, reinsert it.
             if (nodeRemovedFromQueue != null) fixedNodesDeque.addFirst(nodeRemovedFromQueue);
 
-            //PARTIAL SOLUTION FOUND. I would put this in the line below but fucking linter.
+            //PARTIAL SOLUTION FOUND.
             if (minLen != -1 && visited.size() >= minLen) return;
 
             throw new HidatoIsFilledWrongException();

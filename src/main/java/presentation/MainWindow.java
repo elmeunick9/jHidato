@@ -39,7 +39,7 @@ public class MainWindow {
 
     private void initView() {
         // Frame
-        frame.setMinimumSize(new Dimension(700,700));
+        frame.setMinimumSize(new Dimension(600,650));
         frame.setPreferredSize(frame.getMinimumSize());
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
@@ -68,14 +68,23 @@ public class MainWindow {
         menuitemQuit.addActionListener(e -> System.exit(0));
 
         menuitemNewGame.addActionListener(e -> {
-            boolean toGenerate = newGameWindow.showDialog();
-            int d = newGameWindow.difficulty;
-            int t = newGameWindow.type;
+            if (!newGameWindow.showDialog()) return;
+            boolean toGenerate = newGameWindow.toGenerate;
+            int d = newGameWindow.getDifficulty();
+            int t = newGameWindow.getHType();
+            int a = newGameWindow.getAdjacency();
             String name = newGameWindow.getFilename();
-            if (toGenerate) CtrlPresentation.getInstance().getCtrlDomain().generateGame(name, d, t);
-            else CtrlPresentation.getInstance().getCtrlDomain().createGame(name);
-
-            initGame();
+            try {
+                if (toGenerate)
+                    CtrlPresentation.getInstance().getCtrlDomain().generateGame(name, d, t, a);
+                else CtrlPresentation.getInstance().getCtrlDomain().createGame(name);
+                initGame();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame,
+                        ex.getMessage(),
+                        "Exception ocurred!",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         menuitemSavegame.addActionListener(e -> {

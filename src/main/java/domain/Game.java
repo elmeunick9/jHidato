@@ -16,8 +16,8 @@ public class Game {
     private long timeInit;
     private long currTime = 0;
 
-    Game(Difficulty d, User u, HidatoType htype) {
-        this(d, u, htype, new Generator(d, htype));
+    Game(Difficulty d, User u, HidatoType htype, Hidato.AdjacencyType adj) {
+        this(d, u, htype, new Generator(d, htype, adj));
     }
 
     Game(Difficulty d, User u, Hidato hidato, HidatoType hidatoType,
