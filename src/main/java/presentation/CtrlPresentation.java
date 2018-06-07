@@ -34,7 +34,10 @@ public class CtrlPresentation {
 
     public boolean leftClick(int x, int y, int val) {
         int v = CtrlDomain.getInstance().getValue(x+1,y+1);
-        if (v != -1) val = v+1;
+        if (v != -1) {
+            if (CtrlDomain.getInstance().isNodeFixed(x+1,y+1)) val = v;
+            else val = v+1;
+        }
 
         int s = CtrlDomain.getInstance().getHidatoSize();
         mainWindow.getBoard().setNextMove(val);

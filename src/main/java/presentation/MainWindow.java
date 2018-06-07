@@ -22,9 +22,8 @@ public class MainWindow {
     private JMenuItem menuitemLoadTemplate = new JMenuItem("Load Template");
     private JMenuItem menuitemQuit = new JMenuItem("Quit");
     private JMenu menuHidato = new JMenu("Hidato");
-    private JMenuItem menuItemSolve = new JMenuItem("Solve");
+    private JMenuItem menuitemSolve = new JMenuItem("Solve");
     private JMenuItem menuitemClear = new JMenuItem("Clear");
-    private JMenuItem menuItemFix = new JMenuItem("Fix");
     private JMenu menuRanking = new JMenu("Ranking");
     private JMenu menuHelp = new JMenu("Help");
     private JMenuItem menuitemAbout = new JMenuItem("About");
@@ -61,9 +60,8 @@ public class MainWindow {
         menuFile.add(menuitemLoadTemplate);
         menuFile.add(menuitemQuit);
         menuMain.add(menuFile);
-        menuHidato.add(menuItemSolve);
+        menuHidato.add(menuitemSolve);
         menuHidato.add(menuitemClear);
-        menuHidato.add(menuItemFix);
         menuMain.add(menuHidato);
         menuMain.add(menuRanking);
         menuHelp.add(menuitemManual);
@@ -117,19 +115,23 @@ public class MainWindow {
         menuitemSaveAs.addActionListener(e -> saveTemplateDialog());
         menuitemLoadTemplate.addActionListener(e -> loadTemplateDialog());
 
-        menuItemSolve.addActionListener(e -> {
+        menuitemSolve.addActionListener(e -> {
             if (!CtrlDomain.getInstance().solve()) {
                 JOptionPane.showMessageDialog(frame,
-                        "Cant solve! Try to clear.",
-                        "Unsolvable. May God have mercy on your soul.",
+                        "Cant solve! Either there is no game, no solution, " +
+                                "or something is broken.\n" +
+                                "P.S. Try to clear.",
+                        "Unsolvable. May God have mercy on yOUR soul.",
                         JOptionPane.ERROR_MESSAGE);
+                return;
             }
             boardHidato.updateMatrix(CtrlDomain.getInstance().getMatrix());
         });
 
         menuitemClear.addActionListener(e -> {
-            CtrlDomain.getInstance().clear();
-            boardHidato.updateMatrix(CtrlDomain.getInstance().getMatrix());
+            if (CtrlDomain.getInstance().clear()) {
+                boardHidato.updateMatrix(CtrlDomain.getInstance().getMatrix());
+            }
         });
 
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
@@ -195,8 +197,26 @@ public class MainWindow {
         CtrlPresentation ctrlPresentation = CtrlPresentation.getInstance();
         String myuser = ctrlPresentation.getCtrlDomain().getUsername();
 
-        fcTemplates.setDialogTitle("Save Game as Template");
+        try {
+            // How to save.
+            if (!CtrlDomain.getInstance().isClearerd()) {
+                int b = JOptionPane.showConfirmDialog(frame, "Convert filled cells to fixed?",
+                        "A simple question.", JOptionPane.YES_NO_OPTION);
+                if (b == 0) { //YES
+                    CtrlDomain.getInstance().convertToFixed();
+                    initGame();
+                }
+            }
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(frame,
+                    ex.getMessage(),
+                    "Exception ocurred!",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        // File chooser.
+        fcTemplates.setDialogTitle("Save Game as Template");
         boolean loop = true;
         while (loop) {
             int c = fcTemplates.showSaveDialog(frame);
@@ -293,7 +313,7 @@ public class MainWindow {
         }
 
         File templatesPath = new File(
-                System.getProperty("user.dir") + "/Usuaris/" + usrname + "/templates/");
+                System.getProperty("user.dir") + "/Users/" + usrname + "/templates/");
         templatesPath.mkdirs();
 
         fcTemplates.setCurrentDirectory(templatesPath);

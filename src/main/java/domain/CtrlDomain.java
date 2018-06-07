@@ -74,7 +74,7 @@ public class CtrlDomain {
      * @throws IOException If there has been an error with IO
      * @throws IllegalStateException If user is not currently playing any game. */
     public String saveGame() throws IOException {
-        if (game == null) throw new IllegalStateException("You must start a game first!");
+        if (game == null) throw new IllegalStateException("No game no life.");
         game.saveGame();
         return game.getFilename();
     }
@@ -125,11 +125,18 @@ public class CtrlDomain {
     }
 
     public int getValue(int x, int y) {
+        if (game == null) return 0;
+        Node n = game.getHidato().getNode(x, y);
         try {
-            return game.getHidato().getNode(x, y).getValue();
+            return n.getValue();
         } catch (Node.InvalidTypeException e) {
             return -1;
         }
+    }
+
+    public boolean isNodeFixed(int x, int y) {
+        if (game == null) return false;
+        return game.getHidato().getNode(x, y).getType() == Node.Type.fixed;
     }
 
     public String getTypeHidato() {
@@ -137,6 +144,7 @@ public class CtrlDomain {
     }
 
     public boolean solve() {
+        if (game == null) return false;
         Solver s = new Solver(game.getHidato());
         try {
             Hidato h = s.generateSolution();
@@ -147,7 +155,32 @@ public class CtrlDomain {
         return true;
     }
 
-    public void clear() {
+    public boolean isClearerd() {
+        if (game == null) throw new RuntimeException("No game no life.");
+        return game.getHidato().isCleared();
+    }
+
+    public boolean clear() {
+        if (game == null) throw new RuntimeException("No game no life.");
         game.getHidato().clear();
+        return true;
+    }
+
+    public void convertToFixed() {
+        if (game == null) throw new RuntimeException("No game no life.");
+        ArrayList<ArrayList<Node>> data = game.getHidato().copyData();
+        for (int j = 0; j < data.size(); j++) {
+            ArrayList<Node> l = data.get(j);
+            for (int i = 0; i < l.size(); i++) {
+                if (l.get(i).getType() == Node.Type.variable) {
+                    String n = Integer.toString(l.get(i).getValue());
+                    l.set(i, new Node(n));
+                }
+            }
+            data.set(j, l);
+        }
+
+        Hidato h = makeNewHidato(game.getHt(), game.getHidato().getAdjacency(), data);
+        game = new Game(game.getDif(), user, h, game.getHt(), game.getFilename());
     }
 }
