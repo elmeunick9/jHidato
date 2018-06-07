@@ -252,9 +252,9 @@ public class MainWindow {
             case "Q":
                 nc = new SquareNode();
                 break;
-            // case "H":
-            //     nc = new HexagonNode();
-            //     break;
+            case "H":
+                 nc = new HexagonNode();
+                 break;
             default:
                 nc = new SquareNode();
                 break;
