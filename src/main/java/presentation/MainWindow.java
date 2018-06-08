@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class MainWindow {
     private JMenuItem menuitemSolve = new JMenuItem("Solve");
     private JMenuItem menuitemClear = new JMenuItem("Clear");
     private JMenu menuRanking = new JMenu("Ranking");
+    private JMenuItem menuitemRView = new JMenuItem("View");
+    private JMenuItem menuitemRClear = new JMenuItem("Clear User");
     private JMenu menuHelp = new JMenu("Help");
     private JMenuItem menuitemAbout = new JMenuItem("About");
     private JMenuItem menuitemManual = new JMenuItem("Manual");
@@ -42,6 +45,13 @@ public class MainWindow {
         initView();
         initActions();
         CtrlPresentation.getInstance().initUser(askUser());
+    }
+
+    private void exceptionDialog(Exception ex) {
+        JOptionPane.showMessageDialog(frame,
+                ex.getMessage(),
+                "Exception ocurred!",
+                JOptionPane.ERROR_MESSAGE);
     }
 
     private void initView() {
@@ -63,6 +73,8 @@ public class MainWindow {
         menuHidato.add(menuitemSolve);
         menuHidato.add(menuitemClear);
         menuMain.add(menuHidato);
+        menuRanking.add(menuitemRView);
+        menuRanking.add(menuitemRClear);
         menuMain.add(menuRanking);
         menuHelp.add(menuitemManual);
         menuHelp.add(menuitemAbout);
@@ -89,12 +101,7 @@ public class MainWindow {
                 else CtrlPresentation.getInstance().getCtrlDomain().createGame(name, d, t, a);
                 CtrlPresentation.getInstance().editorMode = !toGenerate;
                 initGame();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(frame,
-                        ex.getMessage(),
-                        "Exception ocurred!",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+            } catch (Exception ex) { exceptionDialog(ex); }
         });
 
         menuitemSavegame.addActionListener(e -> {
@@ -106,12 +113,7 @@ public class MainWindow {
                         "Game saved",
                         JOptionPane.INFORMATION_MESSAGE);
                 CtrlPresentation.getInstance().editorMode = false;
-            } catch (IllegalStateException | IOException ex) {
-                JOptionPane.showMessageDialog(frame,
-                ex.getMessage(),
-                "Exception ocurred!",
-                JOptionPane.ERROR_MESSAGE);
-            }
+            } catch (IllegalStateException | IOException ex) { exceptionDialog(ex); }
         });
 
         menuitemLoadgame.addActionListener(e -> loadGameDialog());
@@ -137,18 +139,20 @@ public class MainWindow {
             }
         });
 
+        menuitemRView.addActionListener(e -> showRankingDialog());
+        menuitemRClear.addActionListener(e -> {
+            try {
+                CtrlPresentation.getInstance().getCtrlDomain().clearRanking();
+            } catch (IOException ex) { exceptionDialog(ex); }
+        });
+
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
         menuitemManual.addActionListener(e -> {
             if (Desktop.isDesktopSupported()) {
                 try {
                     File myFile = new File("./Files/manual.pdf");
                     Desktop.getDesktop().open(myFile);
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(frame,
-                            ex.getMessage(),
-                            "Exception ocurred!",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                } catch (IOException ex) { exceptionDialog(ex); }
             }
         });
 
@@ -211,13 +215,7 @@ public class MainWindow {
                     initGame();
                 }
             }
-        } catch (RuntimeException ex) {
-            JOptionPane.showMessageDialog(frame,
-                    ex.getMessage(),
-                    "Exception ocurred!",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        } catch (RuntimeException ex) { exceptionDialog(ex); return; }
 
         // File chooser.
         fcTemplates.setDialogTitle("Save Game as Template");
@@ -267,11 +265,42 @@ public class MainWindow {
 
     public void showFinishGameDialog() {
         if (boardHidato == null) return;
-        JOptionPane.showMessageDialog(frame,
-                "CONGRATULATIONS. YOU WIN!\n",
-                "Maou-sama has been beaten!",
-                JOptionPane.INFORMATION_MESSAGE);
+        if (CtrlDomain.getInstance().getUsername().equals("MAOU")) {
+            JOptionPane.showMessageDialog(frame,
+                    "CONGRATULATIONS. YOU WIN!\n\n"
+                    + "You manged to defeat the hero.\n"
+                    + "Now that humanity has lost their hope, conquering the world shall be easy.\n"
+                    + "A new age for the demon race begins.",
+                    "The hero and his party has been beaten!",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(frame,
+                    "CONGRATULATIONS. YOU WIN!\n",
+                    "Maou-sama has been beaten!",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
 
+        //Add yourself to ranking
+        try {
+            CtrlDomain.getInstance().finishGame();
+        } catch (IOException ex) { exceptionDialog(ex); }
+
+        //Show ranking
+        showRankingDialog();
+
+    }
+
+    private void showRankingDialog() {
+        try {
+            String text = CtrlDomain.getInstance().getRanking();
+            JLabel label = new JLabel("<html>" + text.replaceAll("\n", "<br>") + "</html>");
+            Font font = new Font("Monospaced", Font.BOLD, 16);
+            label.setFont(font);
+            JOptionPane.showMessageDialog(frame,
+                    label,
+                    "Ranking",
+                    JOptionPane.PLAIN_MESSAGE);
+        } catch (IOException ex) { exceptionDialog(ex); }
     }
 
     private void initGame() {

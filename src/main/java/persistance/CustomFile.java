@@ -18,7 +18,7 @@ public class CustomFile {
         GameInStrings his = new GameInStrings();
         String header = b.readLine();
         String[] params = header.split(",");
-        if (params.length < 3) throw new IOException("Invalid header!");
+        if (params.length < 4) throw new IOException("Invalid header!");
         his.type = params[0];
         his.adjacency = params[1];
         int x = Integer.parseInt(params[2]);
@@ -95,6 +95,22 @@ public class CustomFile {
         }
 
         return ret;
+    }
+
+    public static void setRanking(ArrayList<ArrayList<String>> data) throws IOException {
+        String ruta = "Files/ranking.txt";
+        FileWriter fw = new FileWriter(ruta);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        for(ArrayList<String> line : data) {
+            String text = line.get(0) + "/" + line.get(1) + "/" + line.get(2);
+            bw.write(text);
+            bw.newLine();
+        }
+        bw.close();
+        fw.close();
+
+
     }
 
     public static void saveTemplate(File file, ArrayList<String> data) {

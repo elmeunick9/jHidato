@@ -13,11 +13,16 @@ public class RankingTest {
     @Before
     public void before() throws IOException{
         rank = new Ranking();
+        rank.clear();
+        rank.addScore("ExampleUser2", 820);
+        rank.addScore("ExampleUser", 920);
+        rank.addScore("ExampleUse3", 598);
+        rank.addScore("ExampleUse4", 498);
     }
 
     @Test
     public void gettingUserNames() {
-        ArrayList<ArrayList<String>> r = rank.getRanking();
+        ArrayList<ArrayList<String>> r = rank.getRankingData();
         String aux = r.get(0).get(0);
         assertEquals("ExampleUser", aux);
         aux = r.get(1).get(0);
@@ -26,7 +31,7 @@ public class RankingTest {
 
     @Test
     public void gettingScores() {
-        ArrayList<ArrayList<String>> r = rank.getRanking();
+        ArrayList<ArrayList<String>> r = rank.getRankingData();
         String aux = r.get(0).get(1);
         assertEquals("920", aux);
         aux = r.get(3).get(1);

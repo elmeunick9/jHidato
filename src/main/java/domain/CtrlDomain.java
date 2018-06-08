@@ -9,6 +9,7 @@ import java.io.IOException;
 public class CtrlDomain {
     private Game game;
     private User user;
+    private Ranking ranking = null;
     private static CtrlDomain domain = null;
     protected CtrlDomain() {
 
@@ -162,10 +163,8 @@ public class CtrlDomain {
 
     public boolean solve() {
         if (game == null) return false;
-        Solver s = new Solver(game.getHidato());
         try {
-            Hidato h = s.generateSolution();
-            game = new Game(game.getDif(), user, h, game.getHt(), game.getFilename());
+            game.solve();
         } catch (Solver.SolutionNotFound e) {
             return false;
         }
@@ -205,5 +204,32 @@ public class CtrlDomain {
 
         Hidato h = makeNewHidato(game.getHt(), game.getHidato().getAdjacency(), data);
         game = new Game(game.getDif(), user, h, game.getHt(), game.getFilename());
+    }
+
+    public String getRanking() throws IOException {
+        if (ranking == null) ranking = new Ranking();
+        return ranking.getRanking();
+    }
+
+    public ArrayList<ArrayList<String>> getRankingData() throws IOException {
+        if (ranking == null) ranking = new Ranking();
+        return ranking.getRankingData();
+    }
+
+    public void addScoreToRanking(Integer score) throws IOException {
+        if (ranking == null) ranking = new Ranking();
+        ranking.addScore(getUsername(), score);
+    }
+
+    public void clearRanking() throws IOException {
+        if (ranking == null) ranking = new Ranking();
+        ranking.clear(getUsername());
+    }
+
+
+
+    public void finishGame() throws IOException {
+        if (game == null) throw new IOException("No game no life");
+        game.finishGame();
     }
 }
