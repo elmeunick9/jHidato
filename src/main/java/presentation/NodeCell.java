@@ -3,7 +3,9 @@ package presentation;
 import java.awt.*;
 import java.util.Vector;
 
-
+/**
+ * The interface of the Type of Cells used in board.
+ */
 abstract class NodeCell {
 
     protected Color FIXED_NODE_BGCOLOR = new Color(195, 198, 198);

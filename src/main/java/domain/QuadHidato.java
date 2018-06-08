@@ -35,9 +35,4 @@ public class QuadHidato extends Hidato {
 
         return nodes;
     }
-
-    public void draw() {}
-
-    //TODO: This is a mock implementation.
-    public Node getNodeByCoord(float i, float j) { return new Node("#");}
 }

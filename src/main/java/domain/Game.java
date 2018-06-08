@@ -6,6 +6,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
+/**
+ * Game is the class that allows to the user
+ * to play the Hidato. This class loads in memory the Hidato
+ * from the disk or trigger to generate a random one.
+ */
 public class Game {
     public enum Difficulty { EASY, MEDIUM, HARD, CUSTOM };
     public enum HidatoType { TRIANGLE, SQUARE, HEXAGON};
@@ -67,7 +73,11 @@ public class Game {
             ret = true;
         return ret;
     }
-
+    /**
+     * Check if the given move it's possible.
+     * If it's correct the given possition of the node
+     *  is setted with the value.
+     */
     public boolean move(int x, int y, int value) throws Node.InvalidTypeException {
         if(value == -1) {
             this.h.getNode(x,y).clear();
@@ -80,7 +90,9 @@ public class Game {
         return false;
     }
 
-    /*Save the stats of the game when user pause or leave the game*/
+    /**
+     * Save the stats of the game in disk when user pause or leave the game.
+     * */
     public void saveGame() throws IOException {
         String dificult;
         switch (dif){
@@ -102,6 +114,10 @@ public class Game {
                 filename, h.getRawData(ht), dificult, currTime);
     }
 
+    /**
+     * Returns the equivalent of the string passed
+     * to the Enum Difficulty.
+     */
     public static Difficulty getDifficultyType(String dif) {
         switch (dif) {
             case "easy": return Difficulty.EASY;
@@ -111,7 +127,10 @@ public class Game {
             default: return Difficulty.CUSTOM;
         }
     }
-
+    /**
+     * Returns the equivalent of the string passed
+     * to the Enum of Hidato AdjacencyType.
+     */
     public static Hidato.AdjacencyType getAdjacencyType(String at) {
         Hidato.AdjacencyType ret = null;
         switch (at) {
@@ -130,6 +149,10 @@ public class Game {
         return ret;
     }
 
+    /**
+     * Returns the equivalent of the string passed
+     * to the Enum of HidatoType.
+     */
     public static HidatoType getHidatoType(String t) {
         HidatoType ret = null;
         switch (t) {
@@ -148,6 +171,10 @@ public class Game {
         return ret;
     }
 
+    /**
+     * Returns the equivalent of the Enum of Type
+     * to the equivalent string for the presentation.
+     */
     public String getTypeToPresentation(){
         String ret;
         switch(ht) {
@@ -195,6 +222,11 @@ public class Game {
         h.print();
     }
 
+    /**
+     * Creates a new Instance of Solver with the hidato
+     * and will return the Hidato with one of the possible solution
+     * (if exists).
+     */
     public void solve() throws Solver.SolutionNotFound {
         Solver s = new Solver(h);
         h = s.generateSolution();
@@ -206,6 +238,10 @@ public class Game {
         h.clear();
     }
 
+    /**
+     * Returns the equivalent data of the Hidato
+     * to a matrix of Strings.
+     */
     public ArrayList<ArrayList<String>> getRawData() {
         ArrayList<String> a = h.getRawData(ht);
         //FirstLine of Info Unused on Presentation.

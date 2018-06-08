@@ -33,6 +33,9 @@ public class Solver {
         }
     }
 
+    /**
+     * The condition that if a Hidato is finished.
+     */
     public boolean isSolved() {
         //Find 1
         Node start = null;
@@ -96,14 +99,14 @@ public class Solver {
         fixedNodesDeque.addAll(fixedNodes);
     }
 
-   /* There is a hamiltonian strictly increasing by a order of 1 path from min to max node values.*/
-    /* TODO: To implement using nextMove */
     private boolean isSolution() {
         return false;
     }
 
-    //Based on euclidian distance. Only checks if two nodes are reacheble.
-    //Rather than a heuristic, it actually is a restriction.
+    /**
+     * Based on euclidian distance. Only checks if two nodes are reacheble.
+     * Rather than a heuristic, it actually is a restriction.
+     */
     private int heuristicFunction(Node n, Node target, int fromValue) {
         int diff = target.getValue() - fromValue;
         if (diff <= 0) return 1;

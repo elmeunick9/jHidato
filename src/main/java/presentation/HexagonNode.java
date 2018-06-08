@@ -28,6 +28,9 @@ public class HexagonNode extends NodeCell{
         x2 = radi*Math.sqrt(3);
     }
 
+    /**
+     * Creates the vertex of the polygon.
+     */
     private Polygon node(int x0, int y0, int i, int j) {
         int y = y0 + borderTop;
         int x = x0 + borderLeft;
@@ -41,6 +44,10 @@ public class HexagonNode extends NodeCell{
         return new Polygon(cx,cy,6);
     }
 
+    /**
+     * Depends on the parity the value that are adjacent in the matrix is
+     * the next or the previous for the previous and next row.
+     */
     @Override
     public void drawNode(int i, int j, Graphics2D g2) {
         int x = j * roundToInt(x2);
@@ -54,6 +61,9 @@ public class HexagonNode extends NodeCell{
         g2.drawPolygon(node(x,y,i,j));
     }
 
+    /**
+     * Depends on the type of cell paint the background color and the value (if exists).
+     */
     @Override
     public void paintNode(int i, int j, String n, Graphics2D g2) {
         int x = j * roundToInt(x2);
@@ -90,6 +100,9 @@ public class HexagonNode extends NodeCell{
         }
     }
 
+    /**
+     * Calculate the coords depending on the pixels given.
+     */
     @Override
     public Point pixelsToCoord(int posx, int posy) {
         Point p = new Point(-1,-1);

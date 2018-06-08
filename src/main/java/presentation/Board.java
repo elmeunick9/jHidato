@@ -10,7 +10,9 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-
+/**
+ * Creates a matrix of NodeCells paint in the screen.
+ */
 public class Board extends JPanel {
 
     NodeCell node;
@@ -25,8 +27,10 @@ public class Board extends JPanel {
     private int boardHeight;
     private int nextMove = 1;
 
-    //necessita que el creador faci panel.setPreferredSize(dim);
-    //Aquesta constructora es fa servir per jugar una nova partida
+    /**
+     * Generates a board of NodeCell depending on the Subclass of the NodeCell.
+     *
+     */
     public Board(NodeCell node, ArrayList<ArrayList<String>> matrix){
         //setBorder(new LineBorder(new Color(0, 0, 0)));
         this.node = node;
@@ -40,11 +44,14 @@ public class Board extends JPanel {
         MouseListener mouseListener = new MouseListener();
         addMouseListener(mouseListener);
 
-        this.screenWidth = 600;
-        this.screenHeight = 600;
+        this.screenWidth = 700;
+        this.screenHeight = 700;
         nodeSize();
     }
 
+    /**
+     * Calculates the size of each cell.
+     */
     private void nodeSize(){
         Vector<Double> properties = node.screenProperties(
                 (int)screenWidth,
@@ -67,6 +74,9 @@ public class Board extends JPanel {
         repaint();
     }
 
+    /**
+     * Paint the board. Paint each cell except if is a invisible node.
+     */
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
