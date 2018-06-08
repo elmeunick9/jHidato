@@ -110,6 +110,7 @@ public class CtrlDomain {
         Game.Difficulty d = Game.getDifficultyType(difficulty);
         Hidato h = makeNewHidato(t, a, nodes);
         game = new Game(d, user, h, t, name);
+        game.setTime(Long.parseLong(time));
 
         game.print();
     }
@@ -228,8 +229,10 @@ public class CtrlDomain {
 
 
 
-    public void finishGame() throws IOException {
+    /** Finished the game. That is, sets up everything and save the new ranking.
+     * @return The score. */
+    public int finishGame() throws IOException {
         if (game == null) throw new IOException("No game no life");
-        game.finishGame();
+        return (int)game.finishGame();
     }
 }

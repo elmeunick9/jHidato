@@ -16,6 +16,7 @@ public class Game {
     private String filename;
     private User user;
     private long timeInit;
+    private long timeElapsed;
     private long currTime = 0;
 
     Game(Difficulty d, User u, HidatoType htype, Hidato.AdjacencyType adj) {
@@ -30,6 +31,7 @@ public class Game {
         user = u;
         ht = hidatoType;
         timeInit = System.currentTimeMillis();
+        timeElapsed = 0;
     }
 
     Game(Difficulty d, User u, HidatoType htype, Generator g) {
@@ -45,7 +47,7 @@ public class Game {
     }
     public void setFilename(String fn) { filename = fn; }
 
-    public void setTimeInit(long t) { timeInit = t; }
+    public void setTime(long t) { timeElapsed = t; }
 
     public Difficulty getDif() {
         return dif;
@@ -95,6 +97,7 @@ public class Game {
                 dificult = "custom";
                 break;
         }
+        currTime = timeElapsed + System.currentTimeMillis() - timeInit;
         CtrlDomain.getInstance().getCtrlPersistence().saveGame(user.getName(),
                 filename, h.getRawData(ht), dificult, currTime);
     }
@@ -165,10 +168,10 @@ public class Game {
     }
 
     /**Refresh stats from user and ranking when a game is over
-    * return the time in miliseconds */
+    * return score */
     public long finishGame() throws IOException {
         user.gameFinished();
-        currTime += System.currentTimeMillis() - timeInit;
+        currTime = timeElapsed + System.currentTimeMillis() - timeInit;
 
         //At 1p = Speed of 30s/Node.
         long score = ((long)getHidato().count()*300000) / currTime;
@@ -177,7 +180,7 @@ public class Game {
         ctrl.addScoreToRanking((int)score);
         CtrlPersistence.getInstance().saveRanking(ctrl.getRankingData());
 
-        return currTime;
+        return score;
     }
 
     public void print() {
