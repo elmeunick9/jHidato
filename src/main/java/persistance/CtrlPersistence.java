@@ -51,4 +51,8 @@ public class CtrlPersistence {
         CustomFile.GameInStrings g = CustomFile.loadGame(username, hidatoName);
         loadGameFromDomain(hidatoName, g);
     }
+
+    public void saveRanking(ArrayList<ArrayList<String>> r) throws IOException {
+        CustomFile.setRanking(r);
+    }
 }

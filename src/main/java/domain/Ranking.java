@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class Ranking {
-    TreeMap<Integer, String> map = new TreeMap<>();
+    private TreeMap<Integer, String> map = new TreeMap<>();
     private ArrayList<ArrayList<String>> r;
     Ranking() throws IOException {
         r = CtrlPersistence.getInstance().getRanking();
@@ -15,6 +15,10 @@ public class Ranking {
             int pts = Integer.parseInt(t.get(1));
             map.put(pts, t.get(0));
         }
+    }
+
+    public ArrayList<ArrayList<String>> getRankingData() {
+        return r;
     }
 
     public String getRanking() {
@@ -25,8 +29,8 @@ public class Ranking {
             String pts = line.get(1);
             String username = line.get(0);
             String ptss = "";
-            int n = 37 - pos.length() - username.length() - pts.length();
-            for (int i = 0; i<n; i++) ptss += "..";
+            int n = 47 - pos.length() - username.length() - pts.length();
+            for (int i = 0; i<n; i++) ptss += ".";
             out += pos + ". " + username.toUpperCase() + ptss + pts + "\n";
         }
 
@@ -34,14 +38,14 @@ public class Ranking {
     }
 
     public void addScore(String username, Integer score) {
-        map.put(score, username);
-
         //Get index
         int i = 0;
-        for (int scr : map.keySet()) {
+        for (int scr : map.descendingMap().keySet()) {
             if (score >= scr) break;
             i++;
         }
+
+        map.put(score, username);
 
         //Add to ranking
         ArrayList<String> s = new ArrayList<>();

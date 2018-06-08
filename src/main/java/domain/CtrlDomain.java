@@ -3,6 +3,7 @@ package domain;
 import persistance.CtrlPersistence;
 import presentation.CtrlPresentation;
 
+import javax.management.RuntimeErrorException;
 import java.util.ArrayList;
 import java.io.IOException;
 
@@ -163,10 +164,8 @@ public class CtrlDomain {
 
     public boolean solve() {
         if (game == null) return false;
-        Solver s = new Solver(game.getHidato());
         try {
-            Hidato h = s.generateSolution();
-            game = new Game(game.getDif(), user, h, game.getHt(), game.getFilename());
+            game.solve();
         } catch (Solver.SolutionNotFound e) {
             return false;
         }
@@ -211,5 +210,22 @@ public class CtrlDomain {
     public String getRanking() throws IOException {
         if (ranking == null) ranking = new Ranking();
         return ranking.getRanking();
+    }
+
+    public ArrayList<ArrayList<String>> getRankingData() throws IOException {
+        if (ranking == null) ranking = new Ranking();
+        return ranking.getRankingData();
+    }
+
+    public void addScoreToRanking(Integer score) throws IOException {
+        if (ranking == null) ranking = new Ranking();
+        ranking.addScore(getUsername(), score);
+    }
+
+
+
+    public void finishGame() throws IOException {
+        if (game == null) throw new IOException("No game no life");
+        game.finishGame();
     }
 }

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -138,15 +139,7 @@ public class MainWindow {
             }
         });
 
-        menuitemRView.addActionListener(e -> {
-            try {
-                String text = CtrlDomain.getInstance().getRanking();
-                JOptionPane.showMessageDialog(frame,
-                        text,
-                        "Ranking",
-                        JOptionPane.PLAIN_MESSAGE);
-            } catch (IOException ex) { exceptionDialog(ex); }
-        });
+        menuitemRView.addActionListener(e -> showRankingDialog());
 
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
         menuitemManual.addActionListener(e -> {
@@ -282,6 +275,27 @@ public class MainWindow {
                     JOptionPane.INFORMATION_MESSAGE);
         }
 
+        //Add yourself to ranking
+        try {
+            CtrlDomain.getInstance().finishGame();
+        } catch (IOException ex) { exceptionDialog(ex); }
+
+        //Show ranking
+        showRankingDialog();
+
+    }
+
+    private void showRankingDialog() {
+        try {
+            String text = CtrlDomain.getInstance().getRanking();
+            JLabel label = new JLabel("<html>" + text.replaceAll("\n", "<br>") + "</html>");
+            Font font = new Font("Monospaced", Font.BOLD, 16);
+            label.setFont(font);
+            JOptionPane.showMessageDialog(frame,
+                    label,
+                    "Ranking",
+                    JOptionPane.PLAIN_MESSAGE);
+        } catch (IOException ex) { exceptionDialog(ex); }
     }
 
     private void initGame() {

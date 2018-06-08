@@ -97,6 +97,22 @@ public class CustomFile {
         return ret;
     }
 
+    public static void setRanking(ArrayList<ArrayList<String>> data) throws IOException {
+        String ruta = "Files/ranking.txt";
+        FileWriter fw = new FileWriter(ruta);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        for(ArrayList<String> line : data) {
+            String text = line.get(0) + "/" + line.get(1) + "/" + line.get(2);
+            bw.write(text);
+            bw.newLine();
+        }
+        bw.close();
+        fw.close();
+
+
+    }
+
     public static void saveTemplate(File file, ArrayList<String> data) {
         file.getParentFile().mkdirs();
 

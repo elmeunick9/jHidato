@@ -1,5 +1,7 @@
 package domain;
 
+import persistance.CtrlPersistence;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +44,8 @@ public class Game {
         return filename;
     }
     public void setFilename(String fn) { filename = fn; }
+
+    public void setTimeInit(long t) { timeInit = t; }
 
     public Difficulty getDif() {
         return dif;
@@ -160,11 +164,19 @@ public class Game {
         return ret;
     }
 
-    /*Refresh stats from user and ranking when a game is over
+    /**Refresh stats from user and ranking when a game is over
     * return the time in miliseconds */
-    public long finishGame() {
+    public long finishGame() throws IOException {
         user.gameFinished();
         currTime += System.currentTimeMillis() - timeInit;
+
+        //At 1p = Speed of 30s/Node.
+        long score = ((long)getHidato().count()*300000) / currTime;
+
+        CtrlDomain ctrl = CtrlDomain.getInstance();
+        ctrl.addScoreToRanking((int)score);
+        CtrlPersistence.getInstance().saveRanking(ctrl.getRankingData());
+
         return currTime;
     }
 
