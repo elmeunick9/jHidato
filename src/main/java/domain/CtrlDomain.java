@@ -9,6 +9,7 @@ import java.io.IOException;
 public class CtrlDomain {
     private Game game;
     private User user;
+    private Ranking ranking = null;
     private static CtrlDomain domain = null;
     protected CtrlDomain() {
 
@@ -205,5 +206,10 @@ public class CtrlDomain {
 
         Hidato h = makeNewHidato(game.getHt(), game.getHidato().getAdjacency(), data);
         game = new Game(game.getDif(), user, h, game.getHt(), game.getFilename());
+    }
+
+    public String getRanking() throws IOException {
+        if (ranking == null) ranking = new Ranking();
+        return ranking.getRanking();
     }
 }

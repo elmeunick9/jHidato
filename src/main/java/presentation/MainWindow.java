@@ -25,6 +25,8 @@ public class MainWindow {
     private JMenuItem menuitemSolve = new JMenuItem("Solve");
     private JMenuItem menuitemClear = new JMenuItem("Clear");
     private JMenu menuRanking = new JMenu("Ranking");
+    private JMenuItem menuitemRView = new JMenuItem("View");
+    private JMenuItem menuitemRClear = new JMenuItem("Clear User");
     private JMenu menuHelp = new JMenu("Help");
     private JMenuItem menuitemAbout = new JMenuItem("About");
     private JMenuItem menuitemManual = new JMenuItem("Manual");
@@ -42,6 +44,13 @@ public class MainWindow {
         initView();
         initActions();
         CtrlPresentation.getInstance().initUser(askUser());
+    }
+
+    private void exceptionDialog(Exception ex) {
+        JOptionPane.showMessageDialog(frame,
+                ex.getMessage(),
+                "Exception ocurred!",
+                JOptionPane.ERROR_MESSAGE);
     }
 
     private void initView() {
@@ -63,6 +72,8 @@ public class MainWindow {
         menuHidato.add(menuitemSolve);
         menuHidato.add(menuitemClear);
         menuMain.add(menuHidato);
+        menuRanking.add(menuitemRView);
+        menuRanking.add(menuitemRClear);
         menuMain.add(menuRanking);
         menuHelp.add(menuitemManual);
         menuHelp.add(menuitemAbout);
@@ -89,12 +100,7 @@ public class MainWindow {
                 else CtrlPresentation.getInstance().getCtrlDomain().createGame(name, d, t, a);
                 CtrlPresentation.getInstance().editorMode = !toGenerate;
                 initGame();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(frame,
-                        ex.getMessage(),
-                        "Exception ocurred!",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+            } catch (Exception ex) { exceptionDialog(ex); }
         });
 
         menuitemSavegame.addActionListener(e -> {
@@ -106,12 +112,7 @@ public class MainWindow {
                         "Game saved",
                         JOptionPane.INFORMATION_MESSAGE);
                 CtrlPresentation.getInstance().editorMode = false;
-            } catch (IllegalStateException | IOException ex) {
-                JOptionPane.showMessageDialog(frame,
-                ex.getMessage(),
-                "Exception ocurred!",
-                JOptionPane.ERROR_MESSAGE);
-            }
+            } catch (IllegalStateException | IOException ex) { exceptionDialog(ex); }
         });
 
         menuitemLoadgame.addActionListener(e -> loadGameDialog());
@@ -137,18 +138,23 @@ public class MainWindow {
             }
         });
 
+        menuitemRView.addActionListener(e -> {
+            try {
+                String text = CtrlDomain.getInstance().getRanking();
+                JOptionPane.showMessageDialog(frame,
+                        text,
+                        "Ranking",
+                        JOptionPane.PLAIN_MESSAGE);
+            } catch (IOException ex) { exceptionDialog(ex); }
+        });
+
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
         menuitemManual.addActionListener(e -> {
             if (Desktop.isDesktopSupported()) {
                 try {
                     File myFile = new File("./Files/manual.pdf");
                     Desktop.getDesktop().open(myFile);
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(frame,
-                            ex.getMessage(),
-                            "Exception ocurred!",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                } catch (IOException ex) { exceptionDialog(ex); }
             }
         });
 
@@ -211,13 +217,7 @@ public class MainWindow {
                     initGame();
                 }
             }
-        } catch (RuntimeException ex) {
-            JOptionPane.showMessageDialog(frame,
-                    ex.getMessage(),
-                    "Exception ocurred!",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        } catch (RuntimeException ex) { exceptionDialog(ex); return; }
 
         // File chooser.
         fcTemplates.setDialogTitle("Save Game as Template");

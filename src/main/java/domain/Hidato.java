@@ -165,7 +165,7 @@ public abstract class Hidato implements Iterable<Node> {
             case HEXAGON: typeString = "H"; break;
             default: typeString = "";
         }
-        
+
         String header = typeString +",";
         if(AdjacencyType.EDGE == adjacency) {
             header += "C,";
