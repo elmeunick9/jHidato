@@ -159,22 +159,22 @@ public abstract class Hidato implements Iterable<Node> {
     public ArrayList<String> getRawData(Game.HidatoType type) {
         ArrayList<String> data = new ArrayList<>();
         String typeString = "";
-        if(type == Game.HidatoType.TRIANGLE) {
-            typeString = "T";
-        } else if (type == Game.HidatoType.SQUARE) {
-            typeString = "Q";
-        } else if (type == Game.HidatoType.HEXAGON) {
-            typeString = "H";
+        switch (type) {
+            case TRIANGLE: typeString = "T"; break;
+            case SQUARE: typeString = "Q"; break;
+            case HEXAGON: typeString = "H"; break;
+            default: typeString = "";
         }
+        
         String header = typeString +",";
         if(AdjacencyType.EDGE == adjacency) {
             header += "C,";
         } else if(AdjacencyType.BOTH == adjacency) {
             header += "CA,";
         }
-        //else if(AdjacencyType.VERTEX == adjacency) {
-            //CANNOT BE A VERTEX TYPE
-        //}
+        else if(AdjacencyType.VERTEX == adjacency) {
+            header += "A,";
+        }
         header+= nodes.size()+","+nodes.get(0).size();
         data.add(header);
 
@@ -190,7 +190,7 @@ public abstract class Hidato implements Iterable<Node> {
             data.add(line);
         }
         return data;
-    };
+    }
 
     /** This helper function prints on the standard output a good fomatted text representation
      * of the hidato. Of course the format goes to hell if not a QuadHidato. Also it can only

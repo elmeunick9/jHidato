@@ -267,10 +267,20 @@ public class MainWindow {
 
     public void showFinishGameDialog() {
         if (boardHidato == null) return;
-        JOptionPane.showMessageDialog(frame,
-                "CONGRATULATIONS. YOU WIN!\n",
-                "Maou-sama has been beaten!",
-                JOptionPane.INFORMATION_MESSAGE);
+        if (CtrlDomain.getInstance().getUsername().equals("MAOU")) {
+            JOptionPane.showMessageDialog(frame,
+                    "CONGRATULATIONS. YOU WIN!\n\n"
+                    + "You manged to defeat the hero.\n"
+                    + "Now that humanity has lost their hope, conquering the world shall be easy.\n"
+                    + "A new age for the demon race begins.",
+                    "The hero and his party has been beaten!",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(frame,
+                    "CONGRATULATIONS. YOU WIN!\n",
+                    "Maou-sama has been beaten!",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
 
     }
 

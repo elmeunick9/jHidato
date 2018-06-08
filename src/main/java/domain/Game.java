@@ -114,6 +114,9 @@ public class Game {
             case "CA":
                 ret = Hidato.AdjacencyType.BOTH;
                 break;
+            case "A":
+                ret = Hidato.AdjacencyType.VERTEX;
+                break;
             default:
                 break;
         }
