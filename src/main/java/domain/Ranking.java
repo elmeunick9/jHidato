@@ -11,6 +11,9 @@ public class Ranking {
     private ArrayList<ArrayList<String>> r;
     Ranking() throws IOException {
         r = CtrlPersistence.getInstance().getRanking();
+        if (!r.isEmpty()) {
+            if (r.get(0).isEmpty() || r.get(0).get(0).isEmpty()) r = new ArrayList<>();
+        }
         initMap();
     }
 
