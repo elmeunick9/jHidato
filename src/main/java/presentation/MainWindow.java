@@ -265,12 +265,15 @@ public class MainWindow {
 
     public void showFinishGameDialog() {
         if (boardHidato == null) return;
+        if (CtrlPresentation.getInstance().editorMode) return;
+
         if (CtrlDomain.getInstance().getUsername().equals("MAOU")) {
             JOptionPane.showMessageDialog(frame,
                     "CONGRATULATIONS. YOU WIN!\n\n"
                     + "You manged to defeat the hero.\n"
                     + "Now that humanity has lost their hope, conquering the world shall be easy.\n"
-                    + "A new age for the demon race begins.",
+                    + "A new age for the demon race begins.\n"
+                    + "BAD END.",
                     "The hero and his party has been beaten!",
                     JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -281,18 +284,23 @@ public class MainWindow {
         }
 
         //Add yourself to ranking
+        int score = 0;
         try {
-            CtrlDomain.getInstance().finishGame();
+            score = CtrlDomain.getInstance().finishGame();
         } catch (IOException ex) { exceptionDialog(ex); }
 
         //Show ranking
-        showRankingDialog();
-
+        showRankingDialog(score);
     }
 
     private void showRankingDialog() {
+        showRankingDialog(-1);
+    }
+
+    private void showRankingDialog(Integer score) {
         try {
             String text = CtrlDomain.getInstance().getRanking();
+            if (score != -1) text = "Your score: " + score.toString() + "\n" + text;
             JLabel label = new JLabel("<html>" + text.replaceAll("\n", "<br>") + "</html>");
             Font font = new Font("Monospaced", Font.BOLD, 16);
             label.setFont(font);

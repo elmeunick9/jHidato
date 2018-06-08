@@ -24,3 +24,10 @@ repositories {
 
     apply plugin: 'checkstyle'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+	destinationDir = file("$rootDir/")
+}

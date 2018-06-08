@@ -110,6 +110,7 @@ public class CtrlDomain {
         Game.Difficulty d = Game.getDifficultyType(difficulty);
         Hidato h = makeNewHidato(t, a, nodes);
         game = new Game(d, user, h, t, name);
+        game.setTime(Long.parseLong(time));
 
         game.print();
     }
@@ -151,9 +152,24 @@ public class CtrlDomain {
         return game.getHidato().getNode(x, y).getType() == Node.Type.fixed;
     }
 
+    /** If node already a block, undo. */
     public boolean makeNodeABlock(int x, int y) {
         if (game == null) return false;
-        game.getHidato().setNode(x, y, new Node("*"));
+        Node n;
+        if (game.getHidato().getNode(x, y).getType() == Node.Type.block) n = new Node("?");
+        else n = new Node("*");
+        game.getHidato().setNode(x, y, n);
+        return true;
+    }
+
+    /** If node already a invisible, undo. */
+    public boolean makeNodeAInvisible(int x, int y) {
+        if (game == null) return false;
+        Node n;
+        if (game.getHidato().getNode(x, y).getType() == Node.Type.block) n = new Node("#");
+        else if (game.getHidato().getNode(x, y).getType() == Node.Type.invisible) n = new Node("*");
+        else return false;
+        game.getHidato().setNode(x, y, n);
         return true;
     }
 
@@ -228,8 +244,10 @@ public class CtrlDomain {
 
 
 
-    public void finishGame() throws IOException {
+    /** Finished the game. That is, sets up everything and save the new ranking.
+     * @return The score. */
+    public int finishGame() throws IOException {
         if (game == null) throw new IOException("No game no life");
-        game.finishGame();
+        return (int)game.finishGame();
     }
 }
