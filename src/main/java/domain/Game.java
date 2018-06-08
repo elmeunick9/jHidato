@@ -178,6 +178,7 @@ public class Game {
             case EASY: dint = 1; break;
             case MEDIUM: dint = 2; break;
             case HARD: dint = 3; break;
+            default: dint = 1;
         }
 
         //At 1p = Speed of 30s/Node * diff.
