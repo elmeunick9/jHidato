@@ -15,6 +15,7 @@ public class Ranking {
     }
 
     private void initMap() {
+        map.clear();
         for (ArrayList<String> t : r) {
             int pts = Integer.parseInt(t.get(1));
             map.put(pts, t.get(0));
@@ -71,6 +72,10 @@ public class Ranking {
         initMap();
     }
 
+    public void clear() {
+        r.clear();
+        initMap();
+    }
     public void showRanking() {
         System.out.print("RANKING:  \n");
         for(int i = 0; i < r.size(); i++){

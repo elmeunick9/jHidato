@@ -171,8 +171,7 @@ public abstract class Hidato implements Iterable<Node> {
             header += "C,";
         } else if(AdjacencyType.BOTH == adjacency) {
             header += "CA,";
-        }
-        else if(AdjacencyType.VERTEX == adjacency) {
+        } else if(AdjacencyType.VERTEX == adjacency) {
             header += "A,";
         }
         header+= nodes.size()+","+nodes.get(0).size();

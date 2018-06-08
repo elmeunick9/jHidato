@@ -1,8 +1,14 @@
 
 Divendres:
 Desfer guardar node i valor.
-Ranking -> puntuació temps/numCel·les.
 Diagrama de classes.
 Generar el .jar
 Generar pdf. (Manual)
 Tests.
+
+Extra:
+Indicar score quan guanyes.
+Poder entrar en Edit Mode amb un botó.
+Que en edit mode no es cridi a finishGame o similars.
+Que el edit mode pugui conertir blocs a unsets i blocs a invisible.
+Que puguis seleccionar la mida en el edit mode.

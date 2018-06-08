@@ -3,7 +3,6 @@ package domain;
 import persistance.CtrlPersistence;
 import presentation.CtrlPresentation;
 
-import javax.management.RuntimeErrorException;
 import java.util.ArrayList;
 import java.io.IOException;
 
