@@ -140,6 +140,11 @@ public class MainWindow {
         });
 
         menuitemRView.addActionListener(e -> showRankingDialog());
+        menuitemRClear.addActionListener(e -> {
+            try {
+                CtrlPresentation.getInstance().getCtrlDomain().clearRanking();
+            } catch (IOException ex) { exceptionDialog(ex); }
+        });
 
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
         menuitemManual.addActionListener(e -> {

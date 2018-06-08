@@ -222,6 +222,11 @@ public class CtrlDomain {
         ranking.addScore(getUsername(), score);
     }
 
+    public void clearRanking() throws IOException {
+        if (ranking == null) ranking = new Ranking();
+        ranking.clear(getUsername());
+    }
+
 
 
     public void finishGame() throws IOException {

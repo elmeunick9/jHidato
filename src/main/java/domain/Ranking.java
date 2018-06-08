@@ -11,6 +11,10 @@ public class Ranking {
     private ArrayList<ArrayList<String>> r;
     Ranking() throws IOException {
         r = CtrlPersistence.getInstance().getRanking();
+        initMap();
+    }
+
+    private void initMap() {
         for (ArrayList<String> t : r) {
             int pts = Integer.parseInt(t.get(1));
             map.put(pts, t.get(0));
@@ -55,7 +59,16 @@ public class Ranking {
         r.add(i, s);
 
         //ONLY TOP 10
-        if (r.size() > 10) r.remove(10);
+        if (r.size() > 20) r.remove(20);
+    }
+
+    public void clear(String username) {
+        ArrayList<ArrayList<String>> f = new ArrayList<>();
+        for (ArrayList<String> line : r) {
+            if (!line.get(0).equals(username)) f.add(line);
+        }
+        r=f;
+        initMap();
     }
 
     public void showRanking() {
