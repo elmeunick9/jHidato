@@ -56,7 +56,7 @@ public class MainWindow {
 
     private void initView() {
         // Frame
-        frame.setMinimumSize(new Dimension(600,650));
+        frame.setMinimumSize(new Dimension(700,750));
         frame.setPreferredSize(frame.getMinimumSize());
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);

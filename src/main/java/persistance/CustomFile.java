@@ -76,7 +76,9 @@ public class CustomFile {
         return loadGame(b);
     }
 
-    /* return the data of ranking from the file in form of matrix */
+    /**
+     * return the data of ranking from the file in form of matrix
+     */
     public static ArrayList<ArrayList<String>> getRanking() throws IOException {
         String ruta = "Files/ranking.txt";
         FileReader fr = new FileReader(ruta);
@@ -96,7 +98,9 @@ public class CustomFile {
 
         return ret;
     }
-
+    /**
+     * Updates the ranking.
+     */
     public static void setRanking(ArrayList<ArrayList<String>> data) throws IOException {
         String ruta = "Files/ranking.txt";
         FileWriter fw = new FileWriter(ruta);
@@ -112,6 +116,9 @@ public class CustomFile {
 
 
     }
+    /**
+     * Same as the SaveGame but this time is saved anywhere user wants.
+     */
 
     public static void saveTemplate(File file, ArrayList<String> data) {
         file.getParentFile().mkdirs();
@@ -138,6 +145,9 @@ public class CustomFile {
 
     }
 
+    /**
+     * If the file exists it's overwritten. Then the data is printed into the file.
+     */
     public static void saveGame(File file, ArrayList<String> data, String diff, long currTime)
             throws IOException {
         file.getParentFile().mkdirs();
@@ -162,7 +172,9 @@ public class CustomFile {
         fileWriter.close();
     }
 
-    //
+    /**
+     * Save the game in the folder of the user.
+     */
     public static void saveGame(String username, String hidatoName,
     ArrayList<String> data, String diff, long currTime) throws IOException {
             File game = new File("Users/" + username + "/games/", hidatoName);

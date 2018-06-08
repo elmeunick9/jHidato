@@ -18,6 +18,9 @@ public class TriHidato extends Hidato {
         }
     }
 
+    /**
+     * Depends if it's vertical or not.
+     */
     protected ArrayList<Node> adjacentNodes(int i, int j) {
         ArrayList<Node> nodes = new ArrayList<>();
         if (adjacency == AdjacencyType.EDGE || adjacency == AdjacencyType.BOTH) {
@@ -39,9 +42,4 @@ public class TriHidato extends Hidato {
 
         return nodes;
     }
-
-    public void draw() {}
-
-    //TODO: This is a mock implementation.
-    public Node getNodeByCoord(float i, float j) { return new Node("#");}
 }

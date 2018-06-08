@@ -35,6 +35,10 @@ public class CtrlDomain {
         generateGame(name, difficulty, type, adj, false);
     }
 
+    /**
+     * If name is passed, the Hidato will be loaded,
+     * If not, a game will be generated Randomly.
+     */
     public void generateGame(String name, int difficulty, int type, int adj, boolean empty) {
         Game.Difficulty d;
         switch (difficulty) {
@@ -91,10 +95,17 @@ public class CtrlDomain {
         return game.getFilename();
     }
 
+    /**
+     * Loads a game from disk.
+     */
     public void loadGame(String name) throws IOException {
         getCtrlPersistence().loadGame(user.getName(), name);
     }
 
+    /**
+     * Parses the data of the given matrix and create
+     * a valid instance of Game.
+     */
     public void makeGameFromData(ArrayList<ArrayList<String>> data, String name, String adjacency,
                                  String type, String difficulty, String time) {
         ArrayList<ArrayList<Node>> nodes = new ArrayList<>();
@@ -115,6 +126,9 @@ public class CtrlDomain {
         game.print();
     }
 
+    /**
+     * Returns the Hidato as initial state.
+     */
     public ArrayList<String> getClearHidatoData() {
         Hidato t = game.getHidato().copy();
         t.clear();
@@ -237,6 +251,9 @@ public class CtrlDomain {
         ranking.addScore(getUsername(), score);
     }
 
+    /**
+     * Clear all the records of the user in ranking.
+     */
     public void clearRanking() throws IOException {
         if (ranking == null) ranking = new Ranking();
         ranking.clear(getUsername());

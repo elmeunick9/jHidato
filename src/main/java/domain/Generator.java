@@ -5,7 +5,6 @@ import java.util.Random;
 
 public class Generator {
 
-    //A filename is the FILE NAME, not the FILE NAME + EXTENSION.
     protected String filename;
     protected Hidato h;
 
@@ -15,6 +14,15 @@ public class Generator {
         this(d, ht, Hidato.AdjacencyType.EDGE);
     }
 
+    /**
+     * The main generator constructor. With a given difficulty, type of cells
+     *  and type of adjacency creates a new Random Hidato.
+     *  Firstly, data is an empty array of nodes.
+     *  Then we call the solver to get a valid Hidato.
+     *  To make it more randomly, we generate 20 solutions.
+     *  Then we format the given data and remove some of the values from the solution.
+     *  Finally assign the Hidato to the private field and generate a random Filename.
+     */
     Generator(Game.Difficulty d, Game.HidatoType ht, Hidato.AdjacencyType adj) {
         Random rn = new Random();
         int z = getRangedRandom(d);
@@ -71,6 +79,9 @@ public class Generator {
         filename = getHashedFilename();
     }
 
+    /**
+     * Generate the Instance of Hidato with the given data.
+     */
     private Hidato createHidato(ArrayList<ArrayList<Node>> data,
                                 Hidato.AdjacencyType adj,
                                 Game.HidatoType ht) {
@@ -126,12 +137,5 @@ public class Generator {
             }
         }
         return data;
-    }
-
-    public static void main(String[] args) throws Solver.SolutionNotFound {
-        Generator a = new Generator(Game.Difficulty.EASY, Game.HidatoType.TRIANGLE,
-                Hidato.AdjacencyType.EDGE);
-        System.out.print(a.filename);
-        System.out.print(a.h.getNode(1,1));
     }
 }

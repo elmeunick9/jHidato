@@ -17,6 +17,9 @@ public class SquareNode extends NodeCell{
         this.size = size;
     }
 
+    /**
+     * Creates the vertex of the polygon.
+     */
     private Polygon node(int x0, int y0) {
         int y = y0 + borderTop;
         int x = x0 + borderLeft;
