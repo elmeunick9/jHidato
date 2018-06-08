@@ -106,7 +106,8 @@ public class Board extends JPanel {
             }
             boolean editorMode = CtrlPresentation.getInstance().editorMode;
             if (SwingUtilities.isMiddleMouseButton(e) && editorMode) {
-                if (CtrlPresentation.getInstance().middleClick(p.y, p.x))
+                boolean ct = e.isControlDown();
+                if (CtrlPresentation.getInstance().middleClick(p.y, p.x, ct))
                     matrixHidato = CtrlDomain.getInstance().getMatrix();
             }
             repaint();

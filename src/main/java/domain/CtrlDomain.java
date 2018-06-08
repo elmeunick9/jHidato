@@ -152,9 +152,24 @@ public class CtrlDomain {
         return game.getHidato().getNode(x, y).getType() == Node.Type.fixed;
     }
 
+    /** If node already a block, undo. */
     public boolean makeNodeABlock(int x, int y) {
         if (game == null) return false;
-        game.getHidato().setNode(x, y, new Node("*"));
+        Node n;
+        if (game.getHidato().getNode(x, y).getType() == Node.Type.block) n = new Node("?");
+        else n = new Node("*");
+        game.getHidato().setNode(x, y, n);
+        return true;
+    }
+
+    /** If node already a invisible, undo. */
+    public boolean makeNodeAInvisible(int x, int y) {
+        if (game == null) return false;
+        Node n;
+        if (game.getHidato().getNode(x, y).getType() == Node.Type.block) n = new Node("#");
+        else if (game.getHidato().getNode(x, y).getType() == Node.Type.invisible) n = new Node("*");
+        else return false;
+        game.getHidato().setNode(x, y, n);
         return true;
     }
 

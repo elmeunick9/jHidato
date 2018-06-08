@@ -265,6 +265,7 @@ public class MainWindow {
 
     public void showFinishGameDialog() {
         if (boardHidato == null) return;
+        if (CtrlPresentation.getInstance().editorMode) return;
 
         if (CtrlDomain.getInstance().getUsername().equals("MAOU")) {
             JOptionPane.showMessageDialog(frame,

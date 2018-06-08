@@ -57,8 +57,9 @@ public class CtrlPresentation {
         return CtrlDomain.getInstance().setVal(x+1, y+1, -1);
     }
 
-    public boolean middleClick(int x, int y) {
-        return getCtrlDomain().makeNodeABlock(x+1, y+1);
+    public boolean middleClick(int x, int y, boolean control) {
+        if (!control) return getCtrlDomain().makeNodeABlock(x+1, y+1);
+        else return getCtrlDomain().makeNodeAInvisible(x+1, y+1);
     }
 
 }

@@ -21,10 +21,15 @@ public abstract class Hidato implements Iterable<Node> {
     Hidato(ArrayList<ArrayList<Node>> data, AdjacencyType t) {
         nodes = data;
         adjacency = t;
+        recalculate();
+    }
 
-        for (int i = 1; i <= data.size(); i++) {
+    /** Calculents the adjacencies of all nodes and sizes. */
+    private void recalculate() {
+        map.clear();
+        for (int i = 1; i <= nodes.size(); i++) {
             int j;
-            for (j = 1; j <= data.get(i-1).size(); j++) {
+            for (j = 1; j <= nodes.get(i-1).size(); j++) {
                 Node n = getNode(i, j);
                 if (n.valid()) map.put(n, adjacentNodes(i, j));
             }
@@ -33,7 +38,7 @@ public abstract class Hidato implements Iterable<Node> {
             // a uniform matrix but rather a bunch of lists of different sizes?
             if (j+1 > sizeY) sizeY = j+1;
         }
-        sizeX = data.size();
+        sizeX = nodes.size();
     }
 
     /** @return Returns the size of the matrix representing this hidato on the X axis.
@@ -116,6 +121,7 @@ public abstract class Hidato implements Iterable<Node> {
 
     public void setNode(int x, int y, Node n) throws IndexOutOfBoundsException {
         nodes.get(x-1).set(y-1, n);
+        recalculate();
     }
 
     public AdjacencyType getAdjacency() {
