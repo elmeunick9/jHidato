@@ -114,6 +114,14 @@ public abstract class Hidato implements Iterable<Node> {
         return nodes.get(x-1).get(y-1);
     }
 
+    public void setNode(int x, int y, Node n) throws IndexOutOfBoundsException {
+        nodes.get(x-1).set(y-1, n);
+    }
+
+    public AdjacencyType getAdjacency() {
+        return adjacency;
+    }
+
     /** Like the name implies, clears all end every node on this hidato. Calls Node::clear()
      * @see Node
      */
@@ -209,5 +217,13 @@ public abstract class Hidato implements Iterable<Node> {
             if (n.editable() || n.hasValue()) c++;
         }
         return c;
+    }
+
+    /** This helper function returns whether the hidato has any Node with a value set. */
+    public boolean isCleared() {
+        for (Node n : this) {
+            if (n.getType() == Node.Type.variable) return false;
+        }
+        return true;
     }
 }

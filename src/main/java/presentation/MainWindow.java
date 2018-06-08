@@ -22,9 +22,8 @@ public class MainWindow {
     private JMenuItem menuitemLoadTemplate = new JMenuItem("Load Template");
     private JMenuItem menuitemQuit = new JMenuItem("Quit");
     private JMenu menuHidato = new JMenu("Hidato");
-    private JMenuItem menuItemSolve = new JMenuItem("Solve");
+    private JMenuItem menuitemSolve = new JMenuItem("Solve");
     private JMenuItem menuitemClear = new JMenuItem("Clear");
-    private JMenuItem menuItemFix = new JMenuItem("Fix");
     private JMenu menuRanking = new JMenu("Ranking");
     private JMenu menuHelp = new JMenu("Help");
     private JMenuItem menuitemAbout = new JMenuItem("About");
@@ -61,9 +60,8 @@ public class MainWindow {
         menuFile.add(menuitemLoadTemplate);
         menuFile.add(menuitemQuit);
         menuMain.add(menuFile);
-        menuHidato.add(menuItemSolve);
+        menuHidato.add(menuitemSolve);
         menuHidato.add(menuitemClear);
-        menuHidato.add(menuItemFix);
         menuMain.add(menuHidato);
         menuMain.add(menuRanking);
         menuHelp.add(menuitemManual);
@@ -88,7 +86,8 @@ public class MainWindow {
             try {
                 if (toGenerate)
                     CtrlPresentation.getInstance().getCtrlDomain().generateGame(name, d, t, a);
-                else CtrlPresentation.getInstance().getCtrlDomain().createGame(name);
+                else CtrlPresentation.getInstance().getCtrlDomain().createGame(name, d, t, a);
+                CtrlPresentation.getInstance().editorMode = !toGenerate;
                 initGame();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame,
@@ -99,12 +98,14 @@ public class MainWindow {
         });
 
         menuitemSavegame.addActionListener(e -> {
+            CtrlPresentation.getInstance().editorMode = false;
             try {
                 String filename = CtrlPresentation.getInstance().getCtrlDomain().saveGame();
                 JOptionPane.showMessageDialog(frame,
                         "Game saved with name " + filename,
                         "Game saved",
                         JOptionPane.INFORMATION_MESSAGE);
+                CtrlPresentation.getInstance().editorMode = false;
             } catch (IllegalStateException | IOException ex) {
                 JOptionPane.showMessageDialog(frame,
                 ex.getMessage(),
@@ -117,19 +118,23 @@ public class MainWindow {
         menuitemSaveAs.addActionListener(e -> saveTemplateDialog());
         menuitemLoadTemplate.addActionListener(e -> loadTemplateDialog());
 
-        menuItemSolve.addActionListener(e -> {
+        menuitemSolve.addActionListener(e -> {
             if (!CtrlDomain.getInstance().solve()) {
                 JOptionPane.showMessageDialog(frame,
-                        "Cant solve! Try to clear.",
-                        "Unsolvable. May God have mercy on your soul.",
+                        "Cant solve! Either there is no game, no solution, "
+                                + "or something is broken.\n"
+                                + "P.S. Try to clear.",
+                        "Unsolvable. May God have mercy on yOUR soul.",
                         JOptionPane.ERROR_MESSAGE);
+                return;
             }
             boardHidato.updateMatrix(CtrlDomain.getInstance().getMatrix());
         });
 
         menuitemClear.addActionListener(e -> {
-            CtrlDomain.getInstance().clear();
-            boardHidato.updateMatrix(CtrlDomain.getInstance().getMatrix());
+            if (CtrlDomain.getInstance().clear()) {
+                boardHidato.updateMatrix(CtrlDomain.getInstance().getMatrix());
+            }
         });
 
         menuitemAbout.addActionListener(e -> aboutWindow.setVisible(true));
@@ -180,6 +185,7 @@ public class MainWindow {
                         throw new IOException("You must select a game within YOUR folder!");
                     }
                     ctrlPresentation.getCtrlDomain().loadGame(name);
+                    CtrlPresentation.getInstance().editorMode = false;
                     initGame();
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(frame,
@@ -195,8 +201,26 @@ public class MainWindow {
         CtrlPresentation ctrlPresentation = CtrlPresentation.getInstance();
         String myuser = ctrlPresentation.getCtrlDomain().getUsername();
 
-        fcTemplates.setDialogTitle("Save Game as Template");
+        try {
+            // How to save.
+            if (!CtrlDomain.getInstance().isClearerd()) {
+                int b = JOptionPane.showConfirmDialog(frame, "Convert filled cells to fixed?",
+                        "A simple question.", JOptionPane.YES_NO_OPTION);
+                if (b == 0) { //YES
+                    CtrlDomain.getInstance().convertToFixed();
+                    initGame();
+                }
+            }
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(frame,
+                    ex.getMessage(),
+                    "Exception ocurred!",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        // File chooser.
+        fcTemplates.setDialogTitle("Save Game as Template");
         boolean loop = true;
         while (loop) {
             int c = fcTemplates.showSaveDialog(frame);
@@ -228,6 +252,7 @@ public class MainWindow {
                 try {
                     File file = fcTemplates.getSelectedFile();
                     ctrlPresentation.getCtrlDomain().getCtrlPersistence().importHidato(file);
+                    CtrlPresentation.getInstance().editorMode = false;
                     initGame();
                     loop = false;
                 } catch (IOException ex) {
@@ -238,6 +263,15 @@ public class MainWindow {
                 }
             } else loop = false;
         }
+    }
+
+    public void showFinishGameDialog() {
+        if (boardHidato == null) return;
+        JOptionPane.showMessageDialog(frame,
+                "CONGRATULATIONS. YOU WIN!\n",
+                "Maou-sama has been beaten!",
+                JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     private void initGame() {
@@ -265,6 +299,12 @@ public class MainWindow {
         frame.add(boardHidato);
         frame.pack();
         frame.setVisible(true);
+        if (CtrlPresentation.getInstance().editorMode) {
+            frame.setTitle("jHidato 21.1 - Editor Mode");
+        } else {
+            frame.setTitle(CtrlPresentation.getInstance().getCtrlDomain().getUsername()
+                    + " - jHidato 21.1");
+        }
     }
 
     private String askUser() {
@@ -293,7 +333,7 @@ public class MainWindow {
         }
 
         File templatesPath = new File(
-                System.getProperty("user.dir") + "/Usuaris/" + usrname + "/templates/");
+                System.getProperty("user.dir") + "/Users/" + usrname + "/templates/");
         templatesPath.mkdirs();
 
         fcTemplates.setCurrentDirectory(templatesPath);
