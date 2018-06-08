@@ -173,8 +173,15 @@ public class Game {
         user.gameFinished();
         currTime = timeElapsed + System.currentTimeMillis() - timeInit;
 
-        //At 1p = Speed of 30s/Node.
-        long score = ((long)getHidato().count()*300000) / currTime;
+        int dint = 1;
+        switch (getDif()) {
+            case EASY: dint = 1; break;
+            case MEDIUM: dint = 2; break;
+            case HARD: dint = 3; break;
+        }
+
+        //At 1p = Speed of 30s/Node * diff.
+        long score = ((long)getHidato().count()*100000*dint) / currTime;
 
         CtrlDomain ctrl = CtrlDomain.getInstance();
         ctrl.addScoreToRanking((int)score);
